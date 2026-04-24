@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "98E53E92532B11055A089ED8"
-               BuildableName = "LumenBridge.app"
-               BlueprintName = "LumenBridge"
+               BlueprintIdentifier = "5B40684D1B90DFA751D661F2"
+               BuildableName = "LumenBridgeTV.app"
+               BlueprintName = "LumenBridgeTV"
                ReferencedContainer = "container:LumenBridge.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -30,9 +30,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "98E53E92532B11055A089ED8"
-            BuildableName = "LumenBridge.app"
-            BlueprintName = "LumenBridge"
+            BlueprintIdentifier = "5B40684D1B90DFA751D661F2"
+            BuildableName = "LumenBridgeTV.app"
+            BlueprintName = "LumenBridgeTV"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -53,9 +53,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "98E53E92532B11055A089ED8"
-            BuildableName = "LumenBridge.app"
-            BlueprintName = "LumenBridge"
+            BlueprintIdentifier = "5B40684D1B90DFA751D661F2"
+            BuildableName = "LumenBridgeTV.app"
+            BlueprintName = "LumenBridgeTV"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -70,9 +70,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "98E53E92532B11055A089ED8"
-            BuildableName = "LumenBridge.app"
-            BlueprintName = "LumenBridge"
+            BlueprintIdentifier = "5B40684D1B90DFA751D661F2"
+            BuildableName = "LumenBridgeTV.app"
+            BlueprintName = "LumenBridgeTV"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

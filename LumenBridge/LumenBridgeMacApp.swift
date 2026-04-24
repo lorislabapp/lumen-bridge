@@ -9,7 +9,7 @@ import SwiftUI
 /// `audit-output/roadmap-apple-native-bridge.md` in the Lumen for Frigate
 /// repo.
 @main
-struct LumenBridgeApp: App {
+struct LumenBridgeMacApp: App {
     @State private var bridgeState = BridgeState()
 
     var body: some Scene {

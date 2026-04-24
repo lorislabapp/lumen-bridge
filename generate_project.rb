@@ -1,24 +1,34 @@
 #!/usr/bin/env ruby
-# Generates the LumenBridge.xcodeproj from scratch.
-# Layout matches what's on disk under ~/GitHub/lumen-bridge/LumenBridge/.
+# Generates LumenBridge.xcodeproj with two application targets sharing the
+# Shared/ source tree:
+#   - LumenBridge   (macOS 14+, menu-bar SwiftUI)
+#   - LumenBridgeTV (tvOS   17+, focus-based SwiftUI)
+#
+# Both targets point at the same bundle ID `com.lorislabapp.lumenbridge`
+# (registered universal via App Store Connect API).
+#
+# Re-run this script whenever source files are added or moved — it rebuilds
+# the project from the current disk layout.
 
 require 'xcodeproj'
 require 'fileutils'
 
-ROOT = File.expand_path('~/GitHub/lumen-bridge')
-PROJECT_PATH = "#{ROOT}/LumenBridge.xcodeproj"
-SRC_ROOT = "#{ROOT}/LumenBridge"
+ROOT = File.expand_path(File.dirname(__FILE__))
+PROJECT_PATH = File.join(ROOT, 'LumenBridge.xcodeproj')
 
-# Nuke any existing project (idempotent re-generation).
+SHARED_DIR = File.join(ROOT, 'Shared')
+MAC_DIR    = File.join(ROOT, 'LumenBridge')
+TV_DIR     = File.join(ROOT, 'LumenBridgeTV')
+
+# Nuke + regenerate for idempotency.
 FileUtils.rm_rf(PROJECT_PATH)
-
 project = Xcodeproj::Project.new(PROJECT_PATH)
 
-# Top-level group for the source code on disk.
-src_group = project.new_group('LumenBridge', 'LumenBridge')
+# Groups mirror the on-disk layout.
+shared_group = project.new_group('Shared',         'Shared')
+mac_group    = project.new_group('LumenBridge',    'LumenBridge')
+tv_group     = project.new_group('LumenBridgeTV',  'LumenBridgeTV')
 
-# Recursively add all Swift/plist/entitlements files from disk into the project
-# under the matching group hierarchy. Keeps folders on disk 1:1 with Xcode groups.
 def add_files_recursive(project, parent_group, path_on_disk)
   Dir.glob("#{path_on_disk}/*").sort.each do |entry|
     basename = File.basename(entry)
@@ -31,25 +41,30 @@ def add_files_recursive(project, parent_group, path_on_disk)
   end
 end
 
-add_files_recursive(project, src_group, SRC_ROOT)
+add_files_recursive(project, shared_group, SHARED_DIR)
+add_files_recursive(project, mac_group,    MAC_DIR)
+add_files_recursive(project, tv_group,     TV_DIR)
 
-# macOS app target.
-target = project.new_target(:application, 'LumenBridge', :osx, '14.0')
-
-# Attach Swift source files to Sources build phase.
-swift_files = []
-src_group.recursive_children.each do |f|
-  next unless f.is_a?(Xcodeproj::Project::Object::PBXFileReference)
-  next unless f.path.end_with?('.swift')
-  swift_files << f
+# Collect Swift files per group.
+def swift_files_in(group)
+  files = []
+  group.recursive_children.each do |f|
+    next unless f.is_a?(Xcodeproj::Project::Object::PBXFileReference)
+    next unless f.path.end_with?('.swift')
+    files << f
+  end
+  files
 end
-swift_files.each { |f| target.source_build_phase.add_file_reference(f) }
 
-# Resources (Info.plist is set via INFOPLIST_FILE, not as a resource file).
-# Nothing else to add for now — assets come later.
+shared_swift = swift_files_in(shared_group)
+mac_swift    = swift_files_in(mac_group)
+tv_swift     = swift_files_in(tv_group)
 
-# Build settings
-target.build_configurations.each do |config|
+# --- macOS target ---
+mac_target = project.new_target(:application, 'LumenBridge', :osx, '14.0')
+(shared_swift + mac_swift).each { |f| mac_target.source_build_phase.add_file_reference(f) }
+
+mac_target.build_configurations.each do |config|
   config.build_settings.merge!(
     'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge',
     'PRODUCT_NAME' => 'Lumen Bridge',
@@ -68,17 +83,50 @@ target.build_configurations.each do |config|
     'ENABLE_PREVIEWS' => 'YES',
     'INFOPLIST_KEY_NSHumanReadableCopyright' => 'Copyright © 2026 LorisLabs',
     'INFOPLIST_KEY_LSApplicationCategoryType' => 'public.app-category.utilities',
-    'INFOPLIST_KEY_LSUIElement' => 'YES'
+    'INFOPLIST_KEY_LSUIElement' => 'YES',
+    'SDKROOT' => 'macosx',
+    'SUPPORTED_PLATFORMS' => 'macosx'
   )
 end
 
-# Scheme so `xcodebuild -scheme LumenBridge` works.
+# --- tvOS target ---
+tv_target = project.new_target(:application, 'LumenBridgeTV', :tvos, '17.0')
+(shared_swift + tv_swift).each { |f| tv_target.source_build_phase.add_file_reference(f) }
+
+tv_target.build_configurations.each do |config|
+  config.build_settings.merge!(
+    'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge',
+    'PRODUCT_NAME' => 'Lumen Bridge',
+    'MARKETING_VERSION' => '0.1.0',
+    'CURRENT_PROJECT_VERSION' => '1',
+    'TVOS_DEPLOYMENT_TARGET' => '17.0',
+    'SWIFT_VERSION' => '6.0',
+    'DEVELOPMENT_TEAM' => 'TDV6D5L785',
+    'CODE_SIGN_STYLE' => 'Automatic',
+    'CODE_SIGN_ENTITLEMENTS' => 'LumenBridgeTV/Resources/LumenBridgeTV.entitlements',
+    'INFOPLIST_FILE' => 'LumenBridgeTV/Resources/Info.plist',
+    'LD_RUNPATH_SEARCH_PATHS' => '$(inherited) @executable_path/Frameworks',
+    'ASSETCATALOG_COMPILER_APPICON_NAME' => 'AppIcon',
+    'ENABLE_PREVIEWS' => 'YES',
+    'INFOPLIST_KEY_NSHumanReadableCopyright' => 'Copyright © 2026 LorisLabs',
+    'INFOPLIST_KEY_LSApplicationCategoryType' => 'public.app-category.utilities',
+    'SDKROOT' => 'appletvos',
+    'SUPPORTED_PLATFORMS' => 'appletvos appletvsimulator',
+    'TARGETED_DEVICE_FAMILY' => '3'
+  )
+end
+
 project.save
-scheme = Xcodeproj::XCScheme.new
-scheme.add_build_target(target)
-scheme.set_launch_target(target)
-scheme.save_as(PROJECT_PATH, 'LumenBridge', true)
+
+# Schemes — one per target so xcodebuild can build each independently.
+[mac_target, tv_target].each do |target|
+  scheme = Xcodeproj::XCScheme.new
+  scheme.add_build_target(target)
+  scheme.set_launch_target(target)
+  scheme.save_as(PROJECT_PATH, target.name, true)
+end
 
 puts "Generated #{PROJECT_PATH}"
-puts "Targets: #{project.targets.map(&:name).join(', ')}"
-puts "Sources: #{swift_files.size} Swift files"
+puts "Targets:"
+puts "  - LumenBridge    (macOS 14+)   — #{(shared_swift + mac_swift).size} swift files"
+puts "  - LumenBridgeTV  (tvOS 17+)   — #{(shared_swift + tv_swift).size} swift files"
