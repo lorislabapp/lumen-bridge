@@ -29,10 +29,15 @@ shared_group = project.new_group('Shared',         'Shared')
 mac_group    = project.new_group('LumenBridge',    'LumenBridge')
 tv_group     = project.new_group('LumenBridgeTV',  'LumenBridgeTV')
 
+# Extensions that Xcode treats as opaque packages even though they are
+# directories on disk — we add them as a single file reference, not a group.
+PACKAGE_EXTS = %w[.xcassets .bundle .framework .app .xcframework].freeze
+
 def add_files_recursive(project, parent_group, path_on_disk)
   Dir.glob("#{path_on_disk}/*").sort.each do |entry|
     basename = File.basename(entry)
-    if File.directory?(entry)
+    is_package = PACKAGE_EXTS.any? { |ext| basename.end_with?(ext) }
+    if File.directory?(entry) && !is_package
       sub = parent_group.new_group(basename, basename)
       add_files_recursive(project, sub, entry)
     else
@@ -63,6 +68,14 @@ tv_swift     = swift_files_in(tv_group)
 # --- macOS target ---
 mac_target = project.new_target(:application, 'LumenBridge', :osx, '14.0')
 (shared_swift + mac_swift).each { |f| mac_target.source_build_phase.add_file_reference(f) }
+
+# Asset catalog — macOS icon. The .xcassets folder is a "blue folder" in Xcode
+# but for xcodebuild purposes we add the folder as a file reference with the
+# .xcassets path and Xcode auto-picks it up as an asset catalog resource.
+mac_xcassets = mac_group.recursive_children.find { |f|
+  f.is_a?(Xcodeproj::Project::Object::PBXFileReference) && f.path == 'Assets.xcassets'
+}
+mac_target.resources_build_phase.add_file_reference(mac_xcassets) if mac_xcassets
 
 mac_target.build_configurations.each do |config|
   config.build_settings.merge!(
