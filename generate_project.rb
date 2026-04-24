@@ -24,6 +24,29 @@ TV_DIR     = File.join(ROOT, 'LumenBridgeTV')
 FileUtils.rm_rf(PROJECT_PATH)
 project = Xcodeproj::Project.new(PROJECT_PATH)
 
+# Swift Package dependencies used by both targets.
+MQTT_NIO_URL = 'https://github.com/adam-fowler/mqtt-nio'
+MQTT_NIO_MIN = '2.13.0'
+
+mqtt_nio_pkg = project.new(Xcodeproj::Project::Object::XCRemoteSwiftPackageReference)
+mqtt_nio_pkg.repositoryURL = MQTT_NIO_URL
+mqtt_nio_pkg.requirement = {
+  'kind' => 'upToNextMajorVersion',
+  'minimumVersion' => MQTT_NIO_MIN
+}
+project.root_object.package_references << mqtt_nio_pkg
+
+def add_package_product(project, target, package_ref, product_name)
+  dep = project.new(Xcodeproj::Project::Object::XCSwiftPackageProductDependency)
+  dep.package = package_ref
+  dep.product_name = product_name
+  target.package_product_dependencies << dep
+  # Also add to the Frameworks build phase so it links.
+  build_file = project.new(Xcodeproj::Project::Object::PBXBuildFile)
+  build_file.product_ref = dep
+  target.frameworks_build_phase.files << build_file
+end
+
 # Groups mirror the on-disk layout.
 shared_group = project.new_group('Shared',         'Shared')
 mac_group    = project.new_group('LumenBridge',    'LumenBridge')
@@ -77,6 +100,8 @@ mac_xcassets = mac_group.recursive_children.find { |f|
 }
 mac_target.resources_build_phase.add_file_reference(mac_xcassets) if mac_xcassets
 
+add_package_product(project, mac_target, mqtt_nio_pkg, 'MQTTNIO')
+
 mac_target.build_configurations.each do |config|
   config.build_settings.merge!(
     'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge',
@@ -105,6 +130,8 @@ end
 # --- tvOS target ---
 tv_target = project.new_target(:application, 'LumenBridgeTV', :tvos, '17.0')
 (shared_swift + tv_swift).each { |f| tv_target.source_build_phase.add_file_reference(f) }
+
+add_package_product(project, tv_target, mqtt_nio_pkg, 'MQTTNIO')
 
 tv_target.build_configurations.each do |config|
   config.build_settings.merge!(

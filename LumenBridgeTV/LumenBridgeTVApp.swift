@@ -15,10 +15,17 @@ import SwiftUI
 @main
 struct LumenBridgeTVApp: App {
     @State private var bridgeState = BridgeState()
+    @State private var coordinator: BridgeCoordinator?
 
     var body: some Scene {
         WindowGroup {
             TVHomeView(state: bridgeState)
+                .task {
+                    guard coordinator == nil else { return }
+                    let c = BridgeCoordinator(state: bridgeState)
+                    coordinator = c
+                    await c.start()
+                }
         }
     }
 }

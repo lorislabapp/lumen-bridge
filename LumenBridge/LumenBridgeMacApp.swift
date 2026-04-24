@@ -11,6 +11,7 @@ import SwiftUI
 @main
 struct LumenBridgeMacApp: App {
     @State private var bridgeState = BridgeState()
+    @State private var coordinator: BridgeCoordinator?
 
     var body: some Scene {
         MenuBarExtra {
@@ -19,5 +20,11 @@ struct LumenBridgeMacApp: App {
             Image(systemName: bridgeState.isConnected ? "bolt.fill" : "bolt.slash")
         }
         .menuBarExtraStyle(.window)
+        .onChange(of: coordinator == nil) { _, _ in
+            guard coordinator == nil else { return }
+            let c = BridgeCoordinator(state: bridgeState)
+            coordinator = c
+            Task { await c.start() }
+        }
     }
 }
