@@ -1,0 +1,423 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0FE3C2EBF9B4A32B4ED37620 /* LumenBridgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7997608B719D550B6029F189 /* LumenBridgeApp.swift */; };
+		35EF89DBD3F1B3CA28F7C2E5 /* CloudKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451140151C6D1AB87DF25224 /* CloudKitBridge.swift */; };
+		42EA078C73399543CAD874D6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F04EB9A729B20889BDCE585 /* Cocoa.framework */; };
+		54A2098BD9B105DE53A665BF /* FrigateMQTTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CDF8371F8CBEEA2D1E1C4F /* FrigateMQTTClient.swift */; };
+		5DCD758DE2CACBD6980D0FB0 /* MenuBarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2490AFABE46A4FC2A7C55958 /* MenuBarContent.swift */; };
+		7267508A16E63C80B66196EB /* FrigateDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6999CFBA343D970C16EBB0 /* FrigateDiscovery.swift */; };
+		C28602C017BB46EB6AA43982 /* BridgeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B95693E56E89F6B486AAF9 /* BridgeState.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1F04EB9A729B20889BDCE585 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		2490AFABE46A4FC2A7C55958 /* MenuBarContent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MenuBarContent.swift; sourceTree = "<group>"; };
+		30B95693E56E89F6B486AAF9 /* BridgeState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BridgeState.swift; sourceTree = "<group>"; };
+		451140151C6D1AB87DF25224 /* CloudKitBridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CloudKitBridge.swift; sourceTree = "<group>"; };
+		58D8A582526E9073F6B8B23A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		70CDF8371F8CBEEA2D1E1C4F /* FrigateMQTTClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FrigateMQTTClient.swift; sourceTree = "<group>"; };
+		752D26792768D2C98D2179D9 /* LumenBridge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LumenBridge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7997608B719D550B6029F189 /* LumenBridgeApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LumenBridgeApp.swift; sourceTree = "<group>"; };
+		A8D7B0D00E80F312E7A9FA02 /* LumenBridge.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = LumenBridge.entitlements; sourceTree = "<group>"; };
+		CC6999CFBA343D970C16EBB0 /* FrigateDiscovery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FrigateDiscovery.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F9A9A52ACCC1C0F57BCBA218 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42EA078C73399543CAD874D6 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		16FF9A02080268221D8EF7BE /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				1F04EB9A729B20889BDCE585 /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		2804E9AA4796AE2E518FCF9F /* Discovery */ = {
+			isa = PBXGroup;
+			children = (
+				CC6999CFBA343D970C16EBB0 /* FrigateDiscovery.swift */,
+			);
+			name = Discovery;
+			path = Discovery;
+			sourceTree = "<group>";
+		};
+		288C325C540C052ED39D60B3 = {
+			isa = PBXGroup;
+			children = (
+				33023AD362DE0A5F8B4E9FCD /* Products */,
+				955F378F56D9B694D7DDFD98 /* Frameworks */,
+				4ABDD421BC56E288FC140762 /* LumenBridge */,
+			);
+			sourceTree = "<group>";
+		};
+		33023AD362DE0A5F8B4E9FCD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				752D26792768D2C98D2179D9 /* LumenBridge.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		37CC4C991F44826C6288A0C6 /* CloudKit */ = {
+			isa = PBXGroup;
+			children = (
+				451140151C6D1AB87DF25224 /* CloudKitBridge.swift */,
+			);
+			name = CloudKit;
+			path = CloudKit;
+			sourceTree = "<group>";
+		};
+		4ABDD421BC56E288FC140762 /* LumenBridge */ = {
+			isa = PBXGroup;
+			children = (
+				F37FF9640356A2E3AA3164B2 /* App */,
+				37CC4C991F44826C6288A0C6 /* CloudKit */,
+				2804E9AA4796AE2E518FCF9F /* Discovery */,
+				E825C2789BC1BBFF195E1CBF /* MQTT */,
+				92796644C3F945EE82863524 /* MenuBar */,
+				8697678EAE0EFF3E59F37C7F /* Resources */,
+				98BE7C987EA46B64F10585D0 /* State */,
+			);
+			name = LumenBridge;
+			path = LumenBridge;
+			sourceTree = "<group>";
+		};
+		8697678EAE0EFF3E59F37C7F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				58D8A582526E9073F6B8B23A /* Info.plist */,
+				A8D7B0D00E80F312E7A9FA02 /* LumenBridge.entitlements */,
+			);
+			name = Resources;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		92796644C3F945EE82863524 /* MenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				2490AFABE46A4FC2A7C55958 /* MenuBarContent.swift */,
+			);
+			name = MenuBar;
+			path = MenuBar;
+			sourceTree = "<group>";
+		};
+		955F378F56D9B694D7DDFD98 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				16FF9A02080268221D8EF7BE /* OS X */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		98BE7C987EA46B64F10585D0 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				30B95693E56E89F6B486AAF9 /* BridgeState.swift */,
+			);
+			name = State;
+			path = State;
+			sourceTree = "<group>";
+		};
+		E825C2789BC1BBFF195E1CBF /* MQTT */ = {
+			isa = PBXGroup;
+			children = (
+				70CDF8371F8CBEEA2D1E1C4F /* FrigateMQTTClient.swift */,
+			);
+			name = MQTT;
+			path = MQTT;
+			sourceTree = "<group>";
+		};
+		F37FF9640356A2E3AA3164B2 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				7997608B719D550B6029F189 /* LumenBridgeApp.swift */,
+			);
+			name = App;
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		76D7F10E4C09DBD3D50A13B4 /* LumenBridge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8FA8B4E1C237E1E8A6EE24B3 /* Build configuration list for PBXNativeTarget "LumenBridge" */;
+			buildPhases = (
+				293D9334427DBD5AF090FE75 /* Sources */,
+				F9A9A52ACCC1C0F57BCBA218 /* Frameworks */,
+				B71DDB29EB0497209EDB0DB4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LumenBridge;
+			productName = LumenBridge;
+			productReference = 752D26792768D2C98D2179D9 /* LumenBridge.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4B698631563D9DAC39DF6406 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = 95955272A7FEDB8DF6A059CE /* Build configuration list for PBXProject "LumenBridge" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 288C325C540C052ED39D60B3;
+			minimizedProjectReferenceProxies = 0;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 33023AD362DE0A5F8B4E9FCD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				76D7F10E4C09DBD3D50A13B4 /* LumenBridge */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B71DDB29EB0497209EDB0DB4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		293D9334427DBD5AF090FE75 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0FE3C2EBF9B4A32B4ED37620 /* LumenBridgeApp.swift in Sources */,
+				35EF89DBD3F1B3CA28F7C2E5 /* CloudKitBridge.swift in Sources */,
+				7267508A16E63C80B66196EB /* FrigateDiscovery.swift in Sources */,
+				54A2098BD9B105DE53A665BF /* FrigateMQTTClient.swift in Sources */,
+				5DCD758DE2CACBD6980D0FB0 /* MenuBarContent.swift in Sources */,
+				C28602C017BB46EB6AA43982 /* BridgeState.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A7DA3DA643BA2D07F73AA4C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LumenBridge/Resources/LumenBridge.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TDV6D5L785;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = LumenBridge/Resources/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 LorisLabs";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lorislabapp.lumenbridge;
+				PRODUCT_NAME = "Lumen Bridge";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		CF09CB6A97EA8E0301FADDC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		DDA568909C027EF810A418A2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		E194F3FE88F99C01E13F261F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LumenBridge/Resources/LumenBridge.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TDV6D5L785;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = LumenBridge/Resources/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 LorisLabs";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lorislabapp.lumenbridge;
+				PRODUCT_NAME = "Lumen Bridge";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8FA8B4E1C237E1E8A6EE24B3 /* Build configuration list for PBXNativeTarget "LumenBridge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E194F3FE88F99C01E13F261F /* Release */,
+				A7DA3DA643BA2D07F73AA4C3 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		95955272A7FEDB8DF6A059CE /* Build configuration list for PBXProject "LumenBridge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CF09CB6A97EA8E0301FADDC7 /* Debug */,
+				DDA568909C027EF810A418A2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4B698631563D9DAC39DF6406 /* Project object */;
+}

@@ -1,0 +1,28 @@
+## Build
+build/
+DerivedData/
+*.xcarchive
+
+## Xcode user state
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad/
+
+## macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+## Packages
+.build/
+Packages/
+Package.pins
+Package.resolved
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+## Code signing
+*.mobileprovision
+*.cer
+
+## Logs
+*.log
