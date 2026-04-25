@@ -65,7 +65,13 @@ actor CloudKitBridge {
     /// Persists one Frigate event as a CloudKit record. Idempotent via the
     /// event ID — same event written twice produces one record (Frigate ID
     /// is used as the CKRecord.ID).
-    func persist(event: FrigateMQTTClient.Event) async throws {
+    ///
+    /// `snapshot` is an optional JPEG that will be attached as a `CKAsset`
+    /// on the `snapshot` field. CloudKit stores assets out-of-band and
+    /// only delivers the asset URL/checksum in the silent push, so the
+    /// iOS subscriber decides whether to fetch the bytes. We write the
+    /// JPEG to a temp file because CKAsset takes a file URL, not Data.
+    func persist(event: FrigateMQTTClient.Event, snapshot: Data? = nil) async throws {
         let recordID = CKRecord.ID(recordName: event.id)
         let record = CKRecord(recordType: Self.recordType, recordID: recordID)
         record["camera"] = event.camera as CKRecordValue
@@ -73,6 +79,23 @@ actor CloudKitBridge {
         record["zones"] = event.zones as CKRecordValue
         record["topScore"] = event.topScore as CKRecordValue
         record["detectedAt"] = event.startTime as CKRecordValue
+
+        var tempURL: URL?
+        if let snapshot, !snapshot.isEmpty {
+            let url = FileManager.default.temporaryDirectory
+                .appendingPathComponent("lumenbridge-\(event.id).jpg")
+            do {
+                try snapshot.write(to: url, options: .atomic)
+                record["snapshot"] = CKAsset(fileURL: url)
+                tempURL = url
+            } catch {
+                logger.warning("snapshot write failed: \(error.localizedDescription) — persisting event without preview")
+            }
+        }
+
+        defer {
+            if let tempURL { try? FileManager.default.removeItem(at: tempURL) }
+        }
 
         do {
             _ = try await container.privateCloudDatabase.save(record)

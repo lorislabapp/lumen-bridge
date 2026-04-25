@@ -39,8 +39,15 @@ struct LumenBridgeMacApp: App {
             // forwarded from MQTT to CloudKit. We want to be running 24/7.
             let c = BridgeCoordinator(state: state)
             _coordinator = State(initialValue: c)
+            let triggerTestEvent = CommandLine.arguments.contains("--test-event")
             Task { @MainActor in
                 await c.start()
+                if triggerTestEvent {
+                    // Give MQTT 6s to cache at least one frigate snapshot
+                    // before firing the synthetic event.
+                    try? await Task.sleep(nanoseconds: 6_000_000_000)
+                    await c.sendTestEvent()
+                }
             }
             // First-launch onboarding. SwiftUI's Window scene doesn't
             // auto-open on app launch for a menu-bar (LSUIElement) app, so

@@ -159,7 +159,20 @@ final class BridgeCoordinator {
             topScore: 0.92,
             startTime: Date()
         )
-        await handleEvent(event)
+        // For test events the camera/label is synthetic so latestSnapshot
+        // returns nil. Try to attach ANY cached snapshot so the user can
+        // verify the CKAsset path end-to-end without waiting for a real
+        // detection on a matching camera.
+        state.eventsReceived += 1
+        state.lastEventAt = Date()
+        let snapshot = await mqtt.anyCachedSnapshot()?.data
+        do {
+            try await cloudKit.persist(event: event, snapshot: snapshot)
+            state.eventsForwarded += 1
+            logger.info("test event \(id) persisted (\(snapshot != nil ? "with snapshot" : "no snapshot"))")
+        } catch {
+            logger.error("test event persist failed: \(error.localizedDescription)")
+        }
     }
 
     // MARK: -
@@ -235,10 +248,19 @@ final class BridgeCoordinator {
     private func handleEvent(_ event: FrigateMQTTClient.Event) async {
         state.eventsReceived += 1
         state.lastEventAt = Date()
+        // Pull the most-recent snapshot Frigate published for this
+        // camera+label off the MQTT actor's cache. May be nil for the
+        // very first event of a session before any snapshot has been
+        // published — that's fine, the record persists without preview.
+        let snapshot = await mqtt.latestSnapshot(camera: event.camera, label: event.label)
         do {
-            try await cloudKit.persist(event: event)
+            try await cloudKit.persist(event: event, snapshot: snapshot)
             state.eventsForwarded += 1
-            logger.info("persisted event \(event.id)")
+            if snapshot != nil {
+                logger.info("persisted event \(event.id) with snapshot")
+            } else {
+                logger.info("persisted event \(event.id) (no snapshot yet)")
+            }
         } catch {
             logger.error("CloudKit persist failed for \(event.id): \(error.localizedDescription)")
         }

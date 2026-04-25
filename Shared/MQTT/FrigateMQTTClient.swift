@@ -49,6 +49,30 @@ actor FrigateMQTTClient {
     private var reconnectTask: Task<Void, Never>?
     private var stopRequested: Bool = false
     private var consecutiveReconnectFailures: Int = 0
+
+    /// Latest JPEG snapshot per `(camera, label)` published by Frigate on
+    /// `frigate/<camera>/<label>/snapshot`. Used to attach a preview to
+    /// each FrigateEvent CKRecord at persist time so the iOS notification
+    /// can show a thumbnail.
+    private var snapshotsByCameraLabel: [String: Data] = [:]
+    /// Cap the snapshot cache so we don't grow unbounded if Frigate
+    /// publishes many camera/label combos. ~5MB at 256KB/snap is plenty.
+    private static let maxCachedSnapshots = 20
+
+    /// Latest snapshot for a given camera + label, if Frigate has published
+    /// one in this session. Returned to the coordinator at event-persist
+    /// time so it can attach as a CKAsset.
+    func latestSnapshot(camera: String, label: String) -> Data? {
+        snapshotsByCameraLabel["\(camera)/\(label)"]
+    }
+
+    /// Any cached snapshot — used by test-event flow so we can verify the
+    /// snapshot/CKAsset path end-to-end even when Frigate hasn't published
+    /// one for the synthetic camera/label pair yet.
+    func anyCachedSnapshot() -> (cameraLabel: String, data: Data)? {
+        guard let pair = snapshotsByCameraLabel.first else { return nil }
+        return (pair.key, pair.value)
+    }
     private(set) var isConnected: Bool = false {
         didSet {
             guard oldValue != isConnected else { return }
@@ -112,10 +136,16 @@ actor FrigateMQTTClient {
             _ = try await client.connect()
             logger.info("connected to \(config.host):\(config.port)")
 
+            // Subscribe to events AND to per-camera snapshot topics. Frigate
+            // publishes raw JPEG bytes on `frigate/<camera>/<label>/snapshot`
+            // whenever a detection updates — we cache the latest per
+            // camera/label pair and attach it to the CKRecord at persist
+            // time so the iOS notification can show a thumbnail.
             _ = try await client.subscribe(to: [
-                .init(topicFilter: config.topic, qos: .atLeastOnce)
+                .init(topicFilter: config.topic, qos: .atLeastOnce),
+                .init(topicFilter: "frigate/+/+/snapshot", qos: .atMostOnce),
             ])
-            logger.info("subscribed to \(config.topic)")
+            logger.info("subscribed to \(config.topic) + frigate/+/+/snapshot")
         } catch {
             // Shutdown the half-constructed client so its EventLoopGroup
             // drains cleanly, then re-throw the original error.
@@ -132,18 +162,28 @@ actor FrigateMQTTClient {
             Task { await self?.handleUnexpectedClose() }
         }
 
-        // Listener loop — forward successful publishes to onEvent.
+        // Listener loop — events go to onEvent, snapshots are cached on
+        // the actor for the coordinator to read at persist time.
         let topic = config.topic
         let callback = onEvent
         let listener = client.createPublishListener()
-        listenerTask = Task {
+        listenerTask = Task { [weak self] in
             for await result in listener {
                 switch result {
                 case .success(let packet):
-                    guard packet.topicName == topic else { continue }
-                    if let event = Self.decodeEvent(from: packet.payload) {
-                        if let callback {
-                            await MainActor.run { callback(event) }
+                    if packet.topicName == topic {
+                        if let event = Self.decodeEvent(from: packet.payload) {
+                            if let callback {
+                                await MainActor.run { callback(event) }
+                            }
+                        }
+                    } else if let parsed = Self.parseSnapshotTopic(packet.topicName) {
+                        // Read JPEG bytes off the actor-isolated buffer.
+                        var buf = packet.payload
+                        if let bytes = buf.readData(length: buf.readableBytes) {
+                            await self?.cacheSnapshot(camera: parsed.camera,
+                                                     label: parsed.label,
+                                                     data: bytes)
                         }
                     }
                 case .failure(let err):
@@ -151,6 +191,31 @@ actor FrigateMQTTClient {
                 }
             }
         }
+    }
+
+    /// Stores a snapshot in the per-camera/label cache, evicting the oldest
+    /// entry once we cross `maxCachedSnapshots` so we don't grow unbounded.
+    private func cacheSnapshot(camera: String, label: String, data: Data) {
+        let key = "\(camera)/\(label)"
+        snapshotsByCameraLabel[key] = data
+        if snapshotsByCameraLabel.count > Self.maxCachedSnapshots {
+            // Drop a non-deterministic key — fine because the freshly-cached
+            // one is the one the next event will need; older ones can be
+            // re-fetched from Frigate if/when needed.
+            if let evict = snapshotsByCameraLabel.keys.first(where: { $0 != key }) {
+                snapshotsByCameraLabel.removeValue(forKey: evict)
+            }
+        }
+    }
+
+    /// Parses a `frigate/<camera>/<label>/snapshot` topic. Returns nil for
+    /// any other topic shape so events and snapshots don't cross-contaminate.
+    private static func parseSnapshotTopic(_ topic: String) -> (camera: String, label: String)? {
+        let parts = topic.split(separator: "/")
+        guard parts.count == 4,
+              parts[0] == "frigate",
+              parts[3] == "snapshot" else { return nil }
+        return (camera: String(parts[1]), label: String(parts[2]))
     }
 
     func disconnect() async {
