@@ -111,6 +111,11 @@ final class BridgeCoordinator {
                     await self?.handleEvent(event)
                 }
             }
+            await mqtt.setOnConnectionChange { [weak self] connected in
+                Task { @MainActor in
+                    self?.state.mqttConnected = connected
+                }
+            }
         }
     }
 

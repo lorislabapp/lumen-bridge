@@ -12,6 +12,10 @@ private let logger = Logger(subsystem: "com.lorislabapp.lumenbridge", category: 
 ///
 /// Uses MQTTNIO (SwiftNIO-based) so it runs natively on any Apple platform
 /// including tvOS — no Darwin-only APIs.
+///
+/// Auto-reconnects on unexpected disconnects (network blip, Frigate restart,
+/// broker restart) with exponential backoff capped at 30s. Manual `disconnect`
+/// suppresses reconnect — the next `connect` call has to come from the user.
 actor FrigateMQTTClient {
     // MARK: - Public types
 
@@ -42,10 +46,25 @@ actor FrigateMQTTClient {
     private var config: Config?
     private var client: MQTTClient?
     private var listenerTask: Task<Void, Never>?
-    private(set) var isConnected: Bool = false
+    private var reconnectTask: Task<Void, Never>?
+    private var stopRequested: Bool = false
+    private var consecutiveReconnectFailures: Int = 0
+    private(set) var isConnected: Bool = false {
+        didSet {
+            guard oldValue != isConnected else { return }
+            let cb = onConnectionChange
+            let nowConnected = isConnected
+            if let cb {
+                Task { await MainActor.run { cb(nowConnected) } }
+            }
+        }
+    }
 
     /// Called on the main actor when a `new` Frigate event arrives.
     var onEvent: (@MainActor @Sendable (Event) -> Void)?
+
+    /// Called on the main actor on every connection state transition.
+    var onConnectionChange: (@MainActor @Sendable (Bool) -> Void)?
 
     // MARK: - Lifecycle
 
@@ -57,10 +76,15 @@ actor FrigateMQTTClient {
         self.onEvent = callback
     }
 
+    func setOnConnectionChange(_ callback: @escaping @MainActor @Sendable (Bool) -> Void) {
+        self.onConnectionChange = callback
+    }
+
     func connect() async throws {
         guard let config else { throw ClientError.notConfigured }
+        stopRequested = false
 
-        await disconnect()
+        await teardownClient()
 
         let mqttConfig = MQTTClient.Configuration(
             version: .v3_1_1,
@@ -89,6 +113,12 @@ actor FrigateMQTTClient {
 
         self.client = client
         self.isConnected = true
+        self.consecutiveReconnectFailures = 0
+
+        // Wire close listener for auto-reconnect on unexpected disconnects.
+        client.addCloseListener(named: "auto-reconnect") { [weak self] _ in
+            Task { await self?.handleUnexpectedClose() }
+        }
 
         // Listener loop — forward successful publishes to onEvent.
         let topic = config.topic
@@ -112,14 +142,63 @@ actor FrigateMQTTClient {
     }
 
     func disconnect() async {
+        stopRequested = true
+        reconnectTask?.cancel()
+        reconnectTask = nil
+        await teardownClient()
+        isConnected = false
+    }
+
+    // MARK: - Auto-reconnect
+
+    private func handleUnexpectedClose() async {
+        // Ignore if the user asked us to stop, or if we already detached.
+        guard !stopRequested else { return }
+        guard isConnected else { return }
+        logger.warning("MQTT connection closed unexpectedly — scheduling reconnect")
+        isConnected = false
+        scheduleReconnect()
+    }
+
+    private func scheduleReconnect() {
+        reconnectTask?.cancel()
+        let backoff = nextBackoffSeconds()
+        consecutiveReconnectFailures += 1
+        reconnectTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(backoff * 1_000_000_000))
+            guard !Task.isCancelled else { return }
+            await self?.attemptReconnect()
+        }
+    }
+
+    private func attemptReconnect() async {
+        guard !stopRequested else { return }
+        do {
+            try await connect()
+            logger.info("auto-reconnect succeeded")
+        } catch {
+            logger.error("auto-reconnect failed: \(error.localizedDescription) — backing off")
+            // schedule the next attempt with longer backoff
+            scheduleReconnect()
+        }
+    }
+
+    private func nextBackoffSeconds() -> Double {
+        // 1s, 2s, 4s, 8s, 16s, 30s (cap), 30s, ...
+        let n = min(consecutiveReconnectFailures, 5)
+        let base = pow(2.0, Double(n))
+        return min(base, 30.0)
+    }
+
+    private func teardownClient() async {
         listenerTask?.cancel()
         listenerTask = nil
         if let client {
+            client.removeCloseListener(named: "auto-reconnect")
             try? await client.disconnect()
             try? await client.shutdown()
         }
         client = nil
-        isConnected = false
     }
 
     // MARK: - Decoding
