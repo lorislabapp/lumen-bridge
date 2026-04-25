@@ -27,9 +27,28 @@ final class BridgeState {
 
     var cloudKitStatus: CloudKitStatus = .unknown
 
+    // MARK: - HomeKit (Phase 5)
+
+    var hapStatus: HAPStatus = .stopped
+
     // MARK: - Discovery
 
     var discoveredInstances: [DiscoveredFrigate] = []
+}
+
+/// Lifecycle state of the optional HomeKit Accessory Protocol bridge.
+/// Only the macOS Bridge currently supports HAP (tvOS would require its
+/// own pairing flow). Surfaced in the menu-bar UI so users can grab the
+/// pairing QR code and see how many accessories are exposed.
+enum HAPStatus: Equatable {
+    case stopped
+    case running(setupCode: String, accessoryCount: Int)
+    case error(String)
+
+    var isRunning: Bool {
+        if case .running = self { return true }
+        return false
+    }
 }
 
 enum CloudKitStatus: Equatable {

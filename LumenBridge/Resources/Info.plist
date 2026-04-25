@@ -31,6 +31,7 @@
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_frigate._tcp</string>
+		<string>_hap._tcp</string>
 	</array>
 </dict>
 </plist>

@@ -57,6 +57,38 @@ struct SettingsView: View {
             }
 
             Section {
+                Toggle("Enable HomeKit bridge", isOn: hapEnabledBinding)
+                    .help("Exposes each Frigate camera as a HomeKit motion sensor in the Apple Home app. Requires re-pairing if you change your iCloud account.")
+                switch state.hapStatus {
+                case .stopped:
+                    Text("HomeKit bridge is off. Toggle on to start pairing.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                case .running(let setupCode, let count):
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Pairing code")
+                            .font(.caption.weight(.semibold))
+                        Text(setupCode)
+                            .font(.system(.title3, design: .monospaced).weight(.bold))
+                            .textSelection(.enabled)
+                        Text("Open Apple Home → Add Accessory → More options → enter this code. \(count) Frigate camera\(count == 1 ? "" : "s") exposed.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                case .error(let reason):
+                    Text(reason)
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                }
+            } header: {
+                Text("HomeKit (beta)")
+            } footer: {
+                Text("Phase 5 — motion sensors only for now. Camera streaming and HKSV recording are coming in v0.2.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Section {
                 if !state.discoveredInstances.isEmpty {
                     ForEach(state.discoveredInstances) { instance in
                         Button {
@@ -136,6 +168,18 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
             }
         }
+    }
+
+    /// Two-way binding to the persisted HAP-enabled flag. Reading hits
+    /// UserDefaults; writing flips the flag. The Bridge picks up the new
+    /// value on next launch (HAP needs a clean process for pairing
+    /// state — toggling at runtime would require explicit start/stop on
+    /// the coordinator, which we'll add in v0.2).
+    private var hapEnabledBinding: Binding<Bool> {
+        Binding(
+            get: { UserDefaults.standard.bool(forKey: "lumenbridge.hap.enabled") },
+            set: { UserDefaults.standard.set($0, forKey: "lumenbridge.hap.enabled") }
+        )
     }
 
     private func apply() async {

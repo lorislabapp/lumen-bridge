@@ -24,6 +24,10 @@ final class BridgeCoordinator {
     /// Bonjour discoveries do NOT auto-replace the configured host — only the
     /// user can override their own choice.
     private static let manualConfigKey = "lumenbridge.frigate.manual"
+    /// Opt-in flag for the Phase 5 HomeKit bridge. Off by default so the
+    /// Bridge stays focused on notifications until the user explicitly
+    /// turns HomeKit on in Settings or onboarding.
+    static let hapEnabledKey = "lumenbridge.hap.enabled"
 
     // MARK: -
 
@@ -31,15 +35,28 @@ final class BridgeCoordinator {
     private let discovery = FrigateDiscovery()
     private let mqtt = FrigateMQTTClient()
     private let cloudKit = CloudKitBridge()
+    #if os(macOS)
+    private let hap: HAPBridgeManager
+    #endif
 
     init(state: BridgeState) {
         self.state = state
+        #if os(macOS)
+        self.hap = HAPBridgeManager(state: state)
+        #endif
     }
 
     func start() async {
         await refreshCloudKitStatus()
         wireDiscovery()
         wireMQTT()
+        #if os(macOS)
+        // HomeKit is opt-in for Phase 5. Boot the HAP server only if the
+        // user has flipped the flag (via Settings or onboarding).
+        if UserDefaults.standard.bool(forKey: Self.hapEnabledKey) {
+            await hap.start()
+        }
+        #endif
 
         // Reconnect to the last known Frigate host immediately, in parallel
         // with starting Bonjour. If discovery surfaces a different host on
@@ -264,5 +281,14 @@ final class BridgeCoordinator {
         } catch {
             logger.error("CloudKit persist failed for \(event.id): \(error.localizedDescription)")
         }
+        #if os(macOS)
+        // Mirror to HomeKit — adds the camera as an accessory the first
+        // time we see it, then triggers the motion-detected characteristic
+        // so the Home app surfaces a motion alert and HomePods chime.
+        if state.hapStatus.isRunning {
+            await hap.ensureCameraAccessory(cameraName: event.camera)
+            await hap.reportMotion(cameraName: event.camera, detected: true)
+        }
+        #endif
     }
 }

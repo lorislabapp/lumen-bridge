@@ -36,6 +36,20 @@ mqtt_nio_pkg.requirement = {
 }
 project.root_object.package_references << mqtt_nio_pkg
 
+# Bouke/HAP — Swift HomeKit Accessory Protocol implementation. Used by
+# the Phase 5 HomeKit bridge (macOS only — tvOS doesn't expose HAP-server
+# capability and gets its accessory list via the macOS Bridge).
+HAP_URL = 'https://github.com/Bouke/HAP'
+HAP_REVISION = '51e3505a' # last commit on master, 2022-12-31 — tracked by SHA so we know exactly what code we're shipping
+
+hap_pkg = project.new(Xcodeproj::Project::Object::XCRemoteSwiftPackageReference)
+hap_pkg.repositoryURL = HAP_URL
+hap_pkg.requirement = {
+  'kind' => 'revision',
+  'revision' => HAP_REVISION
+}
+project.root_object.package_references << hap_pkg
+
 def add_package_product(project, target, package_ref, product_name)
   dep = project.new(Xcodeproj::Project::Object::XCSwiftPackageProductDependency)
   dep.package = package_ref
@@ -101,13 +115,14 @@ mac_xcassets = mac_group.recursive_children.find { |f|
 mac_target.resources_build_phase.add_file_reference(mac_xcassets) if mac_xcassets
 
 add_package_product(project, mac_target, mqtt_nio_pkg, 'MQTTNIO')
+add_package_product(project, mac_target, hap_pkg, 'HAP')
 
 mac_target.build_configurations.each do |config|
   config.build_settings.merge!(
     'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge',
     'PRODUCT_NAME' => 'Lumen Bridge',
     'MARKETING_VERSION' => '0.1.0',
-    'CURRENT_PROJECT_VERSION' => '5',
+    'CURRENT_PROJECT_VERSION' => '6',
     'MACOSX_DEPLOYMENT_TARGET' => '14.0',
     'SWIFT_VERSION' => '6.0',
     'DEVELOPMENT_TEAM' => 'TDV6D5L785',
@@ -138,7 +153,7 @@ tv_target.build_configurations.each do |config|
     'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge',
     'PRODUCT_NAME' => 'Lumen Bridge',
     'MARKETING_VERSION' => '0.1.0',
-    'CURRENT_PROJECT_VERSION' => '5',
+    'CURRENT_PROJECT_VERSION' => '6',
     'TVOS_DEPLOYMENT_TARGET' => '17.0',
     'SWIFT_VERSION' => '6.0',
     'DEVELOPMENT_TEAM' => 'TDV6D5L785',
