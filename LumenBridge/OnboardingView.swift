@@ -27,12 +27,13 @@ struct OnboardingView: View {
     @State private var didSendTestEvent: Bool = false
 
     enum Step: Int, CaseIterable {
-        case welcome, frigate, iCloud, done
+        case welcome, frigate, iCloud, roadmap, done
         var title: String {
             switch self {
             case .welcome: return "Welcome"
             case .frigate: return "Connect to Frigate"
             case .iCloud:  return "iCloud"
+            case .roadmap: return "What's next"
             case .done:    return "All set"
             }
         }
@@ -84,6 +85,7 @@ struct OnboardingView: View {
         case .welcome: welcomeStep
         case .frigate: frigateStep
         case .iCloud:  iCloudStep
+        case .roadmap: roadmapStep
         case .done:    doneStep
         }
     }
@@ -200,6 +202,22 @@ struct OnboardingView: View {
                 }
             }
 
+            // If iCloud isn't ready, give the user a one-click jump into
+            // System Settings → Apple ID rather than asking them to find
+            // the right pane themselves.
+            if !state.cloudKitStatus.isHealthy {
+                Button {
+                    if let url = URL(string: "x-apple.systempreferences:com.apple.preferences.AppleIDPrefPane") {
+                        NSWorkspace.shared.open(url)
+                    }
+                } label: {
+                    Label("Open Apple ID in System Settings", systemImage: "person.crop.circle.badge.plus")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+            }
+
             VStack(alignment: .leading, spacing: 10) {
                 bullet("lock.icloud.fill", "Private database",
                        "Records sit in your private CloudKit DB. Apple's servers carry the encrypted data; only your devices have the key.")
@@ -209,6 +227,59 @@ struct OnboardingView: View {
                        "Uses your existing iCloud free tier (5GB shared, but FrigateEvent records are tiny — millions per year fit easily).")
             }
 
+            Spacer(minLength: 0)
+        }
+    }
+
+    private var roadmapStep: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            Text("More features coming to the Bridge")
+                .font(.title2.weight(.semibold))
+            Text("The Bridge is designed to grow into your home's full Frigate ↔ Apple control panel. Here's what's already live and what's next.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+
+            VStack(alignment: .leading, spacing: 12) {
+                roadmapRow(.live, "Push notifications",
+                           "Detection events appear on every Apple device under your iCloud account, with text and zone info.")
+                roadmapRow(.live, "Snapshot previews",
+                           "Notifications include a thumbnail of the detection moment, attached as a CKAsset.")
+                roadmapRow(.next, "HomeKit cameras",
+                           "Each Frigate camera will appear in the Apple Home app — Live View, motion sensors, Lock Screen access. No HomeKit-certified camera required.")
+                roadmapRow(.later, "HomeKit Secure Video",
+                           "Recordings stored encrypted in iCloud, IA detection by Apple in addition to Frigate, no local storage needed.")
+                roadmapRow(.later, "Migration from Cloudflare Worker",
+                           "One-click switch from the legacy worker-based push delivery to Apple Bridge for existing Lumen users.")
+            }
+
+            Spacer(minLength: 0)
+        }
+    }
+
+    private enum RoadmapState { case live, next, later }
+
+    private func roadmapRow(_ state: RoadmapState, _ title: String, _ body: String) -> some View {
+        let (badge, badgeColor): (String, Color) = {
+            switch state {
+            case .live:  return ("Live now", .green)
+            case .next:  return ("Next", .blue)
+            case .later: return ("Later", .secondary)
+            }
+        }()
+        return HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading) {
+                Text(badge)
+                    .font(.caption2.weight(.bold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Capsule().fill(badgeColor))
+            }
+            .frame(width: 64, alignment: .leading)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title).font(.subheadline.weight(.semibold))
+                Text(body).font(.caption).foregroundStyle(.secondary)
+            }
             Spacer(minLength: 0)
         }
     }
@@ -291,9 +362,13 @@ struct OnboardingView: View {
             .disabled(isTestingConnection || (manualHost.trimmingCharacters(in: .whitespaces).isEmpty && !state.mqttConnected))
 
         case .iCloud:
-            Button("Continue") { step = .done }
+            Button("Continue") { step = .roadmap }
                 .buttonStyle(.borderedProminent)
                 .disabled(!state.cloudKitStatus.isHealthy)
+
+        case .roadmap:
+            Button("Continue") { step = .done }
+                .buttonStyle(.borderedProminent)
 
         case .done:
             Button("Finish") {
