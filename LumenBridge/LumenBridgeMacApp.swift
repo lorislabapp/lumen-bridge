@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 /// Lumen Bridge — native macOS menu-bar app that bridges Frigate NVR (via
 /// MQTT) to Apple's CloudKit, letting every Lumen install under the user's
@@ -41,6 +42,19 @@ struct LumenBridgeMacApp: App {
             Task { @MainActor in
                 await c.start()
             }
+            // First-launch onboarding. SwiftUI's Window scene doesn't
+            // auto-open on app launch for a menu-bar (LSUIElement) app, so
+            // we drive the window through AppKit. Fires only when the
+            // versioned completion flag is missing.
+            if UserDefaults.standard.bool(forKey: OnboardingView.completedKey) == false {
+                Task { @MainActor in
+                    // Tiny delay so coordinator's start() has time to set
+                    // initial CloudKit / Bonjour state before the wizard
+                    // reads it for the welcome screens.
+                    try? await Task.sleep(nanoseconds: 800_000_000)
+                    OnboardingWindowPresenter.shared.show(state: state, coordinator: c)
+                }
+            }
         }
     }
 
@@ -73,5 +87,49 @@ struct LumenBridgeMacApp: App {
             )
         }
         .windowResizability(.contentSize)
+
+    }
+}
+
+/// Drives the onboarding window via AppKit because SwiftUI's Window scene
+/// doesn't auto-open on app launch for a menu-bar (LSUIElement) app. The
+/// presenter owns a single NSWindow + NSHostingController over time and
+/// re-uses them if the user closes and re-opens the wizard.
+@MainActor
+final class OnboardingWindowPresenter {
+    static let shared = OnboardingWindowPresenter()
+    private var window: NSWindow?
+
+    func show(state: BridgeState, coordinator: BridgeCoordinator?) {
+        if let w = window {
+            w.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+            return
+        }
+        let view = OnboardingView(
+            state: state,
+            onApplyManualConfig: { [weak coordinator] host, port, user, pass in
+                await coordinator?.applyManualConfig(
+                    host: host, port: port,
+                    username: user, password: pass
+                )
+            },
+            onSendTestEvent: { [weak coordinator] in
+                await coordinator?.sendTestEvent()
+            },
+            onFinish: { [weak self] in
+                self?.window?.close()
+            }
+        )
+        let controller = NSHostingController(rootView: view)
+        let w = NSWindow(contentViewController: controller)
+        w.title = "Welcome to Lumen Bridge"
+        w.styleMask = [.titled, .closable]
+        w.setContentSize(NSSize(width: 640, height: 540))
+        w.center()
+        w.isReleasedWhenClosed = false
+        self.window = w
+        w.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
     }
 }
