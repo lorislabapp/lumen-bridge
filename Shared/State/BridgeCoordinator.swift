@@ -56,6 +56,36 @@ final class BridgeCoordinator {
 
     // MARK: - Test event
 
+    /// Headless schema seeder. Refreshes CloudKit account status, writes one
+    /// synthetic FrigateEvent, then calls `exit()` so the app terminates
+    /// without ever showing UI. Used when the binary is launched with
+    /// `--seed-schema` to bootstrap the FrigateEvent record type in the
+    /// Development environment without a click.
+    func seedSchemaAndQuit() async {
+        await refreshCloudKitStatus()
+        guard state.cloudKitStatus == .available else {
+            logger.error("seed-schema: CloudKit not available (\(String(describing: self.state.cloudKitStatus))) — aborting")
+            exit(1)
+        }
+        let id = "seed-\(Int(Date().timeIntervalSince1970))-\(UUID().uuidString.prefix(8))"
+        let event = FrigateMQTTClient.Event(
+            id: id,
+            camera: "test_camera",
+            label: "person",
+            zones: ["entry"],
+            topScore: 0.92,
+            startTime: Date()
+        )
+        do {
+            try await cloudKit.persist(event: event)
+            logger.info("seed-schema: wrote \(id) to CloudKit ✓")
+            exit(0)
+        } catch {
+            logger.error("seed-schema: persist failed — \(error.localizedDescription)")
+            exit(1)
+        }
+    }
+
     /// Manual entry point — writes a synthetic FrigateEvent to CloudKit
     /// without going through MQTT. Two purposes:
     ///   (1) Seed the FrigateEvent record type in the CloudKit schema on

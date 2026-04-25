@@ -13,6 +13,27 @@ struct LumenBridgeMacApp: App {
     @State private var bridgeState = BridgeState()
     @State private var coordinator: BridgeCoordinator?
 
+    /// Headless one-shot: if `--seed-schema` is in the launch arguments, the
+    /// app writes one synthetic FrigateEvent to CloudKit (seeding the
+    /// Development schema on first run), then exits 0 on success / 1 on
+    /// failure. Used to bootstrap the schema without requiring a click.
+    private static var isSeedMode: Bool {
+        CommandLine.arguments.contains("--seed-schema")
+    }
+
+    @MainActor init() {
+        if Self.isSeedMode {
+            // SwiftUI App.init runs on the main actor; launching a Task here
+            // schedules the seeder on that actor and the body never has to
+            // construct (we exit the process on success).
+            let state = bridgeState
+            Task { @MainActor in
+                let c = BridgeCoordinator(state: state)
+                await c.seedSchemaAndQuit()
+            }
+        }
+    }
+
     var body: some Scene {
         MenuBarExtra {
             MenuBarContent(
