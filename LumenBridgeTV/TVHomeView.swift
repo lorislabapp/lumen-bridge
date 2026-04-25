@@ -72,7 +72,7 @@ struct TVHomeView: View {
         if !state.discoveredInstances.isEmpty {
             return "\(state.discoveredInstances.count) instances found"
         }
-        return "Searching via Bonjour…"
+        return "Waiting for config from your Mac…"
     }
 
     private var frigateSecondary: String {
@@ -88,12 +88,20 @@ struct TVHomeView: View {
     }
 
     private var eventsStrip: some View {
-        HStack {
-            Text("Leave this running — the bridge forwards Frigate events to all your Lumen devices via iCloud.")
-                .font(.callout)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: 900)
+        VStack(spacing: 12) {
+            if state.frigateHost == nil {
+                Text("Open Lumen Bridge on your Mac and finish the setup wizard there. Your Apple TV will pick up the Frigate connection automatically via iCloud.")
+                    .font(.title3)
+                    .foregroundStyle(.orange)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: 1100)
+            } else {
+                Text("Leave this running — the bridge forwards Frigate events to all your Lumen devices via iCloud.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: 900)
+            }
         }
     }
 

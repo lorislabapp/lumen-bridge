@@ -35,6 +35,7 @@ final class BridgeCoordinator {
     private let discovery = FrigateDiscovery()
     private let mqtt = FrigateMQTTClient()
     private let cloudKit = CloudKitBridge()
+    private let configSync = BridgeConfigSync()
     #if os(macOS)
     private let hap: HAPBridgeManager
     #endif
@@ -58,6 +59,19 @@ final class BridgeCoordinator {
         }
         #endif
 
+        // Subscribe to remote KVS updates so a config change on the macOS
+        // Bridge propagates to the tvOS Bridge (and vice-versa) within
+        // seconds without manual re-entry.
+        configSync.observeRemoteChanges { [weak self] cfg in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                await self.applyManualConfig(
+                    host: cfg.host, port: cfg.port,
+                    username: cfg.username, password: cfg.password
+                )
+            }
+        }
+
         // Reconnect to the last known Frigate host immediately, in parallel
         // with starting Bonjour. If discovery surfaces a different host on
         // the same network later, handleDiscovered upgrades to it; if not,
@@ -73,6 +87,15 @@ final class BridgeCoordinator {
             state.mqttUsername = user
             state.mqttPassword = pass
             await connectMQTT(host: savedHost, port: port, username: user, password: pass)
+        } else if let kvs = configSync.current {
+            // No local config (typical on a fresh tvOS install) but iCloud
+            // KVS has a config from a sibling Bridge — use it directly.
+            state.frigateHost = kvs.host
+            state.frigatePort = kvs.port
+            state.mqttUsername = kvs.username
+            state.mqttPassword = kvs.password
+            await connectMQTT(host: kvs.host, port: kvs.port,
+                              username: kvs.username, password: kvs.password)
         }
         discovery.start()
     }
@@ -111,6 +134,10 @@ final class BridgeCoordinator {
         state.mqttUsername = username
         state.mqttPassword = password
         state.lastMQTTError = nil
+
+        // Mirror to iCloud KVS so a sibling Bridge (e.g. tvOS under the
+        // same Apple ID) can pick up the config without manual re-entry.
+        configSync.push(host: trimmedHost, port: port, username: username, password: password)
 
         await mqtt.disconnect()
         await connectMQTT(host: trimmedHost, port: port, username: username, password: password)
