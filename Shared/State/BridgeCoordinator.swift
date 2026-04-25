@@ -122,6 +122,20 @@ final class BridgeCoordinator {
         UserDefaults.standard.bool(forKey: Self.manualConfigKey)
     }
 
+    #if os(macOS)
+    /// Toggle the HomeKit bridge at runtime — flips the persisted opt-in
+    /// flag and starts or stops the HAP server immediately so the user
+    /// doesn't have to relaunch after toggling in Settings.
+    func setHAPEnabled(_ enabled: Bool) async {
+        UserDefaults.standard.set(enabled, forKey: Self.hapEnabledKey)
+        if enabled {
+            await hap.start()
+        } else {
+            await hap.stop()
+        }
+    }
+    #endif
+
     func stop() async {
         discovery.stop()
         await mqtt.disconnect()

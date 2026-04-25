@@ -7,259 +7,238 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02D1BA5F40FF0C030D9E2402 /* BridgeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17074846EA77AAAE4A5FE01B /* BridgeState.swift */; };
-		0BF1BEDBA54BD5941F860C9C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38B306573A4A160C431C9E49 /* Foundation.framework */; };
-		1F90A9011A738A6A7307C99C /* HAPBridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ACA0415CE8AC5E77328296 /* HAPBridgeManager.swift */; };
-		28CE5377508FC9082E8CF643 /* LumenBridgeMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D316E73AA33DCF5B670D26 /* LumenBridgeMacApp.swift */; };
-		2DF3C99D68696026BB4128A9 /* HAP in Frameworks */ = {isa = PBXBuildFile; productRef = 0D8C472176D7409C2605243C /* HAP */; };
-		4389B6089063708335F0F50E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6337294FF336E04E0B6829DF /* OnboardingView.swift */; };
-		4FA5C97B26EC4A2295DCC02F /* HAPBridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ACA0415CE8AC5E77328296 /* HAPBridgeManager.swift */; };
-		67CFF3985FFABA7536F53BD1 /* BridgeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDD9B215999F5D33DE7BC91 /* BridgeCoordinator.swift */; };
-		6E76259923A700E446DA9393 /* FrigateMQTTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F792E42FFE954EFAB36AD46 /* FrigateMQTTClient.swift */; };
-		7A45749ED3C0F9F3A7312FC1 /* TVHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCA60BBF713ED3FEDCC6A19 /* TVHomeView.swift */; };
-		7DC9968B817349434CF21E00 /* FrigateDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9172813567924FA2BCCA944 /* FrigateDiscovery.swift */; };
-		98FFE8FD114E63012B6DF5BB /* BridgeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDD9B215999F5D33DE7BC91 /* BridgeCoordinator.swift */; };
-		A2B5E96C8B8CE7D8159FDD0E /* FrigateDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9172813567924FA2BCCA944 /* FrigateDiscovery.swift */; };
-		ACDBF982C67EFB3D73205B01 /* FrigateMQTTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F792E42FFE954EFAB36AD46 /* FrigateMQTTClient.swift */; };
-		B2EDF1DEEBEB2C4F9E4B73B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67715F258863550FFE84B58A /* Assets.xcassets */; };
-		B57F2BA49CFFC4B01471888E /* CloudKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7157EEC74621472126385535 /* CloudKitBridge.swift */; };
-		BC40D9AD058932CE761FAB2F /* MQTTNIO in Frameworks */ = {isa = PBXBuildFile; productRef = 3BB188C930087260C812C23C /* MQTTNIO */; };
-		BE6CF6FF0EE6DCA37638125D /* LumenBridgeTVApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125DF9E959F1BE988F91BEFD /* LumenBridgeTVApp.swift */; };
-		CA71911998E2D57918B2C1B2 /* MQTTNIO in Frameworks */ = {isa = PBXBuildFile; productRef = 9DF9B5A2CAC265E413ADF722 /* MQTTNIO */; };
-		D03BF7EA1EB6D378368FF996 /* CloudKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7157EEC74621472126385535 /* CloudKitBridge.swift */; };
-		DF73AB0E92CD64776F77C406 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B184A52CF0459C444BCFD47 /* SettingsView.swift */; };
-		E3D53ADDA7AB42B0D7B602B3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4871962FEB31099AF2A6CC8B /* Cocoa.framework */; };
-		F84C826126F51AB0AB85B2F6 /* MenuBarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5C05127D49E9493E3B6B09 /* MenuBarContent.swift */; };
-		F9C36835F6FD175A73620D84 /* BridgeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17074846EA77AAAE4A5FE01B /* BridgeState.swift */; };
+		007FBEF26905264F3900ADED /* BridgeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9902E326D8E6F9E5CC8FE7E2 /* BridgeCoordinator.swift */; };
+		01D2BB257212FD103CF615A9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99013581D8FEBF8D181D57EC /* Cocoa.framework */; };
+		08470D506B17C2504DDB8B8D /* TVHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817532FF392315A6271D1A9D /* TVHomeView.swift */; };
+		196B64CA4FB6CBD12D7C8195 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD921998EAD20C9558C76373 /* SettingsView.swift */; };
+		2265FEE7AD855A95CEF0D896 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11D31C4E5BFAF0DD6B883207 /* Foundation.framework */; };
+		26AF19F85B35CF8C79D766B4 /* BridgeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9902E326D8E6F9E5CC8FE7E2 /* BridgeCoordinator.swift */; };
+		56612CBFB50B465174D563B9 /* FrigateDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D92EDD87B92ABD6CB21B7987 /* FrigateDiscovery.swift */; };
+		5CD78340C514DB1112551A6C /* BridgeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29D4FD3E4F8114DC87A723 /* BridgeState.swift */; };
+		7667E7D082F3EFFFC0A4880A /* LumenBridgeMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7E26D1FC72A7DB9AC2D40 /* LumenBridgeMacApp.swift */; };
+		850CADE0FE060D25868E13F6 /* FrigateDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = D92EDD87B92ABD6CB21B7987 /* FrigateDiscovery.swift */; };
+		93571907EB9297FC64F00F89 /* MenuBarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4BA0C154CFEEEA6507AE7C /* MenuBarContent.swift */; };
+		9F543A4AB0D8FBB499498433 /* CloudKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA20F926090EF5F27F29A01 /* CloudKitBridge.swift */; };
+		AD88F4CAD4D92A54169FBE88 /* CloudKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA20F926090EF5F27F29A01 /* CloudKitBridge.swift */; };
+		BF4DBECB4C5037AD39A00382 /* MQTTNIO in Frameworks */ = {isa = PBXBuildFile; productRef = E81AAE4718F5FE2416F28113 /* MQTTNIO */; };
+		C43557FAC11BFB84CBEA4CE9 /* HAP in Frameworks */ = {isa = PBXBuildFile; productRef = 3E9C6EDFA15B61A964CCBAB0 /* HAP */; };
+		DCAF16BEDF2F16385BE90E67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA7BC4E688C0153DEF34FAA5 /* Assets.xcassets */; };
+		E691917897957863DA31D236 /* LumenBridgeTVApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 300CE853FBA7520C0B0CF3D5 /* LumenBridgeTVApp.swift */; };
+		E8454089B5A9753B8DB2C9D6 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25A6E8EB4B3EE007ADED7122 /* OnboardingView.swift */; };
+		E885763B8B48ECFDAF069A13 /* HAPBridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF29979FEC653E734057417 /* HAPBridgeManager.swift */; };
+		E892109CC3866614ACDA5C63 /* FrigateMQTTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5F22E615EFCA0A82727744 /* FrigateMQTTClient.swift */; };
+		E8D377C9989D278C3F08836A /* HAPBridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF29979FEC653E734057417 /* HAPBridgeManager.swift */; };
+		E99D1754AD4B39EEF452D371 /* MQTTNIO in Frameworks */ = {isa = PBXBuildFile; productRef = 85BA0B6C492E25DEFA9E638F /* MQTTNIO */; };
+		F963237EC0813E3931668F74 /* BridgeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29D4FD3E4F8114DC87A723 /* BridgeState.swift */; };
+		FB49A575C9F77B631BEFF8EF /* FrigateMQTTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5F22E615EFCA0A82727744 /* FrigateMQTTClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0B5C05127D49E9493E3B6B09 /* MenuBarContent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MenuBarContent.swift; sourceTree = "<group>"; };
-		125DF9E959F1BE988F91BEFD /* LumenBridgeTVApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LumenBridgeTVApp.swift; sourceTree = "<group>"; };
-		17074846EA77AAAE4A5FE01B /* BridgeState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BridgeState.swift; sourceTree = "<group>"; };
-		38B306573A4A160C431C9E49 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		3B184A52CF0459C444BCFD47 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		4871962FEB31099AF2A6CC8B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-		6337294FF336E04E0B6829DF /* OnboardingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		65C291688568CACDA5EE6570 /* LumenBridgeTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LumenBridgeTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		67715F258863550FFE84B58A /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		7157EEC74621472126385535 /* CloudKitBridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CloudKitBridge.swift; sourceTree = "<group>"; };
-		7BCA60BBF713ED3FEDCC6A19 /* TVHomeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TVHomeView.swift; sourceTree = "<group>"; };
-		7EDD9B215999F5D33DE7BC91 /* BridgeCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BridgeCoordinator.swift; sourceTree = "<group>"; };
-		91D316E73AA33DCF5B670D26 /* LumenBridgeMacApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LumenBridgeMacApp.swift; sourceTree = "<group>"; };
-		9F792E42FFE954EFAB36AD46 /* FrigateMQTTClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FrigateMQTTClient.swift; sourceTree = "<group>"; };
-		A49C8EA6A4CDE81DD1B515C3 /* LumenBridge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LumenBridge.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B9172813567924FA2BCCA944 /* FrigateDiscovery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FrigateDiscovery.swift; sourceTree = "<group>"; };
-		D78E3B1498001AA8A6DA69C1 /* LumenBridge.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = LumenBridge.entitlements; sourceTree = "<group>"; };
-		E4ACA0415CE8AC5E77328296 /* HAPBridgeManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HAPBridgeManager.swift; sourceTree = "<group>"; };
-		EDDB071CD471AC6AAC2C7F65 /* LumenBridgeTV.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = LumenBridgeTV.entitlements; sourceTree = "<group>"; };
-		EECC69F92C9EA68FC108B3C3 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F0C9209A7B89FEE600BA225E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		11D31C4E5BFAF0DD6B883207 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		25A6E8EB4B3EE007ADED7122 /* OnboardingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		300CE853FBA7520C0B0CF3D5 /* LumenBridgeTVApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LumenBridgeTVApp.swift; sourceTree = "<group>"; };
+		3A75AD4417C27D07870ED266 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3BA20F926090EF5F27F29A01 /* CloudKitBridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CloudKitBridge.swift; sourceTree = "<group>"; };
+		436EB00E1341D08FD12A794F /* LumenBridge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LumenBridge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		43D7E26D1FC72A7DB9AC2D40 /* LumenBridgeMacApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LumenBridgeMacApp.swift; sourceTree = "<group>"; };
+		62F2CCFC7EBC313E72241477 /* LumenBridge.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = LumenBridge.entitlements; sourceTree = "<group>"; };
+		80039F1685AF0B28808AA0D4 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		817532FF392315A6271D1A9D /* TVHomeView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TVHomeView.swift; sourceTree = "<group>"; };
+		8C29D4FD3E4F8114DC87A723 /* BridgeState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BridgeState.swift; sourceTree = "<group>"; };
+		99013581D8FEBF8D181D57EC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		9902E326D8E6F9E5CC8FE7E2 /* BridgeCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BridgeCoordinator.swift; sourceTree = "<group>"; };
+		9B4BA0C154CFEEEA6507AE7C /* MenuBarContent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MenuBarContent.swift; sourceTree = "<group>"; };
+		AB5F22E615EFCA0A82727744 /* FrigateMQTTClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FrigateMQTTClient.swift; sourceTree = "<group>"; };
+		BA7BC4E688C0153DEF34FAA5 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BFFB6F09760D663BF203CB9F /* LumenBridgeTV.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = LumenBridgeTV.entitlements; sourceTree = "<group>"; };
+		D92EDD87B92ABD6CB21B7987 /* FrigateDiscovery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FrigateDiscovery.swift; sourceTree = "<group>"; };
+		DD921998EAD20C9558C76373 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		DEF29979FEC653E734057417 /* HAPBridgeManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HAPBridgeManager.swift; sourceTree = "<group>"; };
+		F40E628F81C67C3AB36ED420 /* LumenBridgeTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LumenBridgeTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		CE2A71FE731CC1160AA2B798 /* Frameworks */ = {
+		2FD45CF49BB67A5F383F3410 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0BF1BEDBA54BD5941F860C9C /* Foundation.framework in Frameworks */,
-				BC40D9AD058932CE761FAB2F /* MQTTNIO in Frameworks */,
+				01D2BB257212FD103CF615A9 /* Cocoa.framework in Frameworks */,
+				E99D1754AD4B39EEF452D371 /* MQTTNIO in Frameworks */,
+				C43557FAC11BFB84CBEA4CE9 /* HAP in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FFD35226C9266D4E54629C65 /* Frameworks */ = {
+		9199F09707ECE1AC98A42E6A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3D53ADDA7AB42B0D7B602B3 /* Cocoa.framework in Frameworks */,
-				CA71911998E2D57918B2C1B2 /* MQTTNIO in Frameworks */,
-				2DF3C99D68696026BB4128A9 /* HAP in Frameworks */,
+				2265FEE7AD855A95CEF0D896 /* Foundation.framework in Frameworks */,
+				BF4DBECB4C5037AD39A00382 /* MQTTNIO in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0AEDA199BA721F165DEA1C60 /* LumenBridgeTV */ = {
+		0BDE6AA1F90129F914E145C8 /* State */ = {
 			isa = PBXGroup;
 			children = (
-				125DF9E959F1BE988F91BEFD /* LumenBridgeTVApp.swift */,
-				F67B00BE96025E87C32BD0CF /* Resources */,
-				7BCA60BBF713ED3FEDCC6A19 /* TVHomeView.swift */,
-			);
-			name = LumenBridgeTV;
-			path = LumenBridgeTV;
-			sourceTree = "<group>";
-		};
-		121C9D78935AEF34A8B6CED2 /* CloudKit */ = {
-			isa = PBXGroup;
-			children = (
-				7157EEC74621472126385535 /* CloudKitBridge.swift */,
-			);
-			name = CloudKit;
-			path = CloudKit;
-			sourceTree = "<group>";
-		};
-		194D8F0305C6346A5693B39F /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				67715F258863550FFE84B58A /* Assets.xcassets */,
-				F0C9209A7B89FEE600BA225E /* Info.plist */,
-				D78E3B1498001AA8A6DA69C1 /* LumenBridge.entitlements */,
-			);
-			name = Resources;
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		1F6CFC332174EBF0BCF13F25 /* LumenBridge */ = {
-			isa = PBXGroup;
-			children = (
-				91D316E73AA33DCF5B670D26 /* LumenBridgeMacApp.swift */,
-				0B5C05127D49E9493E3B6B09 /* MenuBarContent.swift */,
-				6337294FF336E04E0B6829DF /* OnboardingView.swift */,
-				194D8F0305C6346A5693B39F /* Resources */,
-				3B184A52CF0459C444BCFD47 /* SettingsView.swift */,
-			);
-			name = LumenBridge;
-			path = LumenBridge;
-			sourceTree = "<group>";
-		};
-		25D99DD249CF4DCDA2D21A1F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A49C8EA6A4CDE81DD1B515C3 /* LumenBridge.app */,
-				65C291688568CACDA5EE6570 /* LumenBridgeTV.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		33A7310ECE454D7B7865827B /* OS X */ = {
-			isa = PBXGroup;
-			children = (
-				4871962FEB31099AF2A6CC8B /* Cocoa.framework */,
-			);
-			name = "OS X";
-			sourceTree = "<group>";
-		};
-		60CC392E448A98261B78EC0F /* Discovery */ = {
-			isa = PBXGroup;
-			children = (
-				B9172813567924FA2BCCA944 /* FrigateDiscovery.swift */,
-			);
-			name = Discovery;
-			path = Discovery;
-			sourceTree = "<group>";
-		};
-		60FC413DED70A1D306C0CA18 = {
-			isa = PBXGroup;
-			children = (
-				25D99DD249CF4DCDA2D21A1F /* Products */,
-				BA7B48FF1BF46A18E960BDAF /* Frameworks */,
-				9179700038BD9ED7DE55E097 /* Shared */,
-				1F6CFC332174EBF0BCF13F25 /* LumenBridge */,
-				0AEDA199BA721F165DEA1C60 /* LumenBridgeTV */,
-			);
-			sourceTree = "<group>";
-		};
-		9179700038BD9ED7DE55E097 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				121C9D78935AEF34A8B6CED2 /* CloudKit */,
-				60CC392E448A98261B78EC0F /* Discovery */,
-				B1BEC9B351E507850DAC331E /* HomeKit */,
-				9D41F95AF7D570AF4A241177 /* MQTT */,
-				DD621D0EC9321849DC9A5C95 /* State */,
-			);
-			name = Shared;
-			path = Shared;
-			sourceTree = "<group>";
-		};
-		9D41F95AF7D570AF4A241177 /* MQTT */ = {
-			isa = PBXGroup;
-			children = (
-				9F792E42FFE954EFAB36AD46 /* FrigateMQTTClient.swift */,
-			);
-			name = MQTT;
-			path = MQTT;
-			sourceTree = "<group>";
-		};
-		A4B8E9C7A774C2995C121B13 /* tvOS */ = {
-			isa = PBXGroup;
-			children = (
-				38B306573A4A160C431C9E49 /* Foundation.framework */,
-			);
-			name = tvOS;
-			sourceTree = "<group>";
-		};
-		B1BEC9B351E507850DAC331E /* HomeKit */ = {
-			isa = PBXGroup;
-			children = (
-				E4ACA0415CE8AC5E77328296 /* HAPBridgeManager.swift */,
-			);
-			name = HomeKit;
-			path = HomeKit;
-			sourceTree = "<group>";
-		};
-		BA7B48FF1BF46A18E960BDAF /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				33A7310ECE454D7B7865827B /* OS X */,
-				A4B8E9C7A774C2995C121B13 /* tvOS */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		DD621D0EC9321849DC9A5C95 /* State */ = {
-			isa = PBXGroup;
-			children = (
-				7EDD9B215999F5D33DE7BC91 /* BridgeCoordinator.swift */,
-				17074846EA77AAAE4A5FE01B /* BridgeState.swift */,
+				9902E326D8E6F9E5CC8FE7E2 /* BridgeCoordinator.swift */,
+				8C29D4FD3E4F8114DC87A723 /* BridgeState.swift */,
 			);
 			name = State;
 			path = State;
 			sourceTree = "<group>";
 		};
-		F67B00BE96025E87C32BD0CF /* Resources */ = {
+		1733B5B1225575B27C15AFE2 /* HomeKit */ = {
 			isa = PBXGroup;
 			children = (
-				EECC69F92C9EA68FC108B3C3 /* Info.plist */,
-				EDDB071CD471AC6AAC2C7F65 /* LumenBridgeTV.entitlements */,
+				DEF29979FEC653E734057417 /* HAPBridgeManager.swift */,
+			);
+			name = HomeKit;
+			path = HomeKit;
+			sourceTree = "<group>";
+		};
+		1ED4F0299D9D074F0F7DFF12 /* LumenBridge */ = {
+			isa = PBXGroup;
+			children = (
+				43D7E26D1FC72A7DB9AC2D40 /* LumenBridgeMacApp.swift */,
+				9B4BA0C154CFEEEA6507AE7C /* MenuBarContent.swift */,
+				25A6E8EB4B3EE007ADED7122 /* OnboardingView.swift */,
+				CA72EEA31651C2B7FD4E5994 /* Resources */,
+				DD921998EAD20C9558C76373 /* SettingsView.swift */,
+			);
+			name = LumenBridge;
+			path = LumenBridge;
+			sourceTree = "<group>";
+		};
+		33A816BF3782E68BC40346DC = {
+			isa = PBXGroup;
+			children = (
+				AB2D096AF0335D9F42C9AFAD /* Products */,
+				8E00EA3EA6B525B4DBFF0FE4 /* Frameworks */,
+				35C67614CB6DF8E8C3BE2D10 /* Shared */,
+				1ED4F0299D9D074F0F7DFF12 /* LumenBridge */,
+				A387D166A9D03300F6AC914E /* LumenBridgeTV */,
+			);
+			sourceTree = "<group>";
+		};
+		35C67614CB6DF8E8C3BE2D10 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				75EBF4587CC683F784EBE50D /* CloudKit */,
+				5717AD7FE4FB94026C0C6BBE /* Discovery */,
+				1733B5B1225575B27C15AFE2 /* HomeKit */,
+				EFABD8392C113717ABB13077 /* MQTT */,
+				0BDE6AA1F90129F914E145C8 /* State */,
+			);
+			name = Shared;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		5717AD7FE4FB94026C0C6BBE /* Discovery */ = {
+			isa = PBXGroup;
+			children = (
+				D92EDD87B92ABD6CB21B7987 /* FrigateDiscovery.swift */,
+			);
+			name = Discovery;
+			path = Discovery;
+			sourceTree = "<group>";
+		};
+		75EBF4587CC683F784EBE50D /* CloudKit */ = {
+			isa = PBXGroup;
+			children = (
+				3BA20F926090EF5F27F29A01 /* CloudKitBridge.swift */,
+			);
+			name = CloudKit;
+			path = CloudKit;
+			sourceTree = "<group>";
+		};
+		8B5510584CF835CB8949E122 /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				11D31C4E5BFAF0DD6B883207 /* Foundation.framework */,
+			);
+			name = tvOS;
+			sourceTree = "<group>";
+		};
+		8E00EA3EA6B525B4DBFF0FE4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9A077C887262862638AAB225 /* OS X */,
+				8B5510584CF835CB8949E122 /* tvOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9A077C887262862638AAB225 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				99013581D8FEBF8D181D57EC /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		9FB9B1B5FE1D90455ED11A7D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				80039F1685AF0B28808AA0D4 /* Info.plist */,
+				BFFB6F09760D663BF203CB9F /* LumenBridgeTV.entitlements */,
 			);
 			name = Resources;
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		A387D166A9D03300F6AC914E /* LumenBridgeTV */ = {
+			isa = PBXGroup;
+			children = (
+				300CE853FBA7520C0B0CF3D5 /* LumenBridgeTVApp.swift */,
+				9FB9B1B5FE1D90455ED11A7D /* Resources */,
+				817532FF392315A6271D1A9D /* TVHomeView.swift */,
+			);
+			name = LumenBridgeTV;
+			path = LumenBridgeTV;
+			sourceTree = "<group>";
+		};
+		AB2D096AF0335D9F42C9AFAD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				436EB00E1341D08FD12A794F /* LumenBridge.app */,
+				F40E628F81C67C3AB36ED420 /* LumenBridgeTV.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CA72EEA31651C2B7FD4E5994 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BA7BC4E688C0153DEF34FAA5 /* Assets.xcassets */,
+				3A75AD4417C27D07870ED266 /* Info.plist */,
+				62F2CCFC7EBC313E72241477 /* LumenBridge.entitlements */,
+			);
+			name = Resources;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		EFABD8392C113717ABB13077 /* MQTT */ = {
+			isa = PBXGroup;
+			children = (
+				AB5F22E615EFCA0A82727744 /* FrigateMQTTClient.swift */,
+			);
+			name = MQTT;
+			path = MQTT;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2672EE1A1318D7A7F7219631 /* LumenBridge */ = {
+		196D7DEB9418B309964B1106 /* LumenBridgeTV */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3CA84C07F9A3C6BC63D9CE0F /* Build configuration list for PBXNativeTarget "LumenBridge" */;
+			buildConfigurationList = FEF8AB8AB8947EE7A2859300 /* Build configuration list for PBXNativeTarget "LumenBridgeTV" */;
 			buildPhases = (
-				3FCE0B30DD14A5BDD1EBACE0 /* Sources */,
-				FFD35226C9266D4E54629C65 /* Frameworks */,
-				95995AEF2D8ED70E0EAA0F0C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = LumenBridge;
-			packageProductDependencies = (
-				9DF9B5A2CAC265E413ADF722 /* MQTTNIO */,
-				0D8C472176D7409C2605243C /* HAP */,
-			);
-			productName = LumenBridge;
-			productReference = A49C8EA6A4CDE81DD1B515C3 /* LumenBridge.app */;
-			productType = "com.apple.product-type.application";
-		};
-		4887CF5E701B1479AC5752C8 /* LumenBridgeTV */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F84DEE5A7E523EF4535B58A9 /* Build configuration list for PBXNativeTarget "LumenBridgeTV" */;
-			buildPhases = (
-				EE652F5C1FE798711D64188E /* Sources */,
-				CE2A71FE731CC1160AA2B798 /* Frameworks */,
-				123A100BE801F37BE369C128 /* Resources */,
+				F001BD007987E5658811262A /* Sources */,
+				9199F09707ECE1AC98A42E6A /* Frameworks */,
+				716EAA78A9DAD5D4EA9D5578 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -267,22 +246,43 @@
 			);
 			name = LumenBridgeTV;
 			packageProductDependencies = (
-				3BB188C930087260C812C23C /* MQTTNIO */,
+				E81AAE4718F5FE2416F28113 /* MQTTNIO */,
 			);
 			productName = LumenBridgeTV;
-			productReference = 65C291688568CACDA5EE6570 /* LumenBridgeTV.app */;
+			productReference = F40E628F81C67C3AB36ED420 /* LumenBridgeTV.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7080817A804D24D90A24EA7E /* LumenBridge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9721D01EEC8D2FE2D612404B /* Build configuration list for PBXNativeTarget "LumenBridge" */;
+			buildPhases = (
+				5CE7D4CD1424061D4F9C0A9C /* Sources */,
+				2FD45CF49BB67A5F383F3410 /* Frameworks */,
+				3E1FF6C029047F7E4BBAFF50 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LumenBridge;
+			packageProductDependencies = (
+				85BA0B6C492E25DEFA9E638F /* MQTTNIO */,
+				3E9C6EDFA15B61A964CCBAB0 /* HAP */,
+			);
+			productName = LumenBridge;
+			productReference = 436EB00E1341D08FD12A794F /* LumenBridge.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		07247F689EB5AAC70B4B3A6C /* Project object */ = {
+		8A2931448FC04BB9FE2E7413 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 			};
-			buildConfigurationList = 20F0D6259F48BECF9034DA03 /* Build configuration list for PBXProject "LumenBridge" */;
+			buildConfigurationList = 1B3651197A884C75E24542A8 /* Build configuration list for PBXProject "LumenBridge" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -290,139 +290,85 @@
 				en,
 				Base,
 			);
-			mainGroup = 60FC413DED70A1D306C0CA18;
+			mainGroup = 33A816BF3782E68BC40346DC;
 			minimizedProjectReferenceProxies = 0;
 			packageReferences = (
-				7BDF517F82D0CAE7D327E9B1 /* XCRemoteSwiftPackageReference "mqtt-nio" */,
-				35C4EEB72465B4F521202726 /* XCRemoteSwiftPackageReference "HAP" */,
+				9B7583585B78DA0596361038 /* XCRemoteSwiftPackageReference "mqtt-nio" */,
+				BF6B97D52F2BE1959DF1B9E6 /* XCRemoteSwiftPackageReference "HAP" */,
 			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 25D99DD249CF4DCDA2D21A1F /* Products */;
+			productRefGroup = AB2D096AF0335D9F42C9AFAD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2672EE1A1318D7A7F7219631 /* LumenBridge */,
-				4887CF5E701B1479AC5752C8 /* LumenBridgeTV */,
+				7080817A804D24D90A24EA7E /* LumenBridge */,
+				196D7DEB9418B309964B1106 /* LumenBridgeTV */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		123A100BE801F37BE369C128 /* Resources */ = {
+		3E1FF6C029047F7E4BBAFF50 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCAF16BEDF2F16385BE90E67 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		95995AEF2D8ED70E0EAA0F0C /* Resources */ = {
+		716EAA78A9DAD5D4EA9D5578 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2EDF1DEEBEB2C4F9E4B73B1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3FCE0B30DD14A5BDD1EBACE0 /* Sources */ = {
+		5CE7D4CD1424061D4F9C0A9C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B57F2BA49CFFC4B01471888E /* CloudKitBridge.swift in Sources */,
-				7DC9968B817349434CF21E00 /* FrigateDiscovery.swift in Sources */,
-				1F90A9011A738A6A7307C99C /* HAPBridgeManager.swift in Sources */,
-				ACDBF982C67EFB3D73205B01 /* FrigateMQTTClient.swift in Sources */,
-				67CFF3985FFABA7536F53BD1 /* BridgeCoordinator.swift in Sources */,
-				F9C36835F6FD175A73620D84 /* BridgeState.swift in Sources */,
-				28CE5377508FC9082E8CF643 /* LumenBridgeMacApp.swift in Sources */,
-				F84C826126F51AB0AB85B2F6 /* MenuBarContent.swift in Sources */,
-				4389B6089063708335F0F50E /* OnboardingView.swift in Sources */,
-				DF73AB0E92CD64776F77C406 /* SettingsView.swift in Sources */,
+				AD88F4CAD4D92A54169FBE88 /* CloudKitBridge.swift in Sources */,
+				850CADE0FE060D25868E13F6 /* FrigateDiscovery.swift in Sources */,
+				E8D377C9989D278C3F08836A /* HAPBridgeManager.swift in Sources */,
+				E892109CC3866614ACDA5C63 /* FrigateMQTTClient.swift in Sources */,
+				007FBEF26905264F3900ADED /* BridgeCoordinator.swift in Sources */,
+				5CD78340C514DB1112551A6C /* BridgeState.swift in Sources */,
+				7667E7D082F3EFFFC0A4880A /* LumenBridgeMacApp.swift in Sources */,
+				93571907EB9297FC64F00F89 /* MenuBarContent.swift in Sources */,
+				E8454089B5A9753B8DB2C9D6 /* OnboardingView.swift in Sources */,
+				196B64CA4FB6CBD12D7C8195 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EE652F5C1FE798711D64188E /* Sources */ = {
+		F001BD007987E5658811262A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D03BF7EA1EB6D378368FF996 /* CloudKitBridge.swift in Sources */,
-				A2B5E96C8B8CE7D8159FDD0E /* FrigateDiscovery.swift in Sources */,
-				4FA5C97B26EC4A2295DCC02F /* HAPBridgeManager.swift in Sources */,
-				6E76259923A700E446DA9393 /* FrigateMQTTClient.swift in Sources */,
-				98FFE8FD114E63012B6DF5BB /* BridgeCoordinator.swift in Sources */,
-				02D1BA5F40FF0C030D9E2402 /* BridgeState.swift in Sources */,
-				BE6CF6FF0EE6DCA37638125D /* LumenBridgeTVApp.swift in Sources */,
-				7A45749ED3C0F9F3A7312FC1 /* TVHomeView.swift in Sources */,
+				9F543A4AB0D8FBB499498433 /* CloudKitBridge.swift in Sources */,
+				56612CBFB50B465174D563B9 /* FrigateDiscovery.swift in Sources */,
+				E885763B8B48ECFDAF069A13 /* HAPBridgeManager.swift in Sources */,
+				FB49A575C9F77B631BEFF8EF /* FrigateMQTTClient.swift in Sources */,
+				26AF19F85B35CF8C79D766B4 /* BridgeCoordinator.swift in Sources */,
+				F963237EC0813E3931668F74 /* BridgeState.swift in Sources */,
+				E691917897957863DA31D236 /* LumenBridgeTVApp.swift in Sources */,
+				08470D506B17C2504DDB8B8D /* TVHomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		0B132304DEE812E91701A3C1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = LumenBridge/Resources/LumenBridge.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
-				DEVELOPMENT_TEAM = TDV6D5L785;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = LumenBridge/Resources/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 LorisLabs";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lorislabapp.lumenbridge;
-				PRODUCT_NAME = "Lumen Bridge";
-				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_VERSION = 6.0;
-			};
-			name = Debug;
-		};
-		17575373C66B1FFB7F5D8068 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = LumenBridge/Resources/LumenBridge.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
-				DEVELOPMENT_TEAM = TDV6D5L785;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = LumenBridge/Resources/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 LorisLabs";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lorislabapp.lumenbridge;
-				PRODUCT_NAME = "Lumen Bridge";
-				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_VERSION = 6.0;
-			};
-			name = Release;
-		};
-		871D7BD724FDF8F23B2CCC5F /* Debug */ = {
+		19821EF59736810E66AC4C2A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = LumenBridgeTV/Resources/LumenBridgeTV.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = TDV6D5L785;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = LumenBridgeTV/Resources/Info.plist;
@@ -437,10 +383,11 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 17.0;
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
-		992761F7AF8A61581A10CB4E /* Debug */ = {
+		291A928150E054901A5E8014 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -501,33 +448,61 @@
 			};
 			name = Debug;
 		};
-		9B78DB1B8155971F58CC845F /* Release */ = {
+		50B9B7CFAF03755907B341FC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = LumenBridgeTV/Resources/LumenBridgeTV.entitlements;
+				CODE_SIGN_ENTITLEMENTS = LumenBridge/Resources/LumenBridge.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = TDV6D5L785;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = LumenBridgeTV/Resources/Info.plist;
+				INFOPLIST_FILE = LumenBridge/Resources/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 LorisLabs";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lorislabapp.lumenbridge;
 				PRODUCT_NAME = "Lumen Bridge";
-				SDKROOT = appletvos;
-				SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 17.0;
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		9BD8AD653F2FBB46619504FC /* Release */ = {
+		5D1480FB32742A0790210D1B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LumenBridge/Resources/LumenBridge.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 7;
+				DEVELOPMENT_TEAM = TDV6D5L785;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = LumenBridge/Resources/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 LorisLabs";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lorislabapp.lumenbridge;
+				PRODUCT_NAME = "Lumen Bridge";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		91C64F00CA753AC5E6020612 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -581,32 +556,57 @@
 			};
 			name = Release;
 		};
+		928E650D69E04EC9DDC71728 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LumenBridgeTV/Resources/LumenBridgeTV.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 7;
+				DEVELOPMENT_TEAM = TDV6D5L785;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = LumenBridgeTV/Resources/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 LorisLabs";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lorislabapp.lumenbridge;
+				PRODUCT_NAME = "Lumen Bridge";
+				SDKROOT = appletvos;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		20F0D6259F48BECF9034DA03 /* Build configuration list for PBXProject "LumenBridge" */ = {
+		1B3651197A884C75E24542A8 /* Build configuration list for PBXProject "LumenBridge" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				992761F7AF8A61581A10CB4E /* Debug */,
-				9BD8AD653F2FBB46619504FC /* Release */,
+				291A928150E054901A5E8014 /* Debug */,
+				91C64F00CA753AC5E6020612 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3CA84C07F9A3C6BC63D9CE0F /* Build configuration list for PBXNativeTarget "LumenBridge" */ = {
+		9721D01EEC8D2FE2D612404B /* Build configuration list for PBXNativeTarget "LumenBridge" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				17575373C66B1FFB7F5D8068 /* Release */,
-				0B132304DEE812E91701A3C1 /* Debug */,
+				50B9B7CFAF03755907B341FC /* Release */,
+				5D1480FB32742A0790210D1B /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F84DEE5A7E523EF4535B58A9 /* Build configuration list for PBXNativeTarget "LumenBridgeTV" */ = {
+		FEF8AB8AB8947EE7A2859300 /* Build configuration list for PBXNativeTarget "LumenBridgeTV" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9B78DB1B8155971F58CC845F /* Release */,
-				871D7BD724FDF8F23B2CCC5F /* Debug */,
+				19821EF59736810E66AC4C2A /* Release */,
+				928E650D69E04EC9DDC71728 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -614,15 +614,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		35C4EEB72465B4F521202726 /* XCRemoteSwiftPackageReference "HAP" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Bouke/HAP";
-			requirement = {
-				kind = revision;
-				revision = 51e3505a;
-			};
-		};
-		7BDF517F82D0CAE7D327E9B1 /* XCRemoteSwiftPackageReference "mqtt-nio" */ = {
+		9B7583585B78DA0596361038 /* XCRemoteSwiftPackageReference "mqtt-nio" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/adam-fowler/mqtt-nio";
 			requirement = {
@@ -630,25 +622,33 @@
 				minimumVersion = 2.13.0;
 			};
 		};
+		BF6B97D52F2BE1959DF1B9E6 /* XCRemoteSwiftPackageReference "HAP" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Bouke/HAP";
+			requirement = {
+				kind = revision;
+				revision = 51e3505a;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0D8C472176D7409C2605243C /* HAP */ = {
+		3E9C6EDFA15B61A964CCBAB0 /* HAP */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 35C4EEB72465B4F521202726 /* XCRemoteSwiftPackageReference "HAP" */;
+			package = BF6B97D52F2BE1959DF1B9E6 /* XCRemoteSwiftPackageReference "HAP" */;
 			productName = HAP;
 		};
-		3BB188C930087260C812C23C /* MQTTNIO */ = {
+		85BA0B6C492E25DEFA9E638F /* MQTTNIO */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7BDF517F82D0CAE7D327E9B1 /* XCRemoteSwiftPackageReference "mqtt-nio" */;
+			package = 9B7583585B78DA0596361038 /* XCRemoteSwiftPackageReference "mqtt-nio" */;
 			productName = MQTTNIO;
 		};
-		9DF9B5A2CAC265E413ADF722 /* MQTTNIO */ = {
+		E81AAE4718F5FE2416F28113 /* MQTTNIO */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7BDF517F82D0CAE7D327E9B1 /* XCRemoteSwiftPackageReference "mqtt-nio" */;
+			package = 9B7583585B78DA0596361038 /* XCRemoteSwiftPackageReference "mqtt-nio" */;
 			productName = MQTTNIO;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 07247F689EB5AAC70B4B3A6C /* Project object */;
+	rootObject = 8A2931448FC04BB9FE2E7413 /* Project object */;
 }

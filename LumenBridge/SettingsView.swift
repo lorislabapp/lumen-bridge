@@ -13,6 +13,10 @@ struct SettingsView: View {
     /// Called when the user taps "Save & Connect". The coordinator owns the
     /// actual reconnect / persistence logic.
     var onApply: (@MainActor (_ host: String, _ port: Int, _ username: String?, _ password: String?) async -> Void)? = nil
+    /// Called when the user toggles the HomeKit bridge in Settings. The
+    /// coordinator owns the server start/stop + flag persistence so a
+    /// runtime toggle takes effect immediately (no app relaunch).
+    var onToggleHAP: (@MainActor (_ enabled: Bool) async -> Void)? = nil
 
     @State private var host: String = ""
     @State private var portText: String = "1883"
@@ -171,14 +175,22 @@ struct SettingsView: View {
     }
 
     /// Two-way binding to the persisted HAP-enabled flag. Reading hits
-    /// UserDefaults; writing flips the flag. The Bridge picks up the new
-    /// value on next launch (HAP needs a clean process for pairing
-    /// state — toggling at runtime would require explicit start/stop on
-    /// the coordinator, which we'll add in v0.2).
+    /// UserDefaults; writing routes through the coordinator so the HAP
+    /// server starts or stops immediately — no relaunch needed.
     private var hapEnabledBinding: Binding<Bool> {
         Binding(
             get: { UserDefaults.standard.bool(forKey: "lumenbridge.hap.enabled") },
-            set: { UserDefaults.standard.set($0, forKey: "lumenbridge.hap.enabled") }
+            set: { newValue in
+                Task { @MainActor in
+                    if let onToggleHAP {
+                        await onToggleHAP(newValue)
+                    } else {
+                        // Fallback: at least persist the flag so the next
+                        // launch picks it up.
+                        UserDefaults.standard.set(newValue, forKey: "lumenbridge.hap.enabled")
+                    }
+                }
+            }
         )
     }
 

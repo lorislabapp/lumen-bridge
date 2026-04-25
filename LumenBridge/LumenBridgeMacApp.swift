@@ -90,6 +90,9 @@ struct LumenBridgeMacApp: App {
                         host: host, port: port,
                         username: user, password: pass
                     )
+                },
+                onToggleHAP: { [coordinator] enabled in
+                    await coordinator?.setHAPEnabled(enabled)
                 }
             )
         }
