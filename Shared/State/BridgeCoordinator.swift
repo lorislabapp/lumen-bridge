@@ -18,6 +18,12 @@ final class BridgeCoordinator {
     /// reconnects immediately on next launch instead of waiting for Bonjour.
     private static let savedHostKey = "lumenbridge.frigate.host"
     private static let savedPortKey = "lumenbridge.frigate.port"
+    private static let savedUserKey = "lumenbridge.frigate.mqtt_user"
+    private static let savedPassKey = "lumenbridge.frigate.mqtt_pass"
+    /// True after the user has explicitly entered host details. When true,
+    /// Bonjour discoveries do NOT auto-replace the configured host — only the
+    /// user can override their own choice.
+    private static let manualConfigKey = "lumenbridge.frigate.manual"
 
     // MARK: -
 
@@ -39,14 +45,64 @@ final class BridgeCoordinator {
         // with starting Bonjour. If discovery surfaces a different host on
         // the same network later, handleDiscovered upgrades to it; if not,
         // the saved host wins.
-        if let savedHost = UserDefaults.standard.string(forKey: Self.savedHostKey) {
-            let savedPort = UserDefaults.standard.integer(forKey: Self.savedPortKey)
+        let defaults = UserDefaults.standard
+        if let savedHost = defaults.string(forKey: Self.savedHostKey) {
+            let savedPort = defaults.integer(forKey: Self.savedPortKey)
             let port = savedPort > 0 ? savedPort : 1883
+            let user = defaults.string(forKey: Self.savedUserKey)
+            let pass = defaults.string(forKey: Self.savedPassKey)
             state.frigateHost = savedHost
             state.frigatePort = port
-            await connectMQTT(host: savedHost, port: port)
+            state.mqttUsername = user
+            state.mqttPassword = pass
+            await connectMQTT(host: savedHost, port: port, username: user, password: pass)
         }
         discovery.start()
+    }
+
+    /// Apply user-entered Frigate connection details. Persisted across
+    /// launches and immediately tested. The `manualConfig` flag keeps
+    /// future Bonjour discoveries from silently replacing what the user
+    /// explicitly chose.
+    func applyManualConfig(host: String, port: Int, username: String?, password: String?) async {
+        // Be forgiving — users paste URLs from browser address bars.
+        // Strip http(s):// scheme, any path component, and the inline port
+        // (we treat the explicit `port` argument as authoritative).
+        var trimmedHost = host.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let urlScheme = trimmedHost.range(of: "://") {
+            trimmedHost = String(trimmedHost[urlScheme.upperBound...])
+        }
+        if let slash = trimmedHost.firstIndex(of: "/") {
+            trimmedHost = String(trimmedHost[..<slash])
+        }
+        if let colon = trimmedHost.firstIndex(of: ":") {
+            trimmedHost = String(trimmedHost[..<colon])
+        }
+        guard !trimmedHost.isEmpty, port > 0, port <= 65535 else {
+            state.lastMQTTError = "Invalid host or port"
+            return
+        }
+        let defaults = UserDefaults.standard
+        defaults.set(trimmedHost, forKey: Self.savedHostKey)
+        defaults.set(port, forKey: Self.savedPortKey)
+        defaults.set(username, forKey: Self.savedUserKey)
+        defaults.set(password, forKey: Self.savedPassKey)
+        defaults.set(true, forKey: Self.manualConfigKey)
+
+        state.frigateHost = trimmedHost
+        state.frigatePort = port
+        state.mqttUsername = username
+        state.mqttPassword = password
+        state.lastMQTTError = nil
+
+        await mqtt.disconnect()
+        await connectMQTT(host: trimmedHost, port: port, username: username, password: password)
+    }
+
+    /// True if the user has entered host details explicitly (vs auto-paired
+    /// via Bonjour). Used to decide whether to show the onboarding CTA.
+    var hasManualConfig: Bool {
+        UserDefaults.standard.bool(forKey: Self.manualConfigKey)
     }
 
     func stop() async {
@@ -125,13 +181,15 @@ final class BridgeCoordinator {
         if !state.discoveredInstances.contains(where: { $0.id == found.id }) {
             state.discoveredInstances.append(found)
         }
+        // Never override a host the user has explicitly entered.
+        if hasManualConfig { return }
         // Auto-pair the first discovery if we have none yet.
         guard state.frigateHost == nil else { return }
         state.frigateHost = found.host
         state.frigatePort = found.port
         UserDefaults.standard.set(found.host, forKey: Self.savedHostKey)
         UserDefaults.standard.set(found.port, forKey: Self.savedPortKey)
-        await connectMQTT(host: found.host, port: found.port)
+        await connectMQTT(host: found.host, port: found.port, username: nil, password: nil)
     }
 
     private func wireMQTT() {
@@ -149,16 +207,28 @@ final class BridgeCoordinator {
         }
     }
 
-    private func connectMQTT(host: String, port: Int) async {
-        let config = FrigateMQTTClient.Config(host: host, port: port)
+    private func connectMQTT(host: String, port: Int, username: String?, password: String?) async {
+        let config = FrigateMQTTClient.Config(
+            host: host,
+            port: port,
+            username: username?.isEmpty == false ? username : nil,
+            password: password?.isEmpty == false ? password : nil
+        )
         await mqtt.configure(config)
         do {
             try await mqtt.connect()
             state.mqttConnected = true
-            logger.info("MQTT connected via discovered host \(host):\(port)")
+            state.lastMQTTError = nil
+            logger.info("MQTT connected to \(host):\(port)")
         } catch {
+            // NIOTSChannelError and friends crash inside `localizedDescription`
+            // (Error metadata bridge bug seen in MQTTNIO 2.x on Swift 6).
+            // Use String(describing:) which only inspects the type's own
+            // CustomStringConvertible and never touches the bridged NSError.
+            let safeMessage = String(describing: error)
             state.mqttConnected = false
-            logger.error("MQTT connect failed: \(error.localizedDescription)")
+            state.lastMQTTError = safeMessage
+            logger.error("MQTT connect failed: \(safeMessage)")
         }
     }
 

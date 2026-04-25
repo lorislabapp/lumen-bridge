@@ -103,13 +103,25 @@ actor FrigateMQTTClient {
             configuration: mqttConfig
         )
 
-        _ = try await client.connect()
-        logger.info("connected to \(config.host):\(config.port)")
+        // CRITICAL: MQTTClient.deinit asserts that the client was shut down
+        // before deallocation (otherwise the embedded EventLoopGroup leaks
+        // its thread). If `connect()` or `subscribe()` throws, the local
+        // `client` would be released without shutdown → assertion crash.
+        // Wrap the connect+subscribe in do/catch to clean up on failure.
+        do {
+            _ = try await client.connect()
+            logger.info("connected to \(config.host):\(config.port)")
 
-        _ = try await client.subscribe(to: [
-            .init(topicFilter: config.topic, qos: .atLeastOnce)
-        ])
-        logger.info("subscribed to \(config.topic)")
+            _ = try await client.subscribe(to: [
+                .init(topicFilter: config.topic, qos: .atLeastOnce)
+            ])
+            logger.info("subscribed to \(config.topic)")
+        } catch {
+            // Shutdown the half-constructed client so its EventLoopGroup
+            // drains cleanly, then re-throw the original error.
+            try? await client.shutdown()
+            throw error
+        }
 
         self.client = client
         self.isConnected = true

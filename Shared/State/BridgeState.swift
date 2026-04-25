@@ -16,6 +16,9 @@ final class BridgeState {
     var mqttConnected: Bool = false
     var frigateHost: String?
     var frigatePort: Int?
+    var mqttUsername: String?
+    var mqttPassword: String?
+    var lastMQTTError: String?
     var eventsReceived: Int = 0
     var eventsForwarded: Int = 0
     var lastEventAt: Date?

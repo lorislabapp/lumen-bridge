@@ -5,7 +5,13 @@ import AppKit
 /// read. Most interactions live on the Settings window (not yet wired).
 struct MenuBarContent: View {
     @Bindable var state: BridgeState
+    /// Captured when the coordinator is alive so we can read `hasManualConfig`
+    /// to decide whether to show the onboarding CTA. May be nil briefly
+    /// during launch — the body handles that gracefully.
+    var coordinator: BridgeCoordinator?
     var onSendTestEvent: (@MainActor () async -> Void)? = nil
+
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -73,6 +79,12 @@ struct MenuBarContent: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .textSelection(.enabled)
+                if let err = state.lastMQTTError, !state.mqttConnected {
+                    Text(err)
+                        .font(.caption2)
+                        .foregroundStyle(.orange)
+                        .lineLimit(2)
+                }
             } else if !state.discoveredInstances.isEmpty {
                 Text("\(state.discoveredInstances.count) discovered — none paired yet")
                     .font(.caption)
@@ -81,6 +93,15 @@ struct MenuBarContent: View {
                 Text("Searching via Bonjour…")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                Button {
+                    openWindow(id: "lumenbridge-settings")
+                    NSApp.activate(ignoringOtherApps: true)
+                } label: {
+                    Label("Set up manually", systemImage: "gearshape")
+                        .font(.caption)
+                }
+                .buttonStyle(.link)
+                .padding(.top, 2)
             }
 
             HStack(spacing: 14) {
@@ -115,10 +136,10 @@ struct MenuBarContent: View {
 
             HStack {
                 Button("Settings…") {
-                    // TODO(0.2): open a settings window with MQTT host override,
-                    // iCloud account inspector, filter rules editor.
+                    openWindow(id: "lumenbridge-settings")
+                    NSApp.activate(ignoringOtherApps: true)
                 }
-                .disabled(true)
+                .keyboardShortcut(",")
 
                 Spacer()
 

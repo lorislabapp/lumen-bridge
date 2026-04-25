@@ -10,7 +10,7 @@ import SwiftUI
 /// repo.
 @main
 struct LumenBridgeMacApp: App {
-    @State private var bridgeState = BridgeState()
+    @State private var bridgeState: BridgeState
     @State private var coordinator: BridgeCoordinator?
 
     /// Headless one-shot: if `--seed-schema` is in the launch arguments, the
@@ -22,14 +22,24 @@ struct LumenBridgeMacApp: App {
     }
 
     @MainActor init() {
+        let state = BridgeState()
+        _bridgeState = State(initialValue: state)
+
         if Self.isSeedMode {
-            // SwiftUI App.init runs on the main actor; launching a Task here
-            // schedules the seeder on that actor and the body never has to
-            // construct (we exit the process on success).
-            let state = bridgeState
+            let c = BridgeCoordinator(state: state)
+            _coordinator = State(initialValue: c)
             Task { @MainActor in
-                let c = BridgeCoordinator(state: state)
                 await c.seedSchemaAndQuit()
+            }
+        } else {
+            // Start the coordinator at app launch — NOT lazily on popover
+            // open. Without this, the menu-bar app sits dormant until the
+            // user clicks ⚡ (which is rare), and meanwhile no events get
+            // forwarded from MQTT to CloudKit. We want to be running 24/7.
+            let c = BridgeCoordinator(state: state)
+            _coordinator = State(initialValue: c)
+            Task { @MainActor in
+                await c.start()
             }
         }
     }
@@ -38,6 +48,7 @@ struct LumenBridgeMacApp: App {
         MenuBarExtra {
             MenuBarContent(
                 state: bridgeState,
+                coordinator: coordinator,
                 onSendTestEvent: { [coordinator] in
                     await coordinator?.sendTestEvent()
                 }
@@ -46,11 +57,21 @@ struct LumenBridgeMacApp: App {
             Image(systemName: bridgeState.isConnected ? "bolt.fill" : "bolt.slash")
         }
         .menuBarExtraStyle(.window)
-        .onChange(of: coordinator == nil) { _, _ in
-            guard coordinator == nil else { return }
-            let c = BridgeCoordinator(state: bridgeState)
-            coordinator = c
-            Task { await c.start() }
+
+        // Settings window — opened by the menu-bar "Settings…" button or
+        // when the user picks "Settings…" from the popover. SwiftUI's
+        // openWindow environment action targets it by id.
+        Window("Lumen Bridge — Settings", id: "lumenbridge-settings") {
+            SettingsView(
+                state: bridgeState,
+                onApply: { [coordinator] host, port, user, pass in
+                    await coordinator?.applyManualConfig(
+                        host: host, port: port,
+                        username: user, password: pass
+                    )
+                }
+            )
         }
+        .windowResizability(.contentSize)
     }
 }
