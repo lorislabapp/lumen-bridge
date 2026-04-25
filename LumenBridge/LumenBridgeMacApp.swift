@@ -15,7 +15,12 @@ struct LumenBridgeMacApp: App {
 
     var body: some Scene {
         MenuBarExtra {
-            MenuBarContent(state: bridgeState)
+            MenuBarContent(
+                state: bridgeState,
+                onSendTestEvent: { [coordinator] in
+                    await coordinator?.sendTestEvent()
+                }
+            )
         } label: {
             Image(systemName: bridgeState.isConnected ? "bolt.fill" : "bolt.slash")
         }

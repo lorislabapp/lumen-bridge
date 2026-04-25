@@ -12,6 +12,15 @@ private let logger = Logger(subsystem: "com.lorislabapp.lumenbridge", category: 
 /// writes) lives inside child actors (FrigateMQTTClient, CloudKitBridge).
 @MainActor
 final class BridgeCoordinator {
+    // MARK: - UserDefaults keys
+
+    /// Last known good Frigate host/port. Survives restarts so the bridge
+    /// reconnects immediately on next launch instead of waiting for Bonjour.
+    private static let savedHostKey = "lumenbridge.frigate.host"
+    private static let savedPortKey = "lumenbridge.frigate.port"
+
+    // MARK: -
+
     private let state: BridgeState
     private let discovery = FrigateDiscovery()
     private let mqtt = FrigateMQTTClient()
@@ -25,12 +34,46 @@ final class BridgeCoordinator {
         await refreshCloudKitStatus()
         wireDiscovery()
         wireMQTT()
+
+        // Reconnect to the last known Frigate host immediately, in parallel
+        // with starting Bonjour. If discovery surfaces a different host on
+        // the same network later, handleDiscovered upgrades to it; if not,
+        // the saved host wins.
+        if let savedHost = UserDefaults.standard.string(forKey: Self.savedHostKey) {
+            let savedPort = UserDefaults.standard.integer(forKey: Self.savedPortKey)
+            let port = savedPort > 0 ? savedPort : 1883
+            state.frigateHost = savedHost
+            state.frigatePort = port
+            await connectMQTT(host: savedHost, port: port)
+        }
         discovery.start()
     }
 
     func stop() async {
         discovery.stop()
         await mqtt.disconnect()
+    }
+
+    // MARK: - Test event
+
+    /// Manual entry point — writes a synthetic FrigateEvent to CloudKit
+    /// without going through MQTT. Two purposes:
+    ///   (1) Seed the FrigateEvent record type in the CloudKit schema on
+    ///       first run, so the dashboard can promote Development → Production.
+    ///   (2) Verify end-to-end push delivery (CKSubscription → APNs →
+    ///       Lumen iOS BridgeNotificationPresenter) without needing a
+    ///       running Frigate instance.
+    func sendTestEvent() async {
+        let id = "test-\(Int(Date().timeIntervalSince1970))-\(UUID().uuidString.prefix(8))"
+        let event = FrigateMQTTClient.Event(
+            id: id,
+            camera: "test_camera",
+            label: "person",
+            zones: ["entry"],
+            topScore: 0.92,
+            startTime: Date()
+        )
+        await handleEvent(event)
     }
 
     // MARK: -
@@ -56,6 +99,8 @@ final class BridgeCoordinator {
         guard state.frigateHost == nil else { return }
         state.frigateHost = found.host
         state.frigatePort = found.port
+        UserDefaults.standard.set(found.host, forKey: Self.savedHostKey)
+        UserDefaults.standard.set(found.port, forKey: Self.savedPortKey)
         await connectMQTT(host: found.host, port: found.port)
     }
 

@@ -5,6 +5,7 @@ import AppKit
 /// read. Most interactions live on the Settings window (not yet wired).
 struct MenuBarContent: View {
     @Bindable var state: BridgeState
+    var onSendTestEvent: (@MainActor () async -> Void)? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -101,19 +102,31 @@ struct MenuBarContent: View {
     }
 
     private var footer: some View {
-        HStack {
-            Button("Settings…") {
-                // TODO(1.11.1): open a settings window with MQTT host override,
-                // iCloud account inspector, filter rules editor.
+        VStack(spacing: 8) {
+            if let onSendTestEvent {
+                Button {
+                    Task { await onSendTestEvent() }
+                } label: {
+                    Label("Send test event", systemImage: "paperplane")
+                        .frame(maxWidth: .infinity)
+                }
+                .help("Writes a synthetic FrigateEvent to CloudKit. Useful for seeding the schema and verifying push delivery without a running Frigate.")
             }
-            .disabled(true)
 
-            Spacer()
+            HStack {
+                Button("Settings…") {
+                    // TODO(0.2): open a settings window with MQTT host override,
+                    // iCloud account inspector, filter rules editor.
+                }
+                .disabled(true)
 
-            Button("Quit") {
-                NSApplication.shared.terminate(nil)
+                Spacer()
+
+                Button("Quit") {
+                    NSApplication.shared.terminate(nil)
+                }
+                .keyboardShortcut("q")
             }
-            .keyboardShortcut("q")
         }
     }
 
