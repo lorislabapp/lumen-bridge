@@ -26,6 +26,17 @@ actor FrigateMQTTClient {
         let zones: [String]
         let topScore: Double
         let startTime: Date
+        let kind: Kind
+
+        enum Kind: Sendable, Equatable {
+            /// Detection just started — fires the user-visible notification
+            /// path and writes the FrigateEvent CKRecord with snapshot.
+            case new
+            /// Detection ended and Frigate's clip is available — used by the
+            /// coordinator to backfill the `clip` CKAsset on the existing
+            /// record (only if clip-upload is enabled in Settings).
+            case end
+        }
     }
 
     struct Config: Sendable, Equatable {
@@ -301,7 +312,17 @@ actor FrigateMQTTClient {
         }
         do {
             let wire = try JSONDecoder().decode(Wire.self, from: data)
-            guard wire.type == "new", let a = wire.after else { return nil }
+            // Honor `new` (initial detection) AND `end` (finalised
+            // recording). The handler distinguishes via the `kind` field
+            // — only `new` fires a notification; `end` triggers a clip
+            // backfill on the CKRecord that `new` already created.
+            guard let a = wire.after else { return nil }
+            let kind: Event.Kind
+            switch wire.type {
+            case "new":  kind = .new
+            case "end":  kind = .end
+            default:     return nil
+            }
             if a.stationary == true { return nil }
             if a.top_score < 0.5 { return nil }
             return Event(
@@ -310,7 +331,8 @@ actor FrigateMQTTClient {
                 label: a.label,
                 zones: a.zones ?? [],
                 topScore: a.top_score,
-                startTime: Date(timeIntervalSince1970: a.start_time)
+                startTime: Date(timeIntervalSince1970: a.start_time),
+                kind: kind
             )
         } catch {
             logger.warning("failed to decode event: \(error.localizedDescription)")

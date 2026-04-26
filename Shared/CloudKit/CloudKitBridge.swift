@@ -105,4 +105,31 @@ actor CloudKitBridge {
             return
         }
     }
+
+    /// Phase 4 v0.2 — fetches the existing FrigateEvent record and adds the
+    /// finalised MP4 clip as a `clip` CKAsset. Called from the coordinator
+    /// when Frigate publishes an `end` event for a detection we already
+    /// persisted at `new` time. No-op if the record was never written
+    /// (e.g. low-confidence skip), the clip data is empty, or CloudKit
+    /// rejects the update.
+    func attachClip(eventID: String, clipMP4: Data) async {
+        let recordID = CKRecord.ID(recordName: eventID)
+        let db = container.privateCloudDatabase
+        do {
+            let record = try await db.record(for: recordID)
+            let url = FileManager.default.temporaryDirectory
+                .appendingPathComponent("lumenbridge-clip-\(eventID).mp4")
+            try clipMP4.write(to: url, options: .atomic)
+            defer { try? FileManager.default.removeItem(at: url) }
+            record["clip"] = CKAsset(fileURL: url)
+            _ = try await db.save(record)
+            logger.info("attached clip to event \(eventID) (\(clipMP4.count) bytes)")
+        } catch let ck as CKError where ck.code == .unknownItem {
+            // The `new` write didn't happen (low confidence or filtered) —
+            // nothing to enrich. Silent no-op.
+            return
+        } catch {
+            logger.warning("clip attach failed for \(eventID): \(error.localizedDescription)")
+        }
+    }
 }

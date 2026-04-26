@@ -28,6 +28,14 @@ final class BridgeCoordinator {
     /// Bridge stays focused on notifications until the user explicitly
     /// turns HomeKit on in Settings or onboarding.
     static let hapEnabledKey = "lumenbridge.hap.enabled"
+    /// Phase 4 v0.2 — opt-in flag to upload the MP4 clip when Frigate
+    /// finalises a detection. OFF by default because clips are 1-10 MB
+    /// each and quickly fill iCloud private storage.
+    static let clipUploadEnabledKey = "lumenbridge.clip_upload_enabled"
+    /// Frigate web/API URL — used by both the Homebridge sidecar (macOS-
+    /// only) AND the clip-fetch path (cross-platform). Defined here so
+    /// both targets reference the same key.
+    static let frigateWebURLKey = "lumenbridge.homebridge.frigate_web_url"
 
     // MARK: -
 
@@ -205,7 +213,8 @@ final class BridgeCoordinator {
             label: "person",
             zones: ["entry"],
             topScore: 0.92,
-            startTime: Date()
+            startTime: Date(),
+            kind: .new
         )
         do {
             try await cloudKit.persist(event: event)
@@ -232,7 +241,8 @@ final class BridgeCoordinator {
             label: "person",
             zones: ["entry"],
             topScore: 0.92,
-            startTime: Date()
+            startTime: Date(),
+            kind: .new
         )
         // For test events the camera/label is synthetic so latestSnapshot
         // returns nil. Try to attach ANY cached snapshot so the user can
@@ -321,6 +331,13 @@ final class BridgeCoordinator {
     }
 
     private func handleEvent(_ event: FrigateMQTTClient.Event) async {
+        // `end` events backfill the clip on a record we already wrote at
+        // `new` time. They never fire a notification or bump counters —
+        // the original `new` did that.
+        if event.kind == .end {
+            await enrichWithClip(eventID: event.id, camera: event.camera)
+            return
+        }
         state.eventsReceived += 1
         state.lastEventAt = Date()
         // Pull the most-recent snapshot Frigate published for this
@@ -348,5 +365,36 @@ final class BridgeCoordinator {
             await hap.reportMotion(cameraName: event.camera, detected: true)
         }
         #endif
+    }
+
+    /// Phase 4 v0.2 — when Frigate publishes an `end` event for a detection
+    /// we already wrote at `new` time, fetch the finalised MP4 clip from
+    /// Frigate's web API and update the existing CKRecord with a `clip`
+    /// CKAsset. Gated behind `clipUploadEnabledKey` because clips are
+    /// 1-10 MB and quickly fill iCloud free tier.
+    private func enrichWithClip(eventID: String, camera: String) async {
+        guard UserDefaults.standard.bool(forKey: Self.clipUploadEnabledKey) else { return }
+        guard let webURL = UserDefaults.standard.string(forKey: Self.frigateWebURLKey),
+              !webURL.isEmpty else {
+            logger.info("clip enrich skipped — Frigate web URL not configured")
+            return
+        }
+        guard let clipURL = URL(string: "\(webURL)/api/events/\(eventID)/clip.mp4") else { return }
+        // Frigate finalises the clip a few seconds after the `end` event;
+        // a brief wait avoids the 404 race.
+        try? await Task.sleep(nanoseconds: 5_000_000_000)
+        do {
+            var request = URLRequest(url: clipURL)
+            request.timeoutInterval = 30
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+                logger.info("clip not ready for \(eventID) — leaving record snapshot-only")
+                return
+            }
+            await cloudKit.attachClip(eventID: eventID, clipMP4: data)
+            logger.info("attached clip for \(eventID) (\(data.count) bytes, camera=\(camera))")
+        } catch {
+            logger.warning("clip fetch failed for \(eventID): \(error.localizedDescription)")
+        }
     }
 }

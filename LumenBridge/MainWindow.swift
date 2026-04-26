@@ -155,7 +155,17 @@ struct MainWindow: View {
                     }
                     .buttonStyle(.borderedProminent)
                 }
+
                 Divider().padding(.vertical, 4)
+
+                Toggle("Upload MP4 clip with each event", isOn: clipUploadBinding)
+                    .toggleStyle(.switch)
+                Text("When enabled, the Bridge fetches the finalised clip from Frigate and attaches it to the FrigateEvent record. Clips are 1-10 MB each — leaving this off saves iCloud storage.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                Divider().padding(.vertical, 4)
+
                 infoBlock("Schema", """
 The first FrigateEvent record auto-creates the schema in DEVELOPMENT. \
 PRODUCTION promotion is web-only by Apple's design — visit the \
@@ -164,6 +174,13 @@ CloudKit Console and click 'Deploy Schema Changes'.
             }
             .padding(28)
         }
+    }
+
+    private var clipUploadBinding: Binding<Bool> {
+        Binding(
+            get: { UserDefaults.standard.bool(forKey: "lumenbridge.clip_upload_enabled") },
+            set: { UserDefaults.standard.set($0, forKey: "lumenbridge.clip_upload_enabled") }
+        )
     }
 
     // MARK: - HomeKit Sensors pane
