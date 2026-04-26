@@ -17,6 +17,8 @@ struct SettingsView: View {
     /// coordinator owns the server start/stop + flag persistence so a
     /// runtime toggle takes effect immediately (no app relaunch).
     var onToggleHAP: (@MainActor (_ enabled: Bool) async -> Void)? = nil
+    /// Called when the user toggles the Homebridge camera sidecar.
+    var onToggleHomebridge: (@MainActor (_ enabled: Bool) async -> Void)? = nil
 
     @State private var host: String = ""
     @State private var portText: String = "1883"
@@ -85,9 +87,47 @@ struct SettingsView: View {
                         .foregroundStyle(.orange)
                 }
             } header: {
-                Text("HomeKit (beta)")
+                Text("HomeKit motion sensors (beta)")
             } footer: {
-                Text("Phase 5 — motion sensors only for now. Camera streaming and HKSV recording are coming in v0.2.")
+                Text("Native Swift HAP server. Each Frigate camera shows up as a motion sensor in Apple Home.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Section {
+                TextField("Frigate web URL", text: frigateWebURLBinding,
+                          prompt: Text("https://frigate.local:5000"))
+                    .textContentType(.URL)
+                    .autocorrectionDisabled()
+
+                Toggle("Enable HomeKit cameras", isOn: homebridgeEnabledBinding)
+                    .help("Spawns a private Homebridge process that exposes each Frigate go2rtc stream as a HomeKit camera. Live view in Apple Home, audio off by default.")
+
+                switch state.homebridgeStatus {
+                case .stopped:
+                    Text("Cameras off. Toggle on to install Homebridge and start streaming.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                case .running(let setupCode):
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Cameras pairing code")
+                            .font(.caption.weight(.semibold))
+                        Text(setupCode)
+                            .font(.system(.title3, design: .monospaced).weight(.bold))
+                            .textSelection(.enabled)
+                        Text("Open Apple Home → Add Accessory → enter this code. The cameras bridge appears as ‘Lumen Bridge Cameras’ — separate from the motion-sensor bridge above.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                case .error(let reason):
+                    Text(reason)
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                }
+            } header: {
+                Text("HomeKit cameras (alpha)")
+            } footer: {
+                Text("Phase 5 v0.2 — uses a bundled Homebridge sidecar with homebridge-camera-ffmpeg. RTSP streams come from Frigate's go2rtc on port 8554. First-run install ~30-90s.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -172,6 +212,34 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
             }
         }
+    }
+
+    /// Bind to the user-supplied Frigate web URL — used by the Homebridge
+    /// sidecar to fetch cameras list and RTSP host. Stored under the same
+    /// UserDefaults bundle as the rest of the Bridge config.
+    private var frigateWebURLBinding: Binding<String> {
+        Binding(
+            get: { UserDefaults.standard.string(forKey: "lumenbridge.homebridge.frigate_web_url") ?? "" },
+            set: { UserDefaults.standard.set($0, forKey: "lumenbridge.homebridge.frigate_web_url") }
+        )
+    }
+
+    /// Two-way binding for the Homebridge sidecar toggle. Routes through
+    /// the coordinator (same pattern as `hapEnabledBinding`) so the
+    /// process spawns/quits immediately on flip.
+    private var homebridgeEnabledBinding: Binding<Bool> {
+        Binding(
+            get: { UserDefaults.standard.bool(forKey: "lumenbridge.homebridge.cameras_enabled") },
+            set: { newValue in
+                Task { @MainActor in
+                    if let onToggleHomebridge {
+                        await onToggleHomebridge(newValue)
+                    } else {
+                        UserDefaults.standard.set(newValue, forKey: "lumenbridge.homebridge.cameras_enabled")
+                    }
+                }
+            }
+        )
     }
 
     /// Two-way binding to the persisted HAP-enabled flag. Reading hits

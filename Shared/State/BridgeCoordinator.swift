@@ -38,12 +38,14 @@ final class BridgeCoordinator {
     private let configSync = BridgeConfigSync()
     #if os(macOS)
     private let hap: HAPBridgeManager
+    private let homebridge: HomebridgeManager
     #endif
 
     init(state: BridgeState) {
         self.state = state
         #if os(macOS)
         self.hap = HAPBridgeManager(state: state)
+        self.homebridge = HomebridgeManager(state: state)
         #endif
     }
 
@@ -56,6 +58,9 @@ final class BridgeCoordinator {
         // user has flipped the flag (via Settings or onboarding).
         if UserDefaults.standard.bool(forKey: Self.hapEnabledKey) {
             await hap.start()
+        }
+        if UserDefaults.standard.bool(forKey: HomebridgeManager.camerasEnabledKey) {
+            await homebridge.start()
         }
         #endif
 
@@ -159,6 +164,18 @@ final class BridgeCoordinator {
             await hap.start()
         } else {
             await hap.stop()
+        }
+    }
+
+    /// Toggle the Homebridge sidecar that powers HomeKit camera streaming.
+    /// Independent of `setHAPEnabled` — motion sensors and cameras can
+    /// each be on/off independently.
+    func setHomebridgeCamerasEnabled(_ enabled: Bool) async {
+        UserDefaults.standard.set(enabled, forKey: HomebridgeManager.camerasEnabledKey)
+        if enabled {
+            await homebridge.start()
+        } else {
+            await homebridge.stop()
         }
     }
     #endif

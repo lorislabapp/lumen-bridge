@@ -93,6 +93,9 @@ struct LumenBridgeMacApp: App {
                 },
                 onToggleHAP: { [coordinator] enabled in
                     await coordinator?.setHAPEnabled(enabled)
+                },
+                onToggleHomebridge: { [coordinator] enabled in
+                    await coordinator?.setHomebridgeCamerasEnabled(enabled)
                 }
             )
         }

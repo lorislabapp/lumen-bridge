@@ -122,7 +122,7 @@ mac_target.build_configurations.each do |config|
     'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge',
     'PRODUCT_NAME' => 'Lumen Bridge',
     'MARKETING_VERSION' => '0.1.0',
-    'CURRENT_PROJECT_VERSION' => '7',
+    'CURRENT_PROJECT_VERSION' => '9',
     'MACOSX_DEPLOYMENT_TARGET' => '14.0',
     'SWIFT_VERSION' => '6.0',
     'DEVELOPMENT_TEAM' => 'TDV6D5L785',
@@ -148,12 +148,20 @@ tv_target = project.new_target(:application, 'LumenBridgeTV', :tvos, '17.0')
 
 add_package_product(project, tv_target, mqtt_nio_pkg, 'MQTTNIO')
 
+# tvOS asset catalog — Brand Assets stack (App Icon layered, App Store
+# icon, Top Shelf 1920x720, Top Shelf Wide 2320x720). Required for
+# upload — Apple rejects tvOS .ipa without TVTopShelfImage.
+tv_xcassets = tv_group.recursive_children.find { |f|
+  f.is_a?(Xcodeproj::Project::Object::PBXFileReference) && f.path == 'Assets.xcassets'
+}
+tv_target.resources_build_phase.add_file_reference(tv_xcassets) if tv_xcassets
+
 tv_target.build_configurations.each do |config|
   config.build_settings.merge!(
     'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge',
     'PRODUCT_NAME' => 'Lumen Bridge',
     'MARKETING_VERSION' => '0.1.0',
-    'CURRENT_PROJECT_VERSION' => '7',
+    'CURRENT_PROJECT_VERSION' => '9',
     'TVOS_DEPLOYMENT_TARGET' => '17.0',
     'SWIFT_VERSION' => '6.0',
     'DEVELOPMENT_TEAM' => 'TDV6D5L785',
@@ -161,7 +169,11 @@ tv_target.build_configurations.each do |config|
     'CODE_SIGN_ENTITLEMENTS' => 'LumenBridgeTV/Resources/LumenBridgeTV.entitlements',
     'INFOPLIST_FILE' => 'LumenBridgeTV/Resources/Info.plist',
     'LD_RUNPATH_SEARCH_PATHS' => '$(inherited) @executable_path/Frameworks',
-    'ASSETCATALOG_COMPILER_APPICON_NAME' => 'AppIcon',
+    # tvOS uses the asset-catalog "Brand Assets" stack as the app icon —
+    # Xcode treats the whole `Brand Assets.brandassets` directory as the
+    # source. We wire that via the catalog-name compiler keys.
+    'ASSETCATALOG_COMPILER_APPICON_NAME' => 'App Icon',
+    'ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME' => 'LaunchImage',
     'ENABLE_PREVIEWS' => 'YES',
     'INFOPLIST_KEY_NSHumanReadableCopyright' => 'Copyright © 2026 LorisLabs',
     'INFOPLIST_KEY_LSApplicationCategoryType' => 'public.app-category.utilities',
