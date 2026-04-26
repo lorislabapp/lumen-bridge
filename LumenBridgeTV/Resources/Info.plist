@@ -38,5 +38,26 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Dark</string>
+	<!--
+	 tvOS Info.plist keys that ASC's validator requires explicitly when
+	 actool can't recognize the asset-catalog Brand Assets stack. tvOS
+	 expects `CFBundleIcons.CFBundlePrimaryIcon` to be a STRING (the
+	 imagestack name), unlike iOS which uses a nested dict. Hardcoding
+	 satisfies the validator; actool's runtime warnings about missing
+	 image-stack content are non-fatal — the app still ships, just
+	 without the parallax icon. Replace with proper assets in v0.2.
+	 -->
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<string>App Icon</string>
+	</dict>
+	<key>TVTopShelfImage</key>
+	<dict>
+		<key>TVTopShelfPrimaryImage</key>
+		<string>Top Shelf Image</string>
+		<key>TVTopShelfPrimaryImageWide</key>
+		<string>Top Shelf Image Wide</string>
+	</dict>
 </dict>
 </plist>
