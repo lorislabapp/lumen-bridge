@@ -1,7 +1,39 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-
-  },
-  "version" : "1.0"
+  "sourceLanguage": "en",
+  "version": "1.0",
+  "strings": {
+    "Lumen Bridge": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lumen Bridge"
+          }
+        }
+      }
+    },
+    "Open Lumen Bridge on your Mac and finish the setup wizard there. Your Apple TV will pick up the Frigate connection automatically via iCloud.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez Lumen Bridge sur votre Mac et terminez l’assistant de configuration. Votre Apple TV récupèrera automatiquement la connexion Frigate via iCloud."
+          }
+        }
+      }
+    },
+    "Leave this running — the bridge forwards Frigate events to all your Lumen devices via iCloud.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laissez l’app active — le bridge transfère les événements Frigate vers tous vos appareils Lumen via iCloud."
+          }
+        }
+      }
+    }
+  }
 }

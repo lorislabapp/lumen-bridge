@@ -1,7 +1,776 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-
-  },
-  "version" : "1.0"
+  "sourceLanguage": "en",
+  "version": "1.0",
+  "strings": {
+    "Lumen Bridge": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lumen Bridge"
+          }
+        }
+      }
+    },
+    "Frigate": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frigate"
+          }
+        }
+      }
+    },
+    "CloudKit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CloudKit"
+          }
+        }
+      }
+    },
+    "Back": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Précédent"
+          }
+        }
+      }
+    },
+    "Continue": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer"
+          }
+        }
+      }
+    },
+    "Finish": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminer"
+          }
+        }
+      }
+    },
+    "Quit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitter"
+          }
+        }
+      }
+    },
+    "Settings…": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages…"
+          }
+        }
+      }
+    },
+    "Use": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utiliser"
+          }
+        }
+      }
+    },
+    "Save & Connect": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer et connecter"
+          }
+        }
+      }
+    },
+    "Set up manually": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration manuelle"
+          }
+        }
+      }
+    },
+    "Send test event": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer un événement test"
+          }
+        }
+      }
+    },
+    "Report a Bug": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signaler un bug"
+          }
+        }
+      }
+    },
+    "Open Console.app": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir Console.app"
+          }
+        }
+      }
+    },
+    "Open Apple ID in System Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir Identifiant Apple dans Réglages Système"
+          }
+        }
+      }
+    },
+    "Host": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hôte"
+          }
+        }
+      }
+    },
+    "Port": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port"
+          }
+        }
+      }
+    },
+    "Username (optional)": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom d’utilisateur (facultatif)"
+          }
+        }
+      }
+    },
+    "Password (optional)": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mot de passe (facultatif)"
+          }
+        }
+      }
+    },
+    "Status": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "État"
+          }
+        }
+      }
+    },
+    "Authentication": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Authentification"
+          }
+        }
+      }
+    },
+    "Frigate web URL": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "URL web de Frigate"
+          }
+        }
+      }
+    },
+    "Frigate MQTT broker": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Broker MQTT Frigate"
+          }
+        }
+      }
+    },
+    "Lumen Bridge — Frigate Connection": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lumen Bridge — Connexion Frigate"
+          }
+        }
+      }
+    },
+    "Discovered (Bonjour)": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Détectés (Bonjour)"
+          }
+        }
+      }
+    },
+    "Discovered on your network": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Détectés sur votre réseau"
+          }
+        }
+      }
+    },
+    "Or enter it manually": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ou saisissez-le manuellement"
+          }
+        }
+      }
+    },
+    "Searching via Bonjour…": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche via Bonjour…"
+          }
+        }
+      }
+    },
+    "Where is your Frigate MQTT broker running?": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Où votre broker MQTT Frigate s’exécute-t-il ?"
+          }
+        }
+      }
+    },
+    "Pairing code": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code d’appairage"
+          }
+        }
+      }
+    },
+    "Cameras pairing code": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code d’appairage des caméras"
+          }
+        }
+      }
+    },
+    "Scan with the iOS Camera or Home app": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scannez avec l’appareil photo iOS ou l’app Maison"
+          }
+        }
+      }
+    },
+    "More features coming to the Bridge": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "D’autres fonctionnalités arrivent sur le Bridge"
+          }
+        }
+      }
+    },
+    "Frigate, the Apple-native way.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frigate, version Apple native."
+          }
+        }
+      }
+    },
+    "You're set up.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuration terminée."
+          }
+        }
+      }
+    },
+    "Enable HomeKit bridge": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer le bridge HomeKit"
+          }
+        }
+      }
+    },
+    "Enable HomeKit cameras": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer les caméras HomeKit"
+          }
+        }
+      }
+    },
+    "Enable HomeKit motion sensors": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer les capteurs de mouvement HomeKit"
+          }
+        }
+      }
+    },
+    "Upload MP4 clip with each event": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Téléverser un clip MP4 à chaque événement"
+          }
+        }
+      }
+    },
+    "HomeKit motion sensors (beta)": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capteurs de mouvement HomeKit (bêta)"
+          }
+        }
+      }
+    },
+    "HomeKit cameras (alpha)": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméras HomeKit (alpha)"
+          }
+        }
+      }
+    },
+    "Native Swift HAP server. Each Frigate camera shows up as a motion sensor in Apple Home.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serveur HAP natif Swift. Chaque caméra Frigate apparaît comme un capteur de mouvement dans Apple Home."
+          }
+        }
+      }
+    },
+    "HomeKit bridge is off. Toggle on to start pairing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le bridge HomeKit est désactivé. Activez-le pour démarrer l’appairage."
+          }
+        }
+      }
+    },
+    "Off. Toggle on to start the HAP server and pair from Apple Home.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Désactivé. Activez pour démarrer le serveur HAP et appairer depuis Apple Home."
+          }
+        }
+      }
+    },
+    "Off. First-run install bootstraps homebridge + homebridge-camera-ffmpeg via npm (~30-90s).": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Désactivé. La première activation installe homebridge + homebridge-camera-ffmpeg via npm (~30-90 s)."
+          }
+        }
+      }
+    },
+    "Cameras off. Toggle on to install Homebridge and start streaming.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméras désactivées. Activez pour installer Homebridge et démarrer la diffusion."
+          }
+        }
+      }
+    },
+    "Find this under Frigate → Settings → MQTT. Defaults to port 1883 (no TLS).": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disponible dans Frigate → Settings → MQTT. Port 1883 par défaut (sans TLS)."
+          }
+        }
+      }
+    },
+    "Leave blank if your Mosquitto / EMQX broker allows anonymous connections (Frigate's default).": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laissez vide si votre broker Mosquitto / EMQX accepte les connexions anonymes (par défaut chez Frigate)."
+          }
+        }
+      }
+    },
+    "Frigate publishes detection events to an MQTT broker (usually Mosquitto). The Bridge subscribes to those events and forwards them to your iCloud account.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frigate publie les événements de détection vers un broker MQTT (en général Mosquitto). Le Bridge s’y abonne et les transfère vers votre compte iCloud."
+          }
+        }
+      }
+    },
+    "Lumen Bridge connects your Frigate NVR directly to Apple's ecosystem — push notifications, HomeKit cameras, iCloud clip storage — without any third-party server in between.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lumen Bridge connecte votre NVR Frigate directement à l’écosystème Apple — notifications push, caméras HomeKit, stockage des clips dans iCloud — sans serveur tiers intermédiaire."
+          }
+        }
+      }
+    },
+    "When enabled, the Bridge fetches the finalised clip from Frigate and attaches it to the FrigateEvent record. Clips are 1-10 MB each — leaving this off saves iCloud storage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lorsque activé, le Bridge récupère le clip finalisé depuis Frigate et l’attache à l’enregistrement FrigateEvent. Chaque clip pèse 1 à 10 Mo — désactivez pour économiser l’espace iCloud."
+          }
+        }
+      }
+    },
+    "Distribution note: this feature requires a non-sandboxed direct-download build. The TestFlight build doesn't have permission to spawn the Homebridge subprocess.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note de distribution : cette fonctionnalité requiert une version directe sans sandbox. La version TestFlight n’a pas l’autorisation de lancer le sous-processus Homebridge."
+          }
+        }
+      }
+    },
+    "HomeKit cameras run on the macOS Bridge. Your Apple TV inherits the Frigate connection automatically — pair the cameras from any iOS device under the same Apple ID.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les caméras HomeKit s’exécutent sur le Bridge macOS. Votre Apple TV hérite automatiquement de la connexion Frigate — appairez les caméras depuis n’importe quel appareil iOS sous le même identifiant Apple."
+          }
+        }
+      }
+    },
+    "No instances discovered via Bonjour yet. If your Frigate is on a different VLAN or doesn't advertise `_frigate._tcp`, just enter the host above manually.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune instance détectée via Bonjour pour l’instant. Si votre Frigate est sur un autre VLAN ou n’annonce pas `_frigate._tcp`, saisissez l’hôte manuellement ci-dessus."
+          }
+        }
+      }
+    },
+    "Detection events are stored in your private iCloud database, scoped to the `iCloud.com.lorislabapp.lumenbridge` container. Only your Apple ID can read them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les événements de détection sont stockés dans votre base iCloud privée, dans le conteneur `iCloud.com.lorislabapp.lumenbridge`. Seul votre identifiant Apple peut les lire."
+          }
+        }
+      }
+    },
+    "The Bridge is designed to grow into your home's full Frigate ↔ Apple control panel. Here's what's already live and what's next.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le Bridge est conçu pour devenir le panneau de contrôle complet entre Frigate et Apple chez vous. Voici ce qui est déjà disponible et ce qui arrive."
+          }
+        }
+      }
+    },
+    "The Bridge is running in your menu bar. As Frigate detects events, you'll get notifications on your iPhone, iPad, Mac, and Watch — no server in between.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le Bridge tourne dans votre barre de menus. À mesure que Frigate détecte des événements, vous recevrez des notifications sur votre iPhone, iPad, Mac et Watch — sans serveur intermédiaire."
+          }
+        }
+      }
+    },
+    "Phase 5 v0.2 — uses a bundled Homebridge sidecar with homebridge-camera-ffmpeg. RTSP streams come from Frigate's go2rtc on port 8554. First-run install ~30-90s.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase 5 v0.2 — utilise un sidecar Homebridge intégré avec homebridge-camera-ffmpeg. Les flux RTSP proviennent du go2rtc de Frigate sur le port 8554. Installation initiale ~30-90 s."
+          }
+        }
+      }
+    },
+    "Open Apple Home → Add Accessory → enter this code. The cameras bridge appears as ‘Lumen Bridge Cameras’ — separate from the motion-sensor bridge above.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez Apple Home → Ajouter un accessoire → saisissez ce code. Le bridge des caméras apparaît sous le nom « Lumen Bridge Cameras » — distinct du bridge de capteurs de mouvement ci-dessus."
+          }
+        }
+      }
+    },
+    "Not connected": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non connecté"
+          }
+        }
+      }
+    },
+    "%@:%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@:%lld"
+          }
+        }
+      }
+    },
+    "Connected to %@:%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecté à %@:%lld"
+          }
+        }
+      }
+    },
+    "%lld discovered — none paired yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld détecté(s) — aucun appairé pour l’instant"
+          }
+        }
+      }
+    },
+    "%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
+          }
+        }
+      }
+    },
+    "Open Apple Home → Add Accessory → \"%@\" → scan the QR code or enter the code above.": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez Apple Home → Ajouter un accessoire → « %@ » → scannez le QR code ou saisissez le code ci-dessus."
+          }
+        }
+      }
+    },
+    "1883": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1883"
+          }
+        }
+      }
+    },
+    "https://frigate.local:5000": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "https://frigate.local:5000"
+          }
+        }
+      }
+    },
+    "frigate.local or 10.9.8.42": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "frigate.local ou 10.9.8.42"
+          }
+        }
+      }
+    },
+    "frigate.local or 192.168.3.160": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "frigate.local ou 192.168.3.160"
+          }
+        }
+      }
+    },
+    "© 2026 LorisLabs · Christine Martin (TDV6D5L785)": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "© 2026 LorisLabs · Christine Martin (TDV6D5L785)"
+          }
+        }
+      }
+    }
+  }
 }
