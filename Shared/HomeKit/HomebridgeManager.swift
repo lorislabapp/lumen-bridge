@@ -287,6 +287,13 @@ final class HomebridgeManager {
     /// Tiny weak holder so async closures can release us — `weak self`
     /// inside Task closures refused to compile under Swift 6 strict
     /// concurrency without this dance.
+    ///
+    /// **Why `@unchecked Sendable` is safe here:** the wrapped value is
+    /// `HomebridgeManager`, which is `@MainActor`-isolated. The only
+    /// access path is `weakSelf.value` from inside a `Task { @MainActor in … }`
+    /// closure (see `start()` polling loop), so the `weak var` is read
+    /// exclusively on the main actor. The box itself is immutable after
+    /// init. Audit-tool flag accepted as a known-safe pattern, not a TODO.
     private final class WeakBox<T: AnyObject>: @unchecked Sendable {
         weak var value: T?
         init(_ v: T) { self.value = v }

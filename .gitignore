@@ -27,3 +27,8 @@ Package.resolved
 
 ## Logs
 *.log
+
+## Icon Composer source files (live elsewhere — compiled icons in Assets.xcassets)
+Untitled.icon/
+*.icon/
+audit-output/

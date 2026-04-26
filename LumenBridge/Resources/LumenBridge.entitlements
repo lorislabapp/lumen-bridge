@@ -27,5 +27,12 @@
 	</array>
 	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
 	<string>$(TeamIdentifierPrefix)$(CFBundleIdentifier)</string>
+	<!-- Keychain access groups: required when sandboxed so Bridge can
+	     read/write its own MQTT password entry. The team-id prefix is
+	     mandatory for iCloud Keychain sync (kSecAttrSynchronizable). -->
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)com.lorislabapp.lumenbridge</string>
+	</array>
 </dict>
 </plist>

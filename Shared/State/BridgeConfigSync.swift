@@ -3,13 +3,17 @@ import os
 
 private let logger = Logger(subsystem: "com.lorislabapp.lumenbridge", category: "ConfigSync")
 
-/// Cross-device sync of the Frigate MQTT config via NSUbiquitousKeyValueStore
-/// (iCloud Key-Value Store). Lets the tvOS Bridge pick up the host /
-/// credentials a user already entered on the macOS Bridge — same Apple ID,
-/// no manual re-entry on a remote with no keyboard.
+/// Cross-device sync of the Frigate MQTT config. Non-secret fields
+/// (host, port, username) live in NSUbiquitousKeyValueStore. The
+/// password is stored in iCloud Keychain via `MQTTCredentialsKeychain`
+/// per Apple's secrets-handling guidance (KVS is for preferences, not
+/// credentials).
+///
+/// Cross-device replication semantics are unchanged — both KVS and
+/// iCloud Keychain replicate within seconds of a change.
 ///
 /// KVS has a 1MB total cap and per-value soft limits well above what we
-/// store here (host ~30 bytes, password ~50). Updates are observed via
+/// store here (host ~30 bytes). Updates are observed via
 /// `NSUbiquitousKeyValueStore.didChangeExternallyNotification` so the
 /// remote (tvOS) reconnects within seconds of a change on the source
 /// (macOS).
@@ -18,13 +22,23 @@ final class BridgeConfigSync {
     nonisolated static let hostKey  = "lumenbridge.kvs.frigate.host"
     nonisolated static let portKey  = "lumenbridge.kvs.frigate.port"
     nonisolated static let userKey  = "lumenbridge.kvs.frigate.user"
-    nonisolated static let passKey  = "lumenbridge.kvs.frigate.pass"
+    /// Legacy key — only kept for the one-time migration path that
+    /// pulls any pre-existing KVS value into Keychain on launch.
+    /// Do NOT write through this key.
+    nonisolated static let legacyPassKey = "lumenbridge.kvs.frigate.pass"
 
     private let kvs = NSUbiquitousKeyValueStore.default
     private var observerToken: NSObjectProtocol?
 
-    /// Pulls the freshest known config from KVS. Returns nil for any field
-    /// the user hasn't set yet.
+    init() {
+        // Migrate any legacy KVS-stored password to Keychain on first
+        // launch after the upgrade. No-op if there's nothing to move.
+        MQTTCredentialsKeychain.migrateFromKVS(legacyKey: Self.legacyPassKey)
+    }
+
+    /// Pulls the freshest known config. Host/port/username come from
+    /// KVS; password from Keychain. Returns nil when the user hasn't
+    /// set a host yet.
     var current: PersistedConfig? {
         guard let host = kvs.string(forKey: Self.hostKey), !host.isEmpty else { return nil }
         let port = Int(kvs.longLong(forKey: Self.portKey))
@@ -32,12 +46,13 @@ final class BridgeConfigSync {
             host: host,
             port: port > 0 ? port : 1883,
             username: kvs.string(forKey: Self.userKey),
-            password: kvs.string(forKey: Self.passKey)
+            password: MQTTCredentialsKeychain.get()
         )
     }
 
-    /// Pushes the user's config up to KVS so the same Apple ID's other
-    /// Bridge installs (tvOS, future watchOS) inherit it without re-entry.
+    /// Pushes the user's config up. Host/port/username → KVS, password
+    /// → iCloud Keychain. Same Apple ID's other Bridge installs (tvOS,
+    /// future watchOS) inherit both without re-entry.
     func push(host: String, port: Int, username: String?, password: String?) {
         kvs.set(host, forKey: Self.hostKey)
         kvs.set(Int64(port), forKey: Self.portKey)
@@ -46,13 +61,9 @@ final class BridgeConfigSync {
         } else {
             kvs.removeObject(forKey: Self.userKey)
         }
-        if let password, !password.isEmpty {
-            kvs.set(password, forKey: Self.passKey)
-        } else {
-            kvs.removeObject(forKey: Self.passKey)
-        }
         kvs.synchronize()
-        logger.info("KVS config push: \(host):\(port)")
+        MQTTCredentialsKeychain.set(password)
+        logger.info("Config push: \(host):\(port) (password via Keychain)")
     }
 
     /// Subscribe to remote changes so the bridge reconnects when the user
@@ -65,7 +76,10 @@ final class BridgeConfigSync {
         ) { note in
             // Filter — we only react when one of OUR keys changed.
             let changed = note.userInfo?[NSUbiquitousKeyValueStoreChangedKeysKey] as? [String] ?? []
-            let ours: Set<String> = [Self.hostKey, Self.portKey, Self.userKey, Self.passKey]
+            // Legacy passKey still observed so a tail-end migration on a
+            // remote device fires the reconnect handler — even though we
+            // never write the password through KVS anymore.
+            let ours: Set<String> = [Self.hostKey, Self.portKey, Self.userKey, Self.legacyPassKey]
             guard changed.contains(where: ours.contains) else { return }
             // Hop back to the main actor before touching `current`, which
             // is @MainActor-isolated. The notification queue is `.main`

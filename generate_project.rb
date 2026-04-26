@@ -61,6 +61,22 @@ def add_package_product(project, target, package_ref, product_name)
   target.frameworks_build_phase.files << build_file
 end
 
+# BugReportKit — vendored under Packages/BugReportKit, wired in by
+# `Packages/BugReportKit/scripts/onboard.rb` originally. We register
+# it here so a fresh `generate_project.rb` run keeps the dep wired
+# (otherwise regenerating drops the SPM ref and the next build
+# fails on `import BugReportKit`).
+BUG_REPORT_KIT_DIR = 'Packages/BugReportKit'
+
+def add_local_package(project, dir)
+  pkg = project.new(Xcodeproj::Project::Object::XCLocalSwiftPackageReference)
+  pkg.relative_path = dir
+  project.root_object.package_references << pkg
+  pkg
+end
+
+bug_report_kit_pkg = add_local_package(project, BUG_REPORT_KIT_DIR) if File.exist?(File.join(BUG_REPORT_KIT_DIR, 'Package.swift'))
+
 # Groups mirror the on-disk layout.
 shared_group = project.new_group('Shared',         'Shared')
 mac_group    = project.new_group('LumenBridge',    'LumenBridge')
@@ -103,7 +119,9 @@ mac_swift    = swift_files_in(mac_group)
 tv_swift     = swift_files_in(tv_group)
 
 # --- macOS target ---
-mac_target = project.new_target(:application, 'LumenBridge', :osx, '14.0')
+# macOS 15+ because BugReportKit (added 2026-04-26) requires it. Bridge has
+# no users yet so the bump is free.
+mac_target = project.new_target(:application, 'LumenBridge', :osx, '15.0')
 (shared_swift + mac_swift).each { |f| mac_target.source_build_phase.add_file_reference(f) }
 
 # Asset catalog — macOS icon. The .xcassets folder is a "blue folder" in Xcode
@@ -114,16 +132,29 @@ mac_xcassets = mac_group.recursive_children.find { |f|
 }
 mac_target.resources_build_phase.add_file_reference(mac_xcassets) if mac_xcassets
 
+# Bundle resources required by Apple's Asset Validation:
+#   - Localizable.xcstrings — string catalog (compiled to .strings at build)
+#   - PrivacyInfo.xcprivacy — privacy manifest, mandatory since Spring 2024
+def add_bundle_resource(group, target, basename)
+  ref = group.recursive_children.find { |f|
+    f.is_a?(Xcodeproj::Project::Object::PBXFileReference) && f.path == basename
+  }
+  target.resources_build_phase.add_file_reference(ref) if ref
+end
+add_bundle_resource(mac_group, mac_target, 'Localizable.xcstrings')
+add_bundle_resource(mac_group, mac_target, 'PrivacyInfo.xcprivacy')
+
 add_package_product(project, mac_target, mqtt_nio_pkg, 'MQTTNIO')
 add_package_product(project, mac_target, hap_pkg, 'HAP')
+add_package_product(project, mac_target, bug_report_kit_pkg, 'BugReportKit') if bug_report_kit_pkg
 
 mac_target.build_configurations.each do |config|
   config.build_settings.merge!(
     'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge',
     'PRODUCT_NAME' => 'Lumen Bridge',
     'MARKETING_VERSION' => '0.1.0',
-    'CURRENT_PROJECT_VERSION' => '11',
-    'MACOSX_DEPLOYMENT_TARGET' => '14.0',
+    'CURRENT_PROJECT_VERSION' => '12',
+    'MACOSX_DEPLOYMENT_TARGET' => '15.0',
     'SWIFT_VERSION' => '6.0',
     'DEVELOPMENT_TEAM' => 'TDV6D5L785',
     'CODE_SIGN_STYLE' => 'Automatic',
@@ -156,12 +187,15 @@ tv_xcassets = tv_group.recursive_children.find { |f|
 }
 tv_target.resources_build_phase.add_file_reference(tv_xcassets) if tv_xcassets
 
+add_bundle_resource(tv_group, tv_target, 'Localizable.xcstrings')
+add_bundle_resource(tv_group, tv_target, 'PrivacyInfo.xcprivacy')
+
 tv_target.build_configurations.each do |config|
   config.build_settings.merge!(
     'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge',
     'PRODUCT_NAME' => 'Lumen Bridge',
     'MARKETING_VERSION' => '0.1.0',
-    'CURRENT_PROJECT_VERSION' => '11',
+    'CURRENT_PROJECT_VERSION' => '12',
     'TVOS_DEPLOYMENT_TARGET' => '17.0',
     'SWIFT_VERSION' => '6.0',
     'DEVELOPMENT_TEAM' => 'TDV6D5L785',
@@ -195,5 +229,5 @@ end
 
 puts "Generated #{PROJECT_PATH}"
 puts "Targets:"
-puts "  - LumenBridge    (macOS 14+)   — #{(shared_swift + mac_swift).size} swift files"
+puts "  - LumenBridge    (macOS 15+)  — #{(shared_swift + mac_swift).size} swift files"
 puts "  - LumenBridgeTV  (tvOS 17+)   — #{(shared_swift + tv_swift).size} swift files"
