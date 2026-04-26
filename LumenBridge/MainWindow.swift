@@ -1,4 +1,10 @@
 import SwiftUI
+import BugReportKit
+#if os(macOS)
+import CoreImage
+import CoreImage.CIFilterBuiltins
+import AppKit
+#endif
 
 /// Main settings window — a sidebar-driven control panel for everything
 /// the Bridge can do. Modeled after macOS 14+ System Settings (Sequoia /
@@ -75,14 +81,25 @@ struct MainWindow: View {
                 paneHeader("Status",
                            "What the Bridge is currently doing. Toggle features in the sidebar.")
                 statusGrid
-                Button {
-                    Task { await onSendTestEvent?() }
-                } label: {
-                    Label("Send test event", systemImage: "paperplane.fill")
+                HStack(spacing: 12) {
+                    Button {
+                        Task { await onSendTestEvent?() }
+                    } label: {
+                        Label("Send test event", systemImage: "paperplane.fill")
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .help("Writes a synthetic FrigateEvent to CloudKit so you can verify the pipeline reaches your iPhone without waiting for a real detection.")
+
+                    NavigationLink {
+                        BugReportView(provider: LumenBridgeBugReportContext(state: state))
+                    } label: {
+                        Label("Report a Bug", systemImage: "ant.fill")
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+                    .help("Open the AI-augmented bug-report flow. The diagnostic bundle includes the live Bridge state.")
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .help("Writes a synthetic FrigateEvent to CloudKit so you can verify the pipeline reaches your iPhone without waiting for a real detection.")
             }
             .padding(28)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -197,8 +214,13 @@ CloudKit Console and click 'Deploy Schema Changes'.
                 case .stopped:
                     Text("Off. Toggle on to start the HAP server and pair from Apple Home.")
                         .foregroundStyle(.secondary)
-                case .running(let setupCode, let count):
-                    pairingCodeRow(setupCode, accessoryCount: count, prefix: "Lumen Bridge")
+                case .running(let setupCode, let setupID, let count):
+                    #if os(macOS)
+                    let uri = HAPBridgeManager.makeSetupURI(setupCode: setupCode, setupID: setupID)
+                    pairingCodeRow(setupCode, pairingURI: uri, accessoryCount: count, prefix: "Lumen Bridge")
+                    #else
+                    pairingCodeRow(setupCode, pairingURI: nil, accessoryCount: count, prefix: "Lumen Bridge")
+                    #endif
                 case .error(let reason):
                     Text(reason).foregroundStyle(.orange)
                 }
@@ -225,7 +247,7 @@ CloudKit Console and click 'Deploy Schema Changes'.
                     Text("Off. First-run install bootstraps homebridge + homebridge-camera-ffmpeg via npm (~30-90s).")
                         .foregroundStyle(.secondary)
                 case .running(let setupCode):
-                    pairingCodeRow(setupCode, accessoryCount: nil, prefix: "Lumen Bridge Cameras")
+                    pairingCodeRow(setupCode, pairingURI: nil, accessoryCount: nil, prefix: "Lumen Bridge Cameras")
                 case .error(let reason):
                     Text(reason).foregroundStyle(.orange)
                 }
@@ -277,6 +299,15 @@ CloudKit Console and click 'Deploy Schema Changes'.
                     "Detection events stay in your private iCloud database. Apple cannot read them. The Bridge runs locally on your Mac and never sends data to LorisLabs servers.",
                     linkLabel: "Privacy Policy",
                     linkURL: "https://lorislab.fr/privacy.html")
+
+                Divider().padding(.vertical, 8)
+
+                NavigationLink {
+                    BugReportView(provider: LumenBridgeBugReportContext(state: state))
+                } label: {
+                    Label("Report a Bug", systemImage: "ant.fill")
+                }
+                .buttonStyle(.bordered)
             }
             .padding(28)
         }
@@ -328,22 +359,69 @@ CloudKit Console and click 'Deploy Schema Changes'.
         }
     }
 
-    private func pairingCodeRow(_ code: String, accessoryCount: Int?, prefix: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Pairing code").font(.caption.weight(.semibold))
-            Text(code)
-                .font(.system(.title2, design: .monospaced).weight(.bold))
-                .textSelection(.enabled)
-            if let accessoryCount {
-                Text("\(accessoryCount) accessory \(accessoryCount == 1 ? "" : "ies") · \(prefix)")
-                    .font(.caption).foregroundStyle(.secondary)
-            } else {
-                Text(prefix).font(.caption).foregroundStyle(.secondary)
+    private func pairingCodeRow(
+        _ code: String,
+        pairingURI: String?,
+        accessoryCount: Int?,
+        prefix: String
+    ) -> some View {
+        HStack(alignment: .top, spacing: 20) {
+            #if os(macOS)
+            if let pairingURI, let qr = Self.qrImage(from: pairingURI, size: 180) {
+                VStack(alignment: .center, spacing: 4) {
+                    Image(nsImage: qr)
+                        .interpolation(.none)
+                        .resizable()
+                        .frame(width: 180, height: 180)
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                        )
+                    Text("Scan with the iOS Camera or Home app")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
             }
-            Text("Open Apple Home → Add Accessory → \"\(prefix)\" → enter the code above.")
-                .font(.caption).foregroundStyle(.secondary)
+            #endif
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Pairing code").font(.caption.weight(.semibold))
+                Text(code)
+                    .font(.system(.title2, design: .monospaced).weight(.bold))
+                    .textSelection(.enabled)
+                if let accessoryCount {
+                    Text("\(accessoryCount) accessory \(accessoryCount == 1 ? "" : "ies") · \(prefix)")
+                        .font(.caption).foregroundStyle(.secondary)
+                } else {
+                    Text(prefix).font(.caption).foregroundStyle(.secondary)
+                }
+                Text("Open Apple Home → Add Accessory → \"\(prefix)\" → scan the QR code or enter the code above.")
+                    .font(.caption).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 0)
         }
     }
+
+    #if os(macOS)
+    /// Renders a Core Image QR code at the requested point size. Uses `.none`
+    /// interpolation upstream so the crisp pixel grid survives — CIImage
+    /// scaling otherwise smears the modules.
+    private static func qrImage(from string: String, size: CGFloat) -> NSImage? {
+        let filter = CIFilter.qrCodeGenerator()
+        filter.message = Data(string.utf8)
+        filter.correctionLevel = "M"
+        guard let output = filter.outputImage else { return nil }
+        let scale = size / output.extent.width
+        let scaled = output.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
+        let rep = NSCIImageRep(ciImage: scaled)
+        let image = NSImage(size: rep.size)
+        image.addRepresentation(rep)
+        return image
+    }
+    #endif
 
     private var hostDetail: String {
         if let host = state.frigateHost, let port = state.frigatePort {
@@ -355,7 +433,7 @@ CloudKit Console and click 'Deploy Schema Changes'.
     private var hapStatusDetail: String {
         switch state.hapStatus {
         case .stopped: return "HAP server off"
-        case .running(_, let count): return "\(count) sensor\(count == 1 ? "" : "s")"
+        case .running(_, _, let count): return "\(count) sensor\(count == 1 ? "" : "s")"
         case .error: return "Error — see HomeKit · Sensors"
         }
     }
@@ -365,12 +443,46 @@ CloudKit Console and click 'Deploy Schema Changes'.
         switch state.homebridgeStatus {
         case .stopped: return "Sidecar off"
         case .running: return "Cameras live"
-        case .error: return "Error — see HomeKit · Cameras"
+        case .error(let reason):
+            // Surface a recognizable hint for the most common failure modes
+            // instead of the raw enum description, so the dashboard tile
+            // tells the user where to look without drilling into the
+            // sub-pane.
+            let hint = Self.shortenHomebridgeError(reason)
+            return "Error — \(hint)"
         }
         #else
         return ""
         #endif
     }
+
+    #if os(macOS)
+    /// Maps known `HomebridgeError` cases to a short, user-facing hint.
+    /// Falls back to the first 60 chars of the raw error when the case
+    /// isn't recognized.
+    private static func shortenHomebridgeError(_ raw: String) -> String {
+        if raw.contains("missingFrigateURL") {
+            return "set Frigate web URL in HomeKit · Cameras"
+        }
+        if raw.contains("npmNotFound") {
+            return "npm not found (install Node from nodejs.org)"
+        }
+        if raw.contains("nodeNotFound") {
+            return "node not found (install Node from nodejs.org)"
+        }
+        if raw.contains("installFailed") {
+            return "homebridge install failed — see HomeKit · Cameras"
+        }
+        if raw.contains("homebridgeBinNotFound") {
+            return "homebridge binary missing — re-toggle"
+        }
+        if raw.contains("sandbox") || raw.contains("Operation not permitted") {
+            return "sandbox blocks subprocess (use direct-download build)"
+        }
+        let trimmed = raw.replacingOccurrences(of: "\n", with: " ")
+        return String(trimmed.prefix(60))
+    }
+    #endif
 
     // Bindings — duplicate the ones from SettingsView so this pane is self-
     // contained. Once we're confident MainWindow is the canonical UI we'll

@@ -35,6 +35,13 @@ final class HAPBridgeManager {
     /// own state file, because we want to display it in the Settings UI
     /// even before the HAP server has booted).
     private static let setupCodeKey = "lumenbridge.hap.setup_code"
+    /// HomeKit setup identifier — 4 alphanumeric chars (A-Z, 2-9). Required
+    /// to compute the X-HM pairing URI rendered as a QR code in the UI.
+    /// Persisted alongside the setup code so the QR code stays stable
+    /// across restarts.
+    private static let setupIDKey = "lumenbridge.hap.setup_id"
+    /// HAP accessory category for a Bridge per HAP Spec R17 §13.
+    private static let bridgeCategory: UInt64 = 2
 
     // MARK: -
 
@@ -56,6 +63,7 @@ final class HAPBridgeManager {
         do {
             let storage = try Self.makeFileStorage()
             let setupCode = Self.loadOrCreateSetupCode()
+            let setupID = Self.loadOrCreateSetupID()
 
             // Bridge accessory identity. The serial is stable per Mac
             // (DeviceIdentifier UUID) so users who re-install the Bridge
@@ -82,8 +90,8 @@ final class HAPBridgeManager {
             let server = try HAP.Server(device: device, listenPort: 0)
             self.server = server
 
-            state.hapStatus = .running(setupCode: setupCode, accessoryCount: 0)
-            logger.info("HAP bridge started, setup code: \(setupCode)")
+            state.hapStatus = .running(setupCode: setupCode, setupID: setupID, accessoryCount: 0)
+            logger.info("HAP bridge started, setup code: \(setupCode), setup ID: \(setupID)")
         } catch {
             state.hapStatus = .error(String(describing: error))
             logger.error("HAP start failed: \(String(describing: error))")
@@ -131,8 +139,8 @@ final class HAPBridgeManager {
         device.addAccessories([accessory])
         configuredCameras[cameraName] = accessory
 
-        if case .running(let code, let count) = state.hapStatus {
-            state.hapStatus = .running(setupCode: code, accessoryCount: count + 1)
+        if case .running(let code, let id, let count) = state.hapStatus {
+            state.hapStatus = .running(setupCode: code, setupID: id, accessoryCount: count + 1)
         }
         logger.info("HAP added motion sensor for \(cameraName)")
     }
@@ -180,6 +188,53 @@ final class HAPBridgeManager {
         let formatted = "\(digits.prefix(3))-\(digits.dropFirst(3).prefix(2))-\(digits.dropFirst(5))"
         defaults.set(formatted, forKey: setupCodeKey)
         return formatted
+    }
+
+    /// 4-char A-Z 2-9 setup identifier (excludes 0/1/I/O for legibility,
+    /// matching the convention used for setup codes).
+    private static func loadOrCreateSetupID() -> String {
+        let defaults = UserDefaults.standard
+        if let existing = defaults.string(forKey: setupIDKey),
+           existing.count == 4 {
+            return existing
+        }
+        let alphabet = Array("ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
+        var bytes = [UInt8](repeating: 0, count: 4)
+        _ = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
+        let id = bytes.map { alphabet[Int($0) % alphabet.count] }
+        let value = String(id)
+        defaults.set(value, forKey: setupIDKey)
+        return value
+    }
+
+    /// Builds the `X-HM://...` setup payload per HAP Spec R17 §4.2.1.3.
+    ///
+    /// The 43-bit payload packs (high → low):
+    ///   - 4 bits version (0)
+    ///   - 8 bits accessory category
+    ///   - 4 bits flags (0x4 = IP/WiFi pairing)
+    ///   - 27 bits setup code as integer
+    ///
+    /// Encoded as a 9-char zero-padded uppercase base36 string, with the
+    /// 4-char setup ID appended. iOS scans this URL, decodes the payload,
+    /// and goes straight into the pairing prompt — no manual code entry.
+    static func makeSetupURI(setupCode: String, setupID: String, category: UInt64 = bridgeCategory) -> String {
+        let digits = setupCode.replacingOccurrences(of: "-", with: "")
+        guard let code = UInt64(digits) else { return "" }
+        let flags: UInt64 = 0x4   // IP transport
+        let version: UInt64 = 0
+
+        let payload: UInt64 =
+            (code & 0x07FFFFFF)
+            | ((flags & 0xF) << 27)
+            | ((category & 0xFF) << 31)
+            | ((version & 0xF) << 39)
+
+        var encoded = String(payload, radix: 36, uppercase: true)
+        if encoded.count < 9 {
+            encoded = String(repeating: "0", count: 9 - encoded.count) + encoded
+        }
+        return "X-HM://\(encoded)\(setupID)"
     }
 
     private static func machineUUID() -> String {

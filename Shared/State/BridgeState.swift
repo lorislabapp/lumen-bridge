@@ -49,7 +49,7 @@ final class BridgeState {
 /// pairing QR code and see how many accessories are exposed.
 enum HAPStatus: Equatable {
     case stopped
-    case running(setupCode: String, accessoryCount: Int)
+    case running(setupCode: String, setupID: String, accessoryCount: Int)
     case error(String)
 
     var isRunning: Bool {

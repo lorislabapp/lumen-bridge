@@ -15,7 +15,8 @@ xcuserdata/
 
 ## Packages
 .build/
-Packages/
+Packages/*/.build/
+Packages/*/.swiftpm/xcode/xcuserdata/
 Package.pins
 Package.resolved
 *.xcodeproj/project.xcworkspace/xcuserdata/

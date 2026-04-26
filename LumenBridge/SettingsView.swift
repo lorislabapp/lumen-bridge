@@ -70,7 +70,7 @@ struct SettingsView: View {
                     Text("HomeKit bridge is off. Toggle on to start pairing.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                case .running(let setupCode, let count):
+                case .running(let setupCode, _, let count):
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Pairing code")
                             .font(.caption.weight(.semibold))
