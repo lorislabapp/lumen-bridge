@@ -79,13 +79,16 @@ struct LumenBridgeMacApp: App {
         }
         .menuBarExtraStyle(.window)
 
-        // Settings window — opened by the menu-bar "Settings…" button or
-        // when the user picks "Settings…" from the popover. SwiftUI's
-        // openWindow environment action targets it by id.
-        Window("Lumen Bridge — Settings", id: "lumenbridge-settings") {
-            SettingsView(
+        // Main window — sidebar-driven control panel for everything the
+        // Bridge can do (Status / Frigate / iCloud / HomeKit Sensors /
+        // HomeKit Cameras / Logs / About). Replaces the older one-form
+        // SettingsView once Phase 5 lands and the surface area outgrows
+        // a single scroll view.
+        Window("Lumen Bridge", id: "lumenbridge-settings") {
+            MainWindow(
                 state: bridgeState,
-                onApply: { [coordinator] host, port, user, pass in
+                coordinator: coordinator,
+                onApplyConnection: { [coordinator] host, port, user, pass in
                     await coordinator?.applyManualConfig(
                         host: host, port: port,
                         username: user, password: pass
@@ -96,6 +99,9 @@ struct LumenBridgeMacApp: App {
                 },
                 onToggleHomebridge: { [coordinator] enabled in
                     await coordinator?.setHomebridgeCamerasEnabled(enabled)
+                },
+                onSendTestEvent: { [coordinator] in
+                    await coordinator?.sendTestEvent()
                 }
             )
         }

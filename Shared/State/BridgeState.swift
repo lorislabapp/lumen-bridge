@@ -30,10 +30,13 @@ final class BridgeState {
     // MARK: - HomeKit (Phase 5)
 
     var hapStatus: HAPStatus = .stopped
+    #if os(macOS)
     /// Lifecycle of the optional Homebridge sidecar that powers HomeKit
-    /// camera streaming (Phase 5 v0.2). Independent of `hapStatus` so
-    /// users can have motion sensors alone, cameras alone, or both.
+    /// camera streaming (Phase 5 v0.2). macOS-only — tvOS doesn't host
+    /// HAP camera accessories. Independent of `hapStatus` so users can
+    /// have motion sensors alone, cameras alone, or both.
     var homebridgeStatus: HomebridgeStatus = .stopped
+    #endif
 
     // MARK: - Discovery
 
