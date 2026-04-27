@@ -203,11 +203,13 @@ tv_target.build_configurations.each do |config|
     'CODE_SIGN_ENTITLEMENTS' => 'LumenBridgeTV/Resources/LumenBridgeTV.entitlements',
     'INFOPLIST_FILE' => 'LumenBridgeTV/Resources/Info.plist',
     'LD_RUNPATH_SEARCH_PATHS' => '$(inherited) @executable_path/Frameworks',
-    # tvOS uses the asset-catalog "Brand Assets" stack as the app icon —
-    # Xcode treats the whole `Brand Assets.brandassets` directory as the
-    # source. We wire that via the catalog-name compiler keys.
-    'ASSETCATALOG_COMPILER_APPICON_NAME' => 'App Icon',
-    'ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME' => 'LaunchImage',
+    # tvOS uses a Brand Assets stack as the app icon source. The compiler
+    # key takes the name of the brand-asset stack (without the
+    # `.brandassets` suffix) — NOT the name of an inner imagestack like
+    # "App Icon". Pointing at "App Icon" silently skips Assets.car
+    # production, which causes ASC error 90471 ("Missing App Store Icon")
+    # at upload time.
+    'ASSETCATALOG_COMPILER_APPICON_NAME' => 'Brand Assets',
     'ENABLE_PREVIEWS' => 'YES',
     'INFOPLIST_KEY_NSHumanReadableCopyright' => 'Copyright © 2026 LorisLabs',
     'INFOPLIST_KEY_LSApplicationCategoryType' => 'public.app-category.utilities',
