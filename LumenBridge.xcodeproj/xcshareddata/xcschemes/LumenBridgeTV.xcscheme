@@ -14,8 +14,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "634065D413424F77BDDC89C7"
-               BuildableName = "LumenBridgeTV.app"
+               BlueprintIdentifier = "5AFC2E4611F382EB9534E2E9"
+               BuildableName = "Lumen Bridge.app"
                BlueprintName = "LumenBridgeTV"
                ReferencedContainer = "container:LumenBridge.xcodeproj">
             </BuildableReference>
@@ -30,8 +30,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "634065D413424F77BDDC89C7"
-            BuildableName = "LumenBridgeTV.app"
+            BlueprintIdentifier = "5AFC2E4611F382EB9534E2E9"
+            BuildableName = "Lumen Bridge.app"
             BlueprintName = "LumenBridgeTV"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
          </BuildableReference>
@@ -53,8 +53,8 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "634065D413424F77BDDC89C7"
-            BuildableName = "LumenBridgeTV.app"
+            BlueprintIdentifier = "5AFC2E4611F382EB9534E2E9"
+            BuildableName = "Lumen Bridge.app"
             BlueprintName = "LumenBridgeTV"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
          </BuildableReference>
@@ -70,8 +70,8 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "634065D413424F77BDDC89C7"
-            BuildableName = "LumenBridgeTV.app"
+            BlueprintIdentifier = "5AFC2E4611F382EB9534E2E9"
+            BuildableName = "Lumen Bridge.app"
             BlueprintName = "LumenBridgeTV"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
          </BuildableReference>
