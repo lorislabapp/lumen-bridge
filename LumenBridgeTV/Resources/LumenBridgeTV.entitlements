@@ -18,5 +18,16 @@
 	</array>
 	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
 	<string>$(TeamIdentifierPrefix)$(CFBundleIdentifier)</string>
+	<!-- Keychain access group: must match the macOS Bridge so iCloud
+	     Keychain can sync the MQTT broker password across the user's
+	     devices (same Apple ID). Without this, the Apple TV install
+	     reads a nil password from `MQTTCredentialsKeychain.get()` even
+	     when the macOS Bridge has stored one — host/port/username
+	     arrive via KVS but the password doesn't, so the EMQX
+	     connection fails silently with auth refused on Apple TV. -->
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)com.lorislabapp.lumenbridge</string>
+	</array>
 </dict>
 </plist>
