@@ -88,7 +88,7 @@ struct TVHomeView: View {
     }
 
     private var eventsStrip: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 18) {
             if state.frigateHost == nil {
                 Text("Open Lumen Bridge on your Mac and finish the setup wizard there. Your Apple TV will pick up the Frigate connection automatically via iCloud.")
                     .font(.title3)
@@ -102,7 +102,37 @@ struct TVHomeView: View {
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: 900)
             }
+            // Operational note for Apple TV deployments. tvOS suspends
+            // the foreground app when the user switches to another one
+            // (Netflix, etc.), so the Bridge has to stay foreground for
+            // the relay to keep running. HDMI standby (TV "off") doesn't
+            // affect this — the Apple TV box stays alive on the network.
+            tvOperationalNote
         }
+    }
+
+    /// Footer that explains the only thing about Apple TV deployments
+    /// that surprises users: the Bridge runs as long as Lumen Bridge
+    /// is the foreground tvOS app — including with the screen off
+    /// (HDMI standby). Switching to Netflix / Apple TV+ etc. will
+    /// suspend us. Phrased to be reassuring (the common case works)
+    /// while flagging the one gotcha.
+    private var tvOperationalNote: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "info.circle.fill")
+                .font(.callout)
+                .foregroundStyle(.tint)
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Always-on tip")
+                    .font(.callout.weight(.semibold))
+                Text("The bridge keeps running even when your TV is off — the Apple TV box stays awake on Wi-Fi. Just don't switch to another app on the Apple TV (Netflix, Apple TV+, etc.); tvOS will suspend the bridge until you reopen it. A dedicated Apple TV with Lumen Bridge as the home app is the most reliable setup.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: 1200, alignment: .leading)
+        .padding(20)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 18))
     }
 
     private func statusCard(
