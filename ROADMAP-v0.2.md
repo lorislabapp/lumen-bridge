@@ -68,6 +68,81 @@ Drop into the existing `imagestack` directories.
 
 **Effort** ~1h (designer time to split, 30min to drop in + verify).
 
+## Linux Bridge — HomeKit (HAP) parity
+
+**Why** Today the macOS Bridge exposes Frigate cameras as HomeKit motion
+sensors via `HAPBridgeManager` (Bouke/HAP, Phase 5). Users running the
+Linux daemon (`lumen-bridge-linux`, Docker on a NAS / Pi) get the
+CloudKit notifications path but **no Home-app integration** — they'd
+have to also run a Mac just for HomeKit, which defeats the point of the
+Linux Bridge.
+
+Cross-deferred from `lumen-bridge-linux` because it's the same problem
+on a different host: a Frigate user shouldn't need a Mac in the loop to
+get cameras into the Home app.
+
+**What** Embed `brutella/hap` (the Go equivalent of Bouke/HAP — actively
+maintained, used by Homebridge-on-Go alternatives) inside
+`lumen-bridge-linux`:
+
+1. New `internal/hap/` package mirroring the Swift `HAPBridgeManager`
+   shape: bridge accessory + per-camera motion sensor child accessories.
+2. Setup code (8-digit, `XXX-XX-XXX` format) + setup ID (4-char) are
+   generated on first run and persisted in
+   `~/.config/lumen-bridge/hap-setup.json` (mode 0600). Stable across
+   restarts so the QR stays valid until the user explicitly resets.
+3. Pairings persist in `~/.config/lumen-bridge/hap-pairings.db`
+   (BoltDB) — reload on daemon restart so users don't re-pair after
+   `docker restart`.
+4. mDNS announces the bridge on the LAN — same Bonjour service type
+   the Apple Home app discovers (`_hap._tcp`).
+5. Motion-sensor state is driven by the same MQTT decoder that already
+   feeds CloudKit: each `frigate/events` `new` event flips the
+   corresponding camera's `MotionDetected` to true; `end` flips back.
+6. Config schema gets a `homekit:` block so users can disable it
+   entirely (default: enabled if at least one camera is configured):
+   ```yaml
+   homekit:
+     enabled: true              # default true
+     bridge_name: "Lumen Bridge"  # appears in Home app
+     port: 0                    # 0 = auto-assign
+   ```
+
+**Pairing UX** Three surface points so the user finds the code without
+SSH'ing into the box:
+
+- `lumen-bridge pair` subcommand: prints the 8-digit code + an ASCII QR
+  code rendered to the terminal (`github.com/skip2/go-qrcode` → ASCII
+  fallback), plus the X-HM URI for manual entry.
+- Health endpoint `GET /hap/setup` (existing health server on
+  `:8765`): returns JSON `{ "code": "123-45-678", "uri": "X-HM://...",
+  "status": "unpaired" | "paired" }`. Useful for `curl` from the
+  homelab dashboard.
+- Docker logs: on first boot the daemon logs the code at INFO level
+  with a banner so `docker logs lumen-bridge` after `docker run` shows
+  it without extra plumbing. Code is logged ONCE then suppressed (we
+  don't want it repeating in journald forever).
+
+**Why not depend on the macOS HAP** Each HAP bridge has its own
+identity (mDNS instance, accessory UUID, pairing DB). Two bridges
+talking to the same Home app would either collide (same accessory
+UUIDs) or duplicate (same cameras shown twice). So Linux HAP is a
+separate bridge identity, and users either run the macOS Bridge OR the
+Linux Bridge for HomeKit — not both. The Lumen iOS Settings → Bridge
+section will surface this constraint as a "Active HomeKit bridge:
+<which device>" cell, driven by the v0.2 multi-hub presence record.
+
+**Effort** ~12-16h (HAP package wiring, persistence, mDNS, motion
+sensor lifecycle, pairing UX on three surfaces, integration tests
+against the iOS Home app).
+
+## Linux Bridge — milestone 0.6 catch-up
+
+Re-baseline `lumen-bridge-linux/README.md` Roadmap section after the
+HAP work above lands. Current table stops at 1.0 with no HAP entry —
+add `0.6.0 HomeKit (HAP) bridge parity with macOS` and shift the
+"stable / Docker Hub release" milestone to 1.1.
+
 ## Other reminders
 
 - v0.1 ships without any `@2x` for App Icon - App Store. Apple TV uses

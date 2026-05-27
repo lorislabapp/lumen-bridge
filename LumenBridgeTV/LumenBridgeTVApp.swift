@@ -16,15 +16,37 @@ import SwiftUI
 struct LumenBridgeTVApp: App {
     @State private var bridgeState = BridgeState()
     @State private var coordinator: BridgeCoordinator?
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
-            TVHomeView(state: bridgeState)
+            TVHomeView(
+                state: bridgeState,
+                onRefresh: { [coordinator] in
+                    // Re-runs MQTT probe + CloudKit account refresh +
+                    // Bonjour discovery. Idempotent inside `start()`.
+                    await coordinator?.start()
+                },
+                onSendTestEvent: { [coordinator] in
+                    await coordinator?.sendTestEvent()
+                }
+            )
                 .task {
                     guard coordinator == nil else { return }
                     let c = BridgeCoordinator(state: bridgeState)
                     coordinator = c
                     await c.start()
+                }
+                .onChange(of: scenePhase) { _, newPhase in
+                    // tvOS suspends the app whenever the user switches to
+                    // another app (Netflix, Apple TV+, Settings, etc.). When
+                    // we come back foreground we kick the coordinator
+                    // again so MQTT reconnects, CloudKit account is
+                    // re-checked, and discovery re-runs — without the
+                    // user having to press the Refresh button. `start()`
+                    // is idempotent so calling it on every .active is safe.
+                    guard newPhase == .active, let coordinator else { return }
+                    Task { await coordinator.start() }
                 }
         }
     }

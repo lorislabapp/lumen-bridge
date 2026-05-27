@@ -11,6 +11,18 @@ import SwiftUI
 /// surfaces — each status block is a card sized for 10-foot viewing.
 struct TVHomeView: View {
     @Bindable var state: BridgeState
+    /// Closure that re-runs the coordinator's start path — re-probes
+    /// MQTT, refreshes CloudKit account status, re-runs Bonjour discovery.
+    /// Wired by `LumenBridgeTVApp` to `coordinator.start()`.
+    var onRefresh: () async -> Void = {}
+    /// Closure that fires a synthetic CloudKit event through the bridge
+    /// pipeline so reviewers (and users debugging setup) can see counters
+    /// increment without waiting for a real Frigate detection. Wired
+    /// by `LumenBridgeTVApp` to `coordinator.sendTestEvent()`.
+    var onSendTestEvent: () async -> Void = {}
+
+    @State private var isRefreshing = false
+    @State private var isSendingTest = false
 
     var body: some View {
         ZStack {
@@ -21,30 +33,97 @@ struct TVHomeView: View {
             )
             .ignoresSafeArea()
 
-            VStack(spacing: 48) {
+            VStack(spacing: 32) {
+                foregroundOnlyBanner
+
                 header
 
                 HStack(spacing: 32) {
-                    statusCard(
-                        title: "Frigate",
-                        systemImage: "video.fill",
-                        primary: frigatePrimary,
-                        secondary: frigateSecondary,
-                        healthy: state.mqttConnected
-                    )
+                    Button {
+                        triggerRefresh()
+                    } label: {
+                        statusCard(
+                            title: "Frigate",
+                            systemImage: "video.fill",
+                            primary: frigatePrimary,
+                            secondary: frigateSecondary,
+                            healthy: state.mqttConnected
+                        )
+                    }
+                    .buttonStyle(.card)
 
-                    statusCard(
-                        title: "CloudKit",
-                        systemImage: "icloud.fill",
-                        primary: state.cloudKitStatus.humanReadable,
-                        secondary: cloudKitEventsSecondary,
-                        healthy: state.cloudKitStatus.isHealthy
-                    )
+                    Button {
+                        triggerRefresh()
+                    } label: {
+                        statusCard(
+                            title: "CloudKit",
+                            systemImage: "icloud.fill",
+                            primary: state.cloudKitStatus.humanReadable,
+                            secondary: cloudKitEventsSecondary,
+                            healthy: state.cloudKitStatus.isHealthy
+                        )
+                    }
+                    .buttonStyle(.card)
                 }
 
                 eventsStrip
+
+                actionRow
             }
             .padding(.horizontal, 96)
+        }
+    }
+
+    /// Two focusable buttons shown below the status cards. They give
+    /// the Siri Remote something to navigate to beyond the cards and
+    /// also give app-review verifiers a one-press way to see the
+    /// pipeline in motion (counters increment, statuses re-probe).
+    private var actionRow: some View {
+        HStack(spacing: 24) {
+            Button {
+                triggerSendTestEvent()
+            } label: {
+                Label(
+                    isSendingTest ? "Sending…" : "Send test event",
+                    systemImage: isSendingTest ? "hourglass" : "bolt.fill"
+                )
+                .font(.headline)
+                .padding(.horizontal, 28)
+                .padding(.vertical, 14)
+            }
+            .disabled(isSendingTest || !state.cloudKitStatus.isHealthy)
+
+            Button {
+                triggerRefresh()
+            } label: {
+                Label(
+                    isRefreshing ? "Refreshing…" : "Refresh",
+                    systemImage: isRefreshing ? "hourglass" : "arrow.clockwise"
+                )
+                .font(.headline)
+                .padding(.horizontal, 28)
+                .padding(.vertical, 14)
+            }
+            .disabled(isRefreshing)
+        }
+        .padding(.top, 8)
+    }
+
+    private func triggerRefresh() {
+        guard !isRefreshing else { return }
+        isRefreshing = true
+        Task {
+            await onRefresh()
+            isRefreshing = false
+        }
+    }
+
+    private func triggerSendTestEvent() {
+        guard !isSendingTest else { return }
+        isSendingTest = true
+        Task {
+            await onSendTestEvent()
+            isSendingTest = false
         }
     }
 
@@ -109,6 +188,38 @@ struct TVHomeView: View {
             // affect this — the Apple TV box stays alive on the network.
             tvOperationalNote
         }
+    }
+
+    /// Top-of-screen orange banner that flags the foreground-only
+    /// limitation up-front, so users (and App Store reviewers) see it
+    /// the moment the app launches rather than scrolling to a footer.
+    /// tvOS does not allow long-running background work, so the
+    /// honest framing is "best-effort while in foreground; for 24/7,
+    /// run the macOS Bridge or Linux Bridge". This banner says exactly
+    /// that without burying the lede.
+    private var foregroundOnlyBanner: some View {
+        HStack(alignment: .top, spacing: 14) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.title3)
+                .foregroundStyle(.orange)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Foreground only")
+                    .font(.headline)
+                    .foregroundStyle(.orange)
+                Text("Apple TV pauses background apps. Lumen Bridge keeps relaying events while this app stays foreground (screen off is fine). Switching to Netflix or Apple TV+ suspends the bridge until you reopen it. For 24/7 operation, run Lumen Bridge for macOS or the Linux Docker container alongside Frigate — they take over automatically.")
+                    .font(.callout)
+                    .foregroundStyle(.primary)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 18)
+        .background(.orange.opacity(0.15), in: RoundedRectangle(cornerRadius: 18))
+        .overlay(
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(.orange.opacity(0.6), lineWidth: 2)
+        )
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     /// Footer that explains the only thing about Apple TV deployments
