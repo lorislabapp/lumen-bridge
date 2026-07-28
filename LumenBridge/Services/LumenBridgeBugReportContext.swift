@@ -1,12 +1,12 @@
 import Foundation
-import BugReportKit
+import LorisReports
 import SwiftUI
 
 #if canImport(FoundationModels)
 import FoundationModels
 #endif
 
-/// Lumen Bridge's BugReportKit adoption. Generated 2026-04-26 then
+/// Lumen Bridge's `LorisReports` (LorisLabsKit) adoption. Generated 2026-04-26 then
 /// hand-tuned with Bridge-specific framing (it's a niche app — the
 /// model needs the context to triage correctly).
 ///

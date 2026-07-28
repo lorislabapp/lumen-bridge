@@ -1,5 +1,5 @@
 import SwiftUI
-import BugReportKit
+import LorisReports
 #if os(macOS)
 import CoreImage
 import CoreImage.CIFilterBuiltins

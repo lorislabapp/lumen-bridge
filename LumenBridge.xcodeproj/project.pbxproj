@@ -22,7 +22,7 @@
 		563F78552EBC0EBFADC69DB4 /* BridgeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB9119E055D690B16EF18E9 /* BridgeCoordinator.swift */; };
 		59F72B975F8C681D55BEB19D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BAFF04A549DAD696DCD3E88 /* Cocoa.framework */; };
 		5DDD37757B27ED1195EF348E /* BridgeConfigSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BF4C62B90B91166EF50ED0 /* BridgeConfigSync.swift */; };
-		7DF183815E38E752EE7A149A /* BugReportKit in Frameworks */ = {isa = PBXBuildFile; productRef = 543501063C2233C0608DCA0A /* BugReportKit */; };
+		7DF183815E38E752EE7A149A /* LorisReports in Frameworks */ = {isa = PBXBuildFile; productRef = 543501063C2233C0608DCA0A /* LorisReports */; };
 		844673745561D44DFB4BD27D /* HAP in Frameworks */ = {isa = PBXBuildFile; productRef = DC52E90AC8BBE876DA249F16 /* HAP */; };
 		8C1CDF67DA203CECE5A4D4A6 /* HomebridgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71295CFC41183D273F96771B /* HomebridgeManager.swift */; };
 		8FD80FC93A28690E42E335A3 /* LumenBridgeTVApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B291AB3B68911096AC6A738 /* LumenBridgeTVApp.swift */; };
@@ -89,7 +89,7 @@
 				59F72B975F8C681D55BEB19D /* Cocoa.framework in Frameworks */,
 				B4792CB90F2F1A5DCE20DC4F /* MQTTNIO in Frameworks */,
 				844673745561D44DFB4BD27D /* HAP in Frameworks */,
-				7DF183815E38E752EE7A149A /* BugReportKit in Frameworks */,
+				7DF183815E38E752EE7A149A /* LorisReports in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,7 +292,7 @@
 			packageProductDependencies = (
 				EB83F590D3E09A9C810166F0 /* MQTTNIO */,
 				DC52E90AC8BBE876DA249F16 /* HAP */,
-				543501063C2233C0608DCA0A /* BugReportKit */,
+				543501063C2233C0608DCA0A /* LorisReports */,
 			);
 			productName = LumenBridge;
 			productReference = C4D0340A44ACC865E56BF985 /* LumenBridge.app */;
@@ -340,7 +340,7 @@
 			packageReferences = (
 				739F667601C721F2785456A4 /* XCRemoteSwiftPackageReference "mqtt-nio" */,
 				5CB099129FCAEB2F9F49144B /* XCRemoteSwiftPackageReference "HAP" */,
-				176B1FACB4782320513DBB8F /* XCLocalSwiftPackageReference "BugReportKit" */,
+				176B1FACB4782320513DBB8F /* XCLocalSwiftPackageReference "Packages/LorisLabsKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 40F6F899623683BBF548ECC2 /* Products */;
@@ -673,9 +673,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		176B1FACB4782320513DBB8F /* XCLocalSwiftPackageReference "BugReportKit" */ = {
+		176B1FACB4782320513DBB8F /* XCLocalSwiftPackageReference "Packages/LorisLabsKit" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/BugReportKit;
+			relativePath = Packages/LorisLabsKit;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -699,10 +699,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		543501063C2233C0608DCA0A /* BugReportKit */ = {
+		543501063C2233C0608DCA0A /* LorisReports */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 176B1FACB4782320513DBB8F /* XCLocalSwiftPackageReference "BugReportKit" */;
-			productName = BugReportKit;
+			package = 176B1FACB4782320513DBB8F /* XCLocalSwiftPackageReference "Packages/LorisLabsKit" */;
+			productName = LorisReports;
 		};
 		DC52E90AC8BBE876DA249F16 /* HAP */ = {
 			isa = XCSwiftPackageProductDependency;
