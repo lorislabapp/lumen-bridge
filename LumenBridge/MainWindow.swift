@@ -140,7 +140,7 @@ struct MainWindow: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 paneHeader("Status",
-                           "What the Hub is doing right now.")
+                           String(localized: "What \(Self.appName) is doing right now."))
                 statusGrid
                 HStack(spacing: 12) {
                     Button {
@@ -209,7 +209,7 @@ struct MainWindow: View {
     private var connectionPane: some View {
         VStack(alignment: .leading, spacing: 0) {
             paneHeader(String(localized: "Frigate connection"),
-                       String(localized: "Where the Hub receives detection events: the same MQTT broker as your Frigate."))
+                       String(localized: "Where \(Self.appName) receives detection events: the same MQTT broker as your Frigate."))
                 .padding([.horizontal, .top], 28)
             SettingsView(
                 state: state,
@@ -251,6 +251,7 @@ struct MainWindow: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
+                #if LUMEN_HUB
                 Divider().padding(.vertical, 4)
 
                 infoBlock("Schema", """
@@ -258,6 +259,7 @@ The first FrigateEvent record auto-creates the schema in DEVELOPMENT. \
 PRODUCTION promotion is web-only by Apple's design — visit the \
 CloudKit Console and click 'Deploy Schema Changes'.
 """, linkLabel: "Open CloudKit Console", linkURL: "https://icloud.developer.apple.com/dashboard")
+                #endif
             }
             .padding(28)
         }
@@ -386,7 +388,7 @@ CloudKit Console and click 'Deploy Schema Changes'.
                     .foregroundStyle(.secondary)
                 Divider().padding(.vertical, 8)
                 infoBlock("Privacy",
-                    "Detection events stay in your private iCloud database. Apple cannot read them. The Hub runs locally on your Mac. Optional support messages and reviewed technical diagnostics are sent to LorisLabs only after your confirmation.",
+                    String(localized: "Detection events stay in your private iCloud database. Apple cannot read them. \(Self.appName) runs locally on your Mac. Optional support messages and reviewed technical diagnostics are sent to LorisLabs only after your confirmation."),
                     linkLabel: "Privacy Policy",
                     linkURL: "https://lorislab.fr/privacy.html")
 
@@ -445,7 +447,7 @@ CloudKit Console and click 'Deploy Schema Changes'.
             Text(LocalizedStringKey(title)).font(.subheadline.weight(.semibold))
             Text(LocalizedStringKey(body)).font(.caption).foregroundStyle(.secondary)
             if let linkLabel, let linkURL, let url = URL(string: linkURL) {
-                Link(linkLabel, destination: url).font(.caption)
+                Link(LocalizedStringKey(linkLabel), destination: url).font(.caption)
             }
         }
     }

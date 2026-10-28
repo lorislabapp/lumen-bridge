@@ -235,10 +235,10 @@ final class HubAvailabilityController {
         }
         guard assertion == 0 else { return }
         let result = IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleSystemSleep as CFString,
-            IOPMAssertionLevel(kIOPMAssertionLevelOn), "Lumen Hub availability on external power" as CFString, &assertion)
+            IOPMAssertionLevel(kIOPMAssertionLevelOn), "\(MainWindow.appName) availability on external power" as CFString, &assertion)
         if result != kIOReturnSuccess {
             assertion = 0
-            message = String(localized: "macOS could not keep the Hub available. Check the Mac's sleep settings.")
+            message = String(localized: "macOS could not keep \(MainWindow.appName) available. Check the Mac's sleep settings.")
         }
     }
     private func releaseAssertion() {
@@ -252,7 +252,7 @@ struct HubAvailabilitySettings: View {
         GroupBox {
             VStack(alignment: .leading, spacing: 10) {
                 Toggle(String(localized: "Launch \(MainWindow.appName) at login"), isOn: Binding(get: { availability.loginEnabled }, set: { availability.setLoginEnabled($0) }))
-                Toggle("Keep the Hub available on external power", isOn: Binding(get: { availability.keepAvailableOnPower }, set: { availability.keepAvailableOnPower = $0 }))
+                Toggle(String(localized: "Keep \(MainWindow.appName) available on external power"), isOn: Binding(get: { availability.keepAvailableOnPower }, set: { availability.keepAvailableOnPower = $0 }))
                 Text("The display may sleep. Closing the lid or choosing Sleep can still interrupt notifications and Home accessories.")
                     .font(.caption).foregroundStyle(.secondary)
                 if !availability.message.isEmpty { Text(availability.message).font(.caption).foregroundStyle(.orange) }

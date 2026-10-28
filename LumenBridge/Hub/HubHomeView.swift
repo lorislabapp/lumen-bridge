@@ -87,12 +87,12 @@ struct HubRole: Identifiable {
         if s.frigateHost == nil {
             return HubRole(id: "frigate", title: "Frigate", systemImage: "video", tone: .todo,
                            status: String(localized: "To connect"),
-                           detail: String(localized: "Tell the Hub where your Frigate server is."),
+                           detail: String(localized: "Tell \(MainWindow.appName) where your Frigate server is."),
                            action: .init(title: String(localized: "Connect Frigate"), section: .connection))
         }
         return HubRole(id: "frigate", title: "Frigate", systemImage: "video", tone: .error,
                        status: String(localized: "Disconnected"),
-                       detail: s.lastMQTTError.map { _ in String(localized: "The Hub cannot reach your MQTT server.") }
+                       detail: s.lastMQTTError.map { _ in String(localized: "\(MainWindow.appName) cannot reach your MQTT server.") }
                            ?? String(localized: "Connecting…"),
                        action: .init(title: String(localized: "Check the connection"), section: .connection))
     }

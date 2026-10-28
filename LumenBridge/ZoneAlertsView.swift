@@ -103,7 +103,7 @@ struct ZoneAlertsView: View {
                     .foregroundStyle(.secondary)
             }
             if let outcome = state.lastZonePushOutcome[id] {
-                Text("iPhone notification: \(outcome)")
+                Text("iPhone notification: \(Self.pushOutcomeLabel(outcome))")
                     .font(.caption)
                     .foregroundStyle(outcome == "sent" ? Color.secondary : Color.orange)
             }
@@ -163,5 +163,23 @@ struct ZoneAlertsView: View {
         let zone = zones.first { $0.localizedCaseInsensitiveContains(zoneHint) && !zoneHint.isEmpty } ?? ""
         alerts.append(ZoneAlert(name: name,
                                 configuration: .init(camera: camera, mailboxZone: zone)))
+    }
+
+    /// `lastZonePushOutcome` holds `String(describing: MailboxPushSender.Outcome)`
+    /// ("sent", "noSecret", "rejected(403)", …): show a localized label instead.
+    static func pushOutcomeLabel(_ raw: String) -> String {
+        switch raw {
+        case "sent": return String(localized: "sent", comment: "iPhone notification outcome")
+        case "noSecret": return String(localized: "not set up (open Lumen on your iPhone)", comment: "iPhone notification outcome")
+        case "noReview": return String(localized: "skipped (no Frigate review)", comment: "iPhone notification outcome")
+        case "policyRequiresSignature": return String(localized: "refused (signed policy required)", comment: "iPhone notification outcome")
+        case "failed": return String(localized: "failed", comment: "iPhone notification outcome")
+        default:
+            if raw.hasPrefix("rejected("), raw.hasSuffix(")") {
+                let code = String(raw.dropFirst("rejected(".count).dropLast())
+                return String(localized: "refused (HTTP \(code))", comment: "iPhone notification outcome")
+            }
+            return raw
+        }
     }
 }

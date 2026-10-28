@@ -2,6 +2,16 @@
   "sourceLanguage" : "en",
   "strings" : {
     "%@" : {},
+    "%@ accessories · %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ accessoires · %2$@"
+          }
+        }
+      }
+    },
     "%@ accessory %@ · %@" : {
       "localizations" : {
         "en" : {
@@ -14,6 +24,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ accessoire %2$@ · %3$@"
+          }
+        }
+      }
+    },
+    "%@ cannot reach your MQTT server." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ n’arrive pas à joindre votre serveur MQTT."
           }
         }
       }
@@ -34,6 +54,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ détecté(s) — aucun appairé pour l’instant"
+          }
+        }
+      }
+    },
+    "%@ · %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
           }
         }
       }
@@ -136,6 +166,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld accessoires dans Maison · les sonnettes carillonnent sur les HomePod"
+          }
+        }
+      }
+    },
+    "%lld accessories · %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld accessoires · %@"
           }
         }
       }
@@ -258,6 +298,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "À propos"
+          }
+        }
+      }
+    },
+    "Account" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compte"
           }
         }
       }
@@ -662,7 +712,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Connecté à %1$@:%2$@"
+            "value" : "Connecté à %@:%@"
           }
         }
       }
@@ -738,6 +788,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Contacter l’équipe"
+          }
+        }
+      }
+    },
+    "Container" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conteneur"
           }
         }
       }
@@ -827,6 +887,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Les événements de détection sont stockés dans votre base iCloud privée, dans le conteneur `iCloud.com.lorislabapp.lumenbridge`. Seul votre identifiant Apple peut les lire."
+          }
+        }
+      }
+    },
+    "Detection events live in your private CloudKit DB. Apple cannot read them." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les détections restent dans votre base CloudKit privée. Apple ne peut pas les lire."
+          }
+        }
+      }
+    },
+    "Detection events stay in your private iCloud database. Apple cannot read them. %@ runs locally on your Mac. Optional support messages and reviewed technical diagnostics are sent to LorisLabs only after your confirmation." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les détections restent dans votre base iCloud privée. Apple ne peut pas les lire. %@ fonctionne localement sur votre Mac. Les messages d’assistance et diagnostics techniques facultatifs ne sont envoyés à LorisLabs qu’après votre confirmation."
           }
         }
       }
@@ -1607,6 +1687,16 @@
         }
       }
     },
+    "Keep %@ available on external power" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenir %@ disponible sur secteur"
+          }
+        }
+      }
+    },
     "Keep the Hub available on external power" : {
       "localizations" : {
         "fr" : {
@@ -2327,6 +2417,26 @@
         }
       }
     },
+    "Privacy" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confidentialité"
+          }
+        }
+      }
+    },
+    "Privacy Policy" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Politique de confidentialité"
+          }
+        }
+      }
+    },
     "Private iCloud database" : {
       "localizations" : {
         "fr" : {
@@ -2613,12 +2723,32 @@
         }
       }
     },
+    "Step %@: %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étape %1$@ : %2$@"
+          }
+        }
+      }
+    },
     "Step %lld: %@" : {
       "localizations" : {
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Étape %lld : %@"
+          }
+        }
+      }
+    },
+    "Tell %@ where your Frigate server is." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indiquez à %@ où se trouve votre serveur Frigate."
           }
         }
       }
@@ -3005,6 +3135,16 @@
         }
       }
     },
+    "Version %@ (build %@)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@ (build %@)"
+          }
+        }
+      }
+    },
     "Version 0.1.0 (build %@)" : {},
     "Video connection failed · check the network and Frigate" : {
       "localizations" : {
@@ -3126,6 +3266,16 @@
         }
       }
     },
+    "What %@ is doing right now." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce que fait %@ en ce moment."
+          }
+        }
+      }
+    },
     "What the Hub is doing right now." : {
       "localizations" : {
         "fr" : {
@@ -3163,6 +3313,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lorsque activé, le Bridge récupère le clip finalisé depuis Frigate et l’attache à l’enregistrement FrigateEvent. Chaque clip pèse 1 à 10 Mo — désactivez pour économiser l’espace iCloud."
+          }
+        }
+      }
+    },
+    "Where %@ receives detection events: the same MQTT broker as your Frigate." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Là où %@ reçoit les détections : le même serveur MQTT que votre Frigate."
           }
         }
       }
@@ -3218,6 +3378,16 @@
         }
       }
     },
+    "Writes a synthetic FrigateEvent to CloudKit so you can verify the pipeline reaches your iPhone without waiting for a real detection." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écrit un faux événement Frigate dans iCloud pour vérifier que la chaîne arrive jusqu’à votre iPhone, sans attendre une vraie détection."
+          }
+        }
+      }
+    },
     "You can continue without enabling Apple Home." : {
       "localizations" : {
         "fr" : {
@@ -3234,6 +3404,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vous pouvez relancer la configuration guidée à tout moment depuis l’accueil du Hub."
+          }
+        }
+      }
+    },
+    "You can return to guided setup from the home screen at any time." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous pouvez relancer la configuration guidée à tout moment depuis l’écran d’accueil."
           }
         }
       }
@@ -3309,6 +3489,16 @@
         }
       }
     },
+    "failed" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "échec"
+          }
+        }
+      }
+    },
     "frigate.local or 10.9.8.42" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3327,6 +3517,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "frigate.local ou 192.168.3.160"
+          }
+        }
+      }
+    },
+    "https://frigate.example.com" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://frigate.example.com"
           }
         }
       }
@@ -3402,6 +3602,16 @@
         }
       }
     },
+    "macOS could not keep %@ available. Check the Mac's sleep settings." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS ne peut pas maintenir %@ disponible. Vérifiez les réglages de veille du Mac."
+          }
+        }
+      }
+    },
     "macOS could not keep the Hub available. Check the Mac's sleep settings." : {
       "localizations" : {
         "fr" : {
@@ -3412,12 +3622,62 @@
         }
       }
     },
+    "not set up (open Lumen on your iPhone)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "non configurée (ouvrez Lumen sur votre iPhone)"
+          }
+        }
+      }
+    },
+    "refused (HTTP %@)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "refusée (HTTP %@)"
+          }
+        }
+      }
+    },
+    "refused (signed policy required)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "refusée (règle signée requise)"
+          }
+        }
+      }
+    },
+    "sent" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "envoyée"
+          }
+        }
+      }
+    },
     "set the Frigate web address in HomeKit · Cameras" : {
       "localizations" : {
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "indiquez l’adresse web de Frigate dans HomeKit · Caméras"
+          }
+        }
+      }
+    },
+    "skipped (no Frigate review)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ignorée (pas d’alerte Frigate)"
           }
         }
       }

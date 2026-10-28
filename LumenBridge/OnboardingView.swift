@@ -193,7 +193,7 @@ struct OnboardingView: View {
                         Label(state.mqttConnected ? String(localized: "Frigate connected") : String(localized: "Frigate disconnected"),
                               systemImage: state.mqttConnected ? "checkmark.circle" : "exclamationmark.triangle")
                         Label(state.cloudKitStatus.humanReadable, systemImage: "icloud")
-                        Text("You can return to guided setup from the Hub home screen at any time.")
+                        Text("You can return to guided setup from the home screen at any time.")
                             .foregroundStyle(.secondary)
                         if !canContinue {
                             Text("Go back and restore the Frigate and iCloud connections before finishing.")

@@ -95,7 +95,7 @@ struct SettingsView: View {
                                 VStack(alignment: .leading) {
                                     Text(instance.netServiceName)
                                         .font(.subheadline)
-                                    Text("\(instance.host):\(instance.port)")
+                                    Text(verbatim: "\(instance.host):\(String(instance.port))")
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
@@ -133,7 +133,7 @@ struct SettingsView: View {
                 .fill(state.mqttConnected ? Color.green : Color.orange)
                 .frame(width: 8, height: 8)
             if state.mqttConnected, let h = state.frigateHost, let p = state.frigatePort {
-                Text("Connected to \(h):\(p)")
+                Text("Connected to \(h):\(String(p))")
                     .font(.callout)
             } else if let err = state.lastMQTTError {
                 Text(err)
