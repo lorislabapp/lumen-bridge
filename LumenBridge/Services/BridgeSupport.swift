@@ -220,7 +220,7 @@ final class HubAvailabilityController {
             if enabled { try SMAppService.mainApp.register() }
             else { try SMAppService.mainApp.unregister() }
             loginEnabled = SMAppService.mainApp.status == .enabled
-            message = loginEnabled == enabled ? "" : String(localized: "Approve Lumen Hub in System Settings > Login Items.")
+            message = loginEnabled == enabled ? "" : String(localized: "Approve \(MainWindow.appName) in System Settings > Login Items.")
         } catch {
             loginEnabled = SMAppService.mainApp.status == .enabled
             message = String(localized: "The login setting could not be changed. Check System Settings > Login Items.")
@@ -251,9 +251,9 @@ struct HubAvailabilitySettings: View {
     var body: some View {
         GroupBox {
             VStack(alignment: .leading, spacing: 10) {
-                Toggle("Launch Lumen Hub at login", isOn: Binding(get: { availability.loginEnabled }, set: { availability.setLoginEnabled($0) }))
+                Toggle(String(localized: "Launch \(MainWindow.appName) at login"), isOn: Binding(get: { availability.loginEnabled }, set: { availability.setLoginEnabled($0) }))
                 Toggle("Keep the Hub available on external power", isOn: Binding(get: { availability.keepAvailableOnPower }, set: { availability.keepAvailableOnPower = $0 }))
-                Text("The display may sleep. Closing the lid or choosing Sleep can still interrupt cameras and notifications.")
+                Text("The display may sleep. Closing the lid or choosing Sleep can still interrupt notifications and Home accessories.")
                     .font(.caption).foregroundStyle(.secondary)
                 if !availability.message.isEmpty { Text(availability.message).font(.caption).foregroundStyle(.orange) }
             }.frame(maxWidth: .infinity, alignment: .leading)

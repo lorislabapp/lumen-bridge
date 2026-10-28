@@ -342,6 +342,16 @@
         }
       }
     },
+    "Approve %@ in System Settings > Login Items." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisez %@ dans Réglages Système > Ouverture."
+          }
+        }
+      }
+    },
     "Approve Lumen Hub in System Settings > Login Items." : {
       "localizations" : {
         "fr" : {
@@ -1627,6 +1637,16 @@
         }
       }
     },
+    "Launch %@ at login" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir %@ au démarrage de session"
+          }
+        }
+      }
+    },
     "Launch Lumen Hub at login" : {
       "localizations" : {
         "fr" : {
@@ -2781,6 +2801,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "L’écran peut se mettre en veille. Fermer le capot ou choisir Suspendre l’activité peut interrompre les caméras et les notifications."
+          }
+        }
+      }
+    },
+    "The display may sleep. Closing the lid or choosing Sleep can still interrupt notifications and Home accessories." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’écran peut se mettre en veille. Fermer le capot ou choisir Suspendre l’activité peut interrompre les notifications et les accessoires Maison."
           }
         }
       }
