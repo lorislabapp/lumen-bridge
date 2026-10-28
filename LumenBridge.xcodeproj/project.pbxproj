@@ -11,6 +11,7 @@
 		699CFF760002000000000006 /* BridgeFrigateAccessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699CFF760002000000000005 /* BridgeFrigateAccessTests.swift */; };
 		699CFF760002000000000004 /* BridgeFrigateSnapshotServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699CFF760002000000000003 /* BridgeFrigateSnapshotServer.swift */; };
 		699CFF760002000000000002 /* BridgeFrigateAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699CFF760002000000000001 /* BridgeFrigateAccess.swift */; };
+		A5B5C0DE0001000000000002 /* AppStoreScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B5C0DE0001000000000001 /* AppStoreScreenshotTests.swift */; };
 		699CFF760001000000000002 /* GuidedSetupRenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699CFF760001000000000001 /* GuidedSetupRenderTests.swift */; };
 		0022941A615B99884CC0CDC0 /* LumenBridgeMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB30162556420793277C4E4 /* LumenBridgeMacApp.swift */; };
 		047DCE4D01297396C42A7FDF /* FrigateKit in Frameworks */ = {isa = PBXBuildFile; productRef = 81A24308D8995DEEB5EF9215 /* FrigateKit */; };
@@ -90,6 +91,7 @@
 		699CFF760002000000000005 /* BridgeFrigateAccessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeFrigateAccessTests.swift; sourceTree = "<group>"; };
 		699CFF760002000000000003 /* BridgeFrigateSnapshotServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeFrigateSnapshotServer.swift; sourceTree = "<group>"; };
 		699CFF760002000000000001 /* BridgeFrigateAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeFrigateAccess.swift; sourceTree = "<group>"; };
+		A5B5C0DE0001000000000001 /* AppStoreScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreScreenshotTests.swift; sourceTree = "<group>"; };
 		699CFF760001000000000001 /* GuidedSetupRenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidedSetupRenderTests.swift; sourceTree = "<group>"; };
 		03D81FA2253333C6D8B7B85C /* LumenBridgeTV.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = LumenBridgeTV.entitlements; sourceTree = "<group>"; };
 		095E1DE0A707ADCED5DC197B /* MailboxPushSenderTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MailboxPushSenderTests.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				C7827982D989B99ED5C4FC77 /* MailboxMonitorTests.swift */,
 				095E1DE0A707ADCED5DC197B /* MailboxPushSenderTests.swift */,
 				CE3145A379413DCC68C2417D /* ZoneAlertStoreTests.swift */,
+				A5B5C0DE0001000000000001 /* AppStoreScreenshotTests.swift */,
 				699CFF760001000000000001 /* GuidedSetupRenderTests.swift */,
 				699CFF760002000000000005 /* BridgeFrigateAccessTests.swift */,
 			);
@@ -565,6 +568,7 @@
 				680F33117D33B25420441A2E /* MailboxMonitorTests.swift in Sources */,
 				C5E16AD0B70215322BF3EBA8 /* MailboxPushSenderTests.swift in Sources */,
 				16BEA1EF60840C1BA6EED6CA /* ZoneAlertStoreTests.swift in Sources */,
+				A5B5C0DE0001000000000002 /* AppStoreScreenshotTests.swift in Sources */,
 				699CFF760001000000000002 /* GuidedSetupRenderTests.swift in Sources */,
 				699CFF760002000000000006 /* BridgeFrigateAccessTests.swift in Sources */,
 			);
