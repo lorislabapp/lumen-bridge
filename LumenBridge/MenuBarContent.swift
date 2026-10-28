@@ -1,164 +1,80 @@
 import SwiftUI
 import AppKit
 
-/// The menu-bar popover content. Kept dense but scannable — users glance, not
-/// read. Most interactions live on the Settings window (not yet wired).
+/// Menu-bar popover, direction C (docs/UI-SPEC-LumenHub-C.md): one sentence
+/// on how things are, one row per active role, the last visit, and one way
+/// into the window. Users glance, they don't read.
 struct MenuBarContent: View {
     @Bindable var state: BridgeState
-    /// Captured when the coordinator is alive so we can read `hasManualConfig`
-    /// to decide whether to show the onboarding CTA. May be nil briefly
-    /// during launch — the body handles that gracefully.
     var coordinator: BridgeCoordinator?
     var onSendTestEvent: (@MainActor () async -> Void)? = nil
 
     @Environment(\.openWindow) private var openWindow
 
+    private var roles: [HubRole] { HubRole.all(from: state).filter { $0.tone != .later } }
+
+    private var headline: String {
+        let issues = roles.filter { $0.tone == .todo || $0.tone == .error }
+        if issues.isEmpty { return String(localized: "All is well") }
+        return issues.count == 1 ? String(localized: "One thing to set up")
+                                 : String(localized: "\(issues.count) things to set up")
+    }
+
+    private var lastVisit: String? {
+        guard let (id, date) = state.lastZoneVisits.max(by: { $0.value < $1.value }),
+              let alert = state.zoneAlerts.first(where: { $0.id == id }) else { return nil }
+        return String(localized: "Last visit: \(alert.name), \(date.formatted(date: .omitted, time: .shortened))")
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            header
-                .padding(14)
+        VStack(alignment: .leading, spacing: 12) {
+            Text(headline)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(HubPalette.ink)
 
-            Divider()
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach(roles) { role in
+                    HStack {
+                        Text(role.title).font(.system(size: 13))
+                        Spacer()
+                        Text(role.status)
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(HubPalette.text(role.tone))
+                    }
+                }
+            }
 
-            frigateSection
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-
-            Divider()
-
-            cloudKitSection
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-
-            Divider()
-
-            footer
-                .padding(14)
-        }
-        .frame(width: 320)
-    }
-
-    // MARK: -
-
-    private var statusColor: Color {
-        if state.isConnected { return .green }
-        if state.mqttConnected || state.cloudKitStatus.isHealthy { return .orange }
-        return .secondary
-    }
-
-    private var statusLabel: String {
-        if state.isConnected { return "Running" }
-        if state.mqttConnected { return "MQTT OK, waiting on CloudKit" }
-        if state.cloudKitStatus.isHealthy { return "CloudKit OK, MQTT disconnected" }
-        return "Starting…"
-    }
-
-    private var header: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "bolt.circle.fill")
-                .font(.system(size: 28))
-                .foregroundStyle(statusColor)
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Lumen Bridge")
-                    .font(.headline)
-                Text(statusLabel)
-                    .font(.caption)
+            if let lastVisit {
+                Divider()
+                Text(lastVisit)
+                    .font(.system(size: 13))
                     .foregroundStyle(.secondary)
             }
-            Spacer()
-        }
-    }
 
-    private var frigateSection: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Label("Frigate", systemImage: "video.fill")
-                .font(.subheadline.weight(.semibold))
-
-            if let host = state.frigateHost, let port = state.frigatePort {
-                Text("\(host):\(port)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .textSelection(.enabled)
-                if let err = state.lastMQTTError, !state.mqttConnected {
-                    Text(err)
-                        .font(.caption2)
-                        .foregroundStyle(.orange)
-                        .lineLimit(2)
-                }
-            } else if !state.discoveredInstances.isEmpty {
-                Text("\(state.discoveredInstances.count) discovered — none paired yet")
-                    .font(.caption)
-                    .foregroundStyle(.orange)
-            } else {
-                Text("Searching via Bonjour…")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Button {
-                    openWindow(id: "lumenbridge-settings")
-                    NSApp.activate(ignoringOtherApps: true)
-                } label: {
-                    Label("Set up manually", systemImage: "gearshape")
-                        .font(.caption)
-                }
-                .buttonStyle(.link)
-                .padding(.top, 2)
+            Button {
+                openWindow(id: "lumenbridge-settings")
+                NSApp.activate(ignoringOtherApps: true)
+            } label: {
+                Text("Open \(MainWindow.appName)")
+                    .font(.system(size: 14, weight: .semibold))
+                    .frame(maxWidth: .infinity, minHeight: 28)
             }
-
-            HStack(spacing: 14) {
-                metric(value: state.eventsReceived, label: "received")
-                metric(value: state.eventsForwarded, label: "forwarded")
-            }
-            .padding(.top, 4)
-        }
-    }
-
-    private var cloudKitSection: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Label("CloudKit", systemImage: "icloud.fill")
-                .font(.subheadline.weight(.semibold))
-            Text(state.cloudKitStatus.humanReadable)
-                .font(.caption)
-                .foregroundStyle(state.cloudKitStatus.isHealthy ? Color.secondary : Color.orange)
-        }
-    }
-
-    private var footer: some View {
-        VStack(spacing: 8) {
-            if let onSendTestEvent {
-                Button {
-                    Task { await onSendTestEvent() }
-                } label: {
-                    Label("Send test event", systemImage: "paperplane")
-                        .frame(maxWidth: .infinity)
-                }
-                .help("Writes a synthetic FrigateEvent to CloudKit. Useful for seeding the schema and verifying push delivery without a running Frigate.")
-            }
+            .buttonStyle(.borderedProminent)
+            .tint(HubPalette.accent)
+            .foregroundStyle(HubPalette.onAccent)
+            .keyboardShortcut(",")
 
             HStack {
-                Button("Settings…") {
-                    openWindow(id: "lumenbridge-settings")
-                    NSApp.activate(ignoringOtherApps: true)
-                }
-                .keyboardShortcut(",")
-
+                Button(BridgeSupport.text("Help and ideas")) { BridgeSupportWindow.shared.show(state: state) }
+                    .buttonStyle(.link)
                 Spacer()
-
-                Button("Quit") {
-                    NSApplication.shared.terminate(nil)
-                }
-                .keyboardShortcut("q")
+                Button(String(localized: "Quit")) { NSApplication.shared.terminate(nil) }
+                    .buttonStyle(.link)
+                    .keyboardShortcut("q")
             }
+            .font(.system(size: 12))
         }
-    }
-
-    private func metric(value: Int, label: String) -> some View {
-        VStack(alignment: .leading, spacing: 1) {
-            Text("\(value)")
-                .font(.title3.weight(.semibold))
-                .monospacedDigit()
-            Text(label)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-        }
+        .padding(18)
+        .frame(width: 320)
     }
 }

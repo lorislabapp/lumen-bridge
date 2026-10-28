@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Lumen Hub: Developer ID export (outside the Mac App Store), then notarize.
+     Manual signing: profile "Lumen Hub Developer ID" (MAC_APP_DIRECT). -->
+<plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>developer-id</string>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<key>signingCertificate</key>
+	<string>Developer ID Application</string>
+	<key>teamID</key>
+	<string>TDV6D5L785</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>com.lorislabapp.lumenbridge</key>
+		<string>Lumen Hub Developer ID</string>
+	</dict>
+</dict>
+</plist>

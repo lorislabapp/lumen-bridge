@@ -13,8 +13,9 @@ private let logger = Logger(subsystem: "com.lorislabapp.lumenbridge", category: 
 /// Why move off `NSUbiquitousKeyValueStore`:
 /// - KVS is documented for *preferences*. Apple's privacy / security
 ///   review explicitly flags credential storage in KVS.
-/// - Keychain entries are protected by Secure Enclave when available,
-///   not just iCloud's E2E encryption.
+/// - Keychain applies system data protection and iCloud Keychain's
+///   end-to-end encrypted synchronization. Generic-password entries are
+///   not Secure Enclave keys, so we deliberately do not claim they are.
 /// - iCloud Keychain Sync provides the same cross-device replication.
 enum MQTTCredentialsKeychain {
     private static let service = "com.lorislabapp.lumenbridge.mqtt"
@@ -24,9 +25,6 @@ enum MQTTCredentialsKeychain {
     /// updated in place; a fresh add only happens if the lookup misses.
     @discardableResult
     static func set(_ password: String?) -> Bool {
-        // Always purge any existing entry first — `SecItemAdd` errors
-        // out with `errSecDuplicateItem` if we don't, and the partial-
-        // update path is brittle when `kSecAttrSynchronizable` flips.
         let baseQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -36,11 +34,29 @@ enum MQTTCredentialsKeychain {
             // signed in/out of iCloud at different times.
             kSecAttrSynchronizable as String: kSecAttrSynchronizableAny,
         ]
-        SecItemDelete(baseQuery as CFDictionary)
-
         guard let password, !password.isEmpty else {
+            let status = SecItemDelete(baseQuery as CFDictionary)
+            guard status == errSecSuccess || status == errSecItemNotFound else {
+                logger.error("Keychain SecItemDelete failed (\(status))")
+                return false
+            }
             logger.info("MQTT password cleared from Keychain")
             return true
+        }
+
+        let value = Data(password.utf8)
+        let update: [String: Any] = [
+            kSecValueData as String: value,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
+        ]
+        let updateStatus = SecItemUpdate(baseQuery as CFDictionary, update as CFDictionary)
+        if updateStatus == errSecSuccess {
+            logger.info("MQTT password updated in Keychain")
+            return true
+        }
+        guard updateStatus == errSecItemNotFound else {
+            logger.error("Keychain SecItemUpdate failed (\(updateStatus))")
+            return false
         }
 
         let addQuery: [String: Any] = [
@@ -49,7 +65,7 @@ enum MQTTCredentialsKeychain {
             kSecAttrAccount as String: account,
             kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
             kSecAttrSynchronizable as String: kCFBooleanTrue!,
-            kSecValueData as String: Data(password.utf8),
+            kSecValueData as String: value,
         ]
         let status = SecItemAdd(addQuery as CFDictionary, nil)
         if status == errSecSuccess {
@@ -96,12 +112,30 @@ enum MQTTCredentialsKeychain {
         // Don't clobber an existing Keychain entry on the destination
         // device — Keychain wins if both exist, since we're moving TO
         // Keychain.
-        if get() == nil {
-            _ = set(legacy)
+        if get() == nil, !set(legacy) {
+            logger.error("MQTT password KVS → Keychain migration failed; preserving legacy value")
+            return false
         }
         kvs.removeObject(forKey: legacyKey)
         kvs.synchronize()
         logger.info("Migrated MQTT password KVS → Keychain")
+        return true
+    }
+
+    /// One-time migration from the historical local UserDefaults key.
+    /// The plaintext value is removed only after a Keychain value is known
+    /// to exist, so an unavailable Keychain never destroys the credential.
+    @discardableResult
+    static func migrateFromUserDefaults(_ defaults: UserDefaults = .standard, legacyKey: String) -> Bool {
+        guard let legacy = defaults.string(forKey: legacyKey), !legacy.isEmpty else {
+            return false
+        }
+        if get() == nil, !set(legacy) {
+            logger.error("MQTT password UserDefaults → Keychain migration failed; preserving legacy value")
+            return false
+        }
+        defaults.removeObject(forKey: legacyKey)
+        logger.info("Migrated MQTT password UserDefaults → Keychain")
         return true
     }
 }

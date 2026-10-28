@@ -19,6 +19,19 @@ import FoundationModels
 @MainActor
 struct LumenBridgeBugReportContext: BugReportContextProvider {
 
+    static func redactDiagnosticText(_ value: String) -> String {
+        var text = ReportRedactionPipeline().redact(value)
+        for pattern in [#"(?i)\b(?:https?|rtsps?|srtp|wss?|mqtts?|x-hm)://[^\s<>]+"#,
+                        #"\b[0-9]{3}-[0-9]{2}-[0-9]{3}\b"#,
+                        #"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b"#,
+                        #"(?i)\b(?:[0-9a-f]{0,4}:){2,}[0-9a-f:%_.-]+"#,
+                        #"(?i)-srtp_out_params\s+[^\s]+"#,
+                        #"(?i)\b[a-z0-9][a-z0-9.-]*\.(?:local|ts\.net)\b"#] {
+            text = text.replacingOccurrences(of: pattern, with: "[PRIVATE DATA OMITTED]", options: .regularExpression)
+        }
+        return text
+    }
+
     /// Captured at construction time — the bug report flow runs in a
     /// modal and we want a stable snapshot, not a live binding.
     let stateSnapshot: BridgeStateSnapshot
@@ -90,13 +103,13 @@ struct LumenBridgeBugReportContext: BugReportContextProvider {
 
         lines.append("## State")
         lines.append("- **MQTT connected:** \(stateSnapshot.mqttConnected)")
-        if let host = stateSnapshot.frigateHost, let port = stateSnapshot.frigatePort {
-            lines.append("- **Frigate broker:** \(host):\(port)")
+        if stateSnapshot.frigateHost != nil, stateSnapshot.frigatePort != nil {
+            lines.append("- **Frigate broker:** configured (address omitted)")
         } else {
             lines.append("- **Frigate broker:** not configured")
         }
-        if let err = stateSnapshot.lastMQTTError {
-            lines.append("- **Last MQTT error:** \(err)")
+        if stateSnapshot.lastMQTTError != nil {
+            lines.append("- **Last MQTT error:** present (details omitted)")
         }
         lines.append("- **CloudKit:** \(stateSnapshot.cloudKitStatus)")
         lines.append("- **CloudKit container:** iCloud.com.lorislabapp.lumenbridge")
@@ -116,7 +129,7 @@ struct LumenBridgeBugReportContext: BugReportContextProvider {
         #if os(macOS)
         lines.append("- **Homebridge enabled:** \(defaults.bool(forKey: "lumenbridge.homebridge.cameras_enabled"))")
         if let webURL = defaults.string(forKey: "lumenbridge.homebridge.frigate_web_url"), !webURL.isEmpty {
-            lines.append("- **Frigate web URL:** \(webURL)")
+            lines.append("- **Frigate web URL:** configured (address omitted)")
         }
         #endif
         lines.append("")
@@ -127,7 +140,7 @@ struct LumenBridgeBugReportContext: BugReportContextProvider {
             lines.append(transcript)
         }
 
-        let content = lines.joined(separator: "\n")
+        let content = Self.redactDiagnosticText(lines.joined(separator: "\n"))
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("lumenbridge-bug-report-\(Int(Date().timeIntervalSince1970)).md")
         do {
@@ -158,25 +171,25 @@ struct BridgeStateSnapshot: Sendable {
     @MainActor
     init(state: BridgeState?) {
         self.mqttConnected = state?.mqttConnected ?? false
-        self.frigateHost = state?.frigateHost
+        self.frigateHost = state?.frigateHost == nil ? nil : "configured"
         self.frigatePort = state?.frigatePort
-        self.lastMQTTError = state?.lastMQTTError
+        self.lastMQTTError = state?.lastMQTTError == nil ? nil : "error present"
         self.eventsReceived = state?.eventsReceived ?? 0
         self.eventsForwarded = state?.eventsForwarded ?? 0
         self.lastEventAt = state?.lastEventAt
-        self.cloudKitStatus = state?.cloudKitStatus.humanReadable ?? "unknown"
+        self.cloudKitStatus = state?.cloudKitStatus.isHealthy == true ? "available" : "not available"
 
         switch state?.hapStatus ?? .stopped {
         case .stopped: self.hapStatusDescription = "stopped"
         case .running(_, _, let count): self.hapStatusDescription = "running (\(count) accessories)"
-        case .error(let reason): self.hapStatusDescription = "error: \(reason)"
+        case .error: self.hapStatusDescription = "error (details omitted)"
         }
 
         #if os(macOS)
         switch state?.homebridgeStatus ?? .stopped {
         case .stopped: self.homebridgeStatusDescription = "stopped"
-        case .running(let code): self.homebridgeStatusDescription = "running (code \(code))"
-        case .error(let reason): self.homebridgeStatusDescription = "error: \(reason)"
+        case .running: self.homebridgeStatusDescription = "running (pairing code omitted)"
+        case .error: self.homebridgeStatusDescription = "error (details omitted)"
         }
         #else
         self.homebridgeStatusDescription = "not available on this platform"

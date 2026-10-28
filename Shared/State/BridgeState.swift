@@ -14,6 +14,29 @@ final class BridgeState {
     // MARK: - Frigate / MQTT
 
     var mqttConnected: Bool = false
+    /// True when the MQTT connection uses TLS (shown in Settings; plain MQTT
+    /// gets a warning because credentials and events cross the LAN in clear).
+    var mqttEncrypted: Bool = false
+    // MARK: - Zone alerts
+
+    var zoneAlerts: [ZoneAlert] = []
+    /// End time of each alert's last visit.
+    var lastZoneVisits: [UUID: Date] = [:]
+    /// Result of each alert's last iPhone push.
+    var lastZonePushOutcome: [UUID: String] = [:]
+    /// Cameras → zones and labels seen on MQTT, to fill the alert pickers
+    /// without asking the owner to type Frigate names. Bounded.
+    private(set) var seenZones: [String: Set<String>] = [:]
+    private(set) var seenLabels: Set<String> = []
+
+    func learn(camera: String, zones: [String], label: String) {
+        guard seenZones.count < 64 || seenZones[camera] != nil else { return }
+        var set = seenZones[camera] ?? []
+        for zone in zones where set.count < 64 { set.insert(zone) }
+        if seenZones[camera] != set { seenZones[camera] = set }
+        if seenLabels.count < 64, !seenLabels.contains(label) { seenLabels.insert(label) }
+    }
+
     var frigateHost: String?
     var frigatePort: Int?
     var mqttUsername: String?
@@ -36,6 +59,9 @@ final class BridgeState {
     /// HAP camera accessories. Independent of `hapStatus` so users can
     /// have motion sensors alone, cameras alone, or both.
     var homebridgeStatus: HomebridgeStatus = .stopped
+    var cameraStatuses: [BridgeCameraStatus] = []
+    var notificationTestSentAt: Date?
+    var notificationTestFailed = false
     #endif
 
     // MARK: - Discovery
@@ -72,13 +98,13 @@ enum CloudKitStatus: Equatable {
     var humanReadable: String {
         switch self {
         case .unknown:
-            return "Checking…"
+            return String(localized: "Checking…")
         case .noAccount:
-            return "Sign in to iCloud in System Settings"
+            return String(localized: "Sign in to iCloud in System Settings")
         case .available:
-            return "Connected to iCloud"
+            return String(localized: "Connected to iCloud")
         case .error(let reason):
-            return "Error: \(reason)"
+            return String(localized: "Error: \(reason)")
         }
     }
 }

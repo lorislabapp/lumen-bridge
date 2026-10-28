@@ -1,0 +1,28 @@
+{
+  "schema": "lumen-automation-authority-fixture-v1",
+  "revision": 12,
+  "timeZone": "Europe/Paris",
+  "now": "2026-09-01T12:00:00.000Z",
+  "decisionKeyBase64": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+  "policyJSON": "[{\"id\":\"11111111-1111-1111-1111-111111111111\",\"name\":\"Door\",\"schemaVersion\":4,\"enabled\":true,\"sideEffectAuthority\":\"bridgeRequired\",\"cooldownSeconds\":300,\"branches\":[{\"id\":\"22222222-2222-2222-2222-222222222222\",\"kind\":\"if\",\"expression\":{\"kind\":\"all\",\"parts\":[{\"kind\":\"condition\",\"condition\":{\"camera\":{\"name\":\"front_door\"}}},{\"kind\":\"condition\",\"condition\":{\"confidence\":{\"comparison\":\"gte\",\"value\":0.85}}},{\"kind\":\"condition\",\"condition\":{\"timeOfDay\":{\"startMinutes\":480,\"endMinutes\":1320}}}]},\"actions\":[{\"criticalAlert\":{\"volume\":0.75,\"category\":\"door\"}},{\"spokenAnnouncement\":{\"template\":\"personAtDoor\",\"critical\":true}}]}],\"createdAt\":0,\"updatedAt\":0}]",
+  "policyHash": "sha256:3c6286b40570c5b5e689edadad4d8d3ebaa4737aea0cfbf4f0a079960c6128a2",
+  "event": {
+    "reviewId": "review-fixture",
+    "reviewSeverity": "alert",
+    "eventId": "event-fixture",
+    "camera": "front_door",
+    "label": "person",
+    "score": 0.85
+  },
+  "expected": {
+    "ruleId": "11111111-1111-1111-1111-111111111111",
+    "branchId": "22222222-2222-2222-2222-222222222222",
+    "decisionId": "review-fixture/alert/12",
+    "disposition": "critical",
+    "priority": "timeSensitive",
+    "category": "door",
+    "spokenTemplate": "personAtDoor",
+    "criticalVolume": 0.75,
+    "decisionMAC": "d577a753d2988d876449d605b825d5d885b6aed1657d46f1bad93fc9809c3ec6"
+  }
+}

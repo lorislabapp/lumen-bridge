@@ -26,6 +26,7 @@ final class BridgeConfigSync {
     /// pulls any pre-existing KVS value into Keychain on launch.
     /// Do NOT write through this key.
     nonisolated static let legacyPassKey = "lumenbridge.kvs.frigate.pass"
+    nonisolated static let legacyLocalPassKey = "lumenbridge.frigate.mqtt_pass"
 
     private let kvs = NSUbiquitousKeyValueStore.default
     private var observerToken: NSObjectProtocol?
@@ -34,6 +35,7 @@ final class BridgeConfigSync {
         // Migrate any legacy KVS-stored password to Keychain on first
         // launch after the upgrade. No-op if there's nothing to move.
         MQTTCredentialsKeychain.migrateFromKVS(legacyKey: Self.legacyPassKey)
+        MQTTCredentialsKeychain.migrateFromUserDefaults(legacyKey: Self.legacyLocalPassKey)
     }
 
     /// Pulls the freshest known config. Host/port/username come from
@@ -73,7 +75,8 @@ final class BridgeConfigSync {
             forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
             object: kvs,
             queue: .main
-        ) { note in
+        ) { [weak self] note in
+            guard self != nil else { return }
             // Filter — we only react when one of OUR keys changed.
             let changed = note.userInfo?[NSUbiquitousKeyValueStoreChangedKeysKey] as? [String] ?? []
             // Legacy passKey still observed so a tail-end migration on a

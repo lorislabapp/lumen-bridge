@@ -11,6 +11,7 @@ import AppKit
 /// repo.
 @main
 struct LumenBridgeMacApp: App {
+    @NSApplicationDelegateAdaptor(BridgeSupportAppDelegate.self) private var supportDelegate
     @State private var bridgeState: BridgeState
     @State private var coordinator: BridgeCoordinator?
 
@@ -22,23 +23,37 @@ struct LumenBridgeMacApp: App {
         CommandLine.arguments.contains("--seed-schema")
     }
 
+    /// Unit tests are hosted by this app. Never connect to MQTT, CloudKit or
+    /// HomeKit while XCTest is running.
+    private static var isRunningTests: Bool {
+        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    }
+
     @MainActor init() {
         let state = BridgeState()
         _bridgeState = State(initialValue: state)
 
-        if Self.isSeedMode {
+        if Self.isRunningTests {
+            _coordinator = State(initialValue: nil)
+        } else if Self.isSeedMode {
             let c = BridgeCoordinator(state: state)
             _coordinator = State(initialValue: c)
             Task { @MainActor in
                 await c.seedSchemaAndQuit()
             }
         } else {
+            BridgeSupport.recordLaunch()
+            HubAvailabilityController.shared.start()
             // Start the coordinator at app launch — NOT lazily on popover
             // open. Without this, the menu-bar app sits dormant until the
             // user clicks ⚡ (which is rare), and meanwhile no events get
             // forwarded from MQTT to CloudKit. We want to be running 24/7.
             let c = BridgeCoordinator(state: state)
             _coordinator = State(initialValue: c)
+            supportDelegate.onShutdown = { [weak c] in
+                HubAvailabilityController.shared.stop()
+                await c?.stop()
+            }
             let triggerTestEvent = CommandLine.arguments.contains("--test-event")
             Task { @MainActor in
                 await c.start()
@@ -71,11 +86,11 @@ struct LumenBridgeMacApp: App {
                 state: bridgeState,
                 coordinator: coordinator,
                 onSendTestEvent: { [coordinator] in
-                    await coordinator?.sendTestEvent()
+                    if await coordinator?.sendTestEvent() == true { BridgeSupport.review.recordSuccessMoment() }
                 }
             )
         } label: {
-            Image(systemName: bridgeState.isConnected ? "bolt.fill" : "bolt.slash")
+            MenuBarLabel(connected: bridgeState.isConnected)
         }
         .menuBarExtraStyle(.window)
 
@@ -84,28 +99,36 @@ struct LumenBridgeMacApp: App {
         // HomeKit Cameras / Logs / About). Replaces the older one-form
         // SettingsView once Phase 5 lands and the surface area outgrows
         // a single scroll view.
-        Window("Lumen Bridge", id: "lumenbridge-settings") {
-            MainWindow(
-                state: bridgeState,
-                coordinator: coordinator,
-                onApplyConnection: { [coordinator] host, port, user, pass in
-                    await coordinator?.applyManualConfig(
-                        host: host, port: port,
-                        username: user, password: pass
-                    )
-                },
-                onToggleHAP: { [coordinator] enabled in
-                    await coordinator?.setHAPEnabled(enabled)
-                },
-                onToggleHomebridge: { [coordinator] enabled in
-                    await coordinator?.setHomebridgeCamerasEnabled(enabled)
-                },
-                onSendTestEvent: { [coordinator] in
-                    await coordinator?.sendTestEvent()
-                }
-            )
+        Window(MainWindow.appName, id: "lumenbridge-settings") {
+            HubRootView(state: bridgeState, onSetup: {
+                OnboardingWindowPresenter.shared.show(state: bridgeState, coordinator: coordinator)
+            }) {
+                MainWindow(
+                    state: bridgeState,
+                    coordinator: coordinator,
+                    onApplyConnection: { [coordinator] host, port, user, pass in
+                        await coordinator?.applyManualConfig(
+                            host: host, port: port,
+                            username: user, password: pass
+                        )
+                    },
+                    onToggleHAP: { [coordinator] enabled in
+                        await coordinator?.setHAPEnabled(enabled)
+                    },
+                    onToggleHomebridge: { [coordinator] enabled in
+                        await coordinator?.setHomebridgeCamerasEnabled(enabled)
+                    },
+                    onSendTestEvent: { [coordinator] in
+                        if await coordinator?.sendTestEvent() == true { BridgeSupport.review.recordSuccessMoment() }
+                    }
+                )
+            }
         }
-        .windowResizability(.contentSize)
+        // Minimum size only: with `.contentSize` the window grew to the full
+        // height of long pages (taller than the screen), which pushed the
+        // sidebar rows under the window buttons. Pages scroll inside.
+        .defaultSize(width: 900, height: 640)
+        .windowResizability(.contentMinSize)
 
     }
 }
@@ -118,37 +141,58 @@ struct LumenBridgeMacApp: App {
 final class OnboardingWindowPresenter {
     static let shared = OnboardingWindowPresenter()
     private var window: NSWindow?
+    var isVisible: Bool { window?.isVisible == true }
 
     func show(state: BridgeState, coordinator: BridgeCoordinator?) {
-        if let w = window {
+        if let w = window, w.isVisible {
             w.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
             return
         }
         let view = OnboardingView(
             state: state,
-            onApplyManualConfig: { [weak coordinator] host, port, user, pass in
-                await coordinator?.applyManualConfig(
-                    host: host, port: port,
-                    username: user, password: pass
-                )
-            },
-            onSendTestEvent: { [weak coordinator] in
-                await coordinator?.sendTestEvent()
-            },
+            coordinator: coordinator,
             onFinish: { [weak self] in
                 self?.window?.close()
+                MainWindowOpener.shared.open?()
             }
         )
         let controller = NSHostingController(rootView: view)
         let w = NSWindow(contentViewController: controller)
-        w.title = "Welcome to Lumen Bridge"
-        w.styleMask = [.titled, .closable]
-        w.setContentSize(NSSize(width: 640, height: 540))
+        // App name from the bundle: "Lumen Hub" (Developer ID) or "Lumen Bridge".
+        let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "Lumen Bridge"
+        w.title = String(localized: "Welcome to \(appName)")
+        w.styleMask = [.titled, .closable, .resizable, .miniaturizable]
+        w.setContentSize(NSSize(width: 820, height: 700))
         w.center()
         w.isReleasedWhenClosed = false
         self.window = w
         w.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
+}
+
+/// Menu bar icon. It is always rendered, so it is where the app captures
+/// `openWindow` for the app delegate: re-opening the app (Finder, Dock,
+/// `open`) shows the main window even when the menu bar icon is hidden
+/// behind the notch or other icons.
+struct MenuBarLabel: View {
+    let connected: Bool
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+        Image(systemName: connected ? "bolt.fill" : "bolt.slash")
+            .onAppear {
+                MainWindowOpener.shared.open = { [openWindow] in
+                    openWindow(id: "lumenbridge-settings")
+                    NSApp.activate(ignoringOtherApps: true)
+                }
+            }
+    }
+}
+
+@MainActor
+final class MainWindowOpener {
+    static let shared = MainWindowOpener()
+    var open: (() -> Void)?
 }

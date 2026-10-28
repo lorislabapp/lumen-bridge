@@ -1,0 +1,278 @@
+{
+ "source": "Owner front camera, Frigate 0.17 REST /api/events?zones=mailbox, 2026-10-12..19; names anonymised, no images",
+ "events": [
+  {
+   "id": "1792424010.313604-qa8bvc",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792424010.313604,
+   "end_time": 1792424026.108764,
+   "zones": [
+    "mailbox",
+    "parking"
+   ],
+   "sub_label": "resident",
+   "false_positive": false
+  },
+  {
+   "id": "1792423983.920096-2qpzz1",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792423983.920096,
+   "end_time": 1792424003.125595,
+   "zones": [
+    "parking",
+    "mailbox"
+   ],
+   "sub_label": null,
+   "false_positive": false
+  },
+  {
+   "id": "1792423983.121298-4uq85j",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792423983.121298,
+   "end_time": 1792424016.10117,
+   "zones": [
+    "parking",
+    "mailbox"
+   ],
+   "sub_label": "resident",
+   "false_positive": false
+  },
+  {
+   "id": "1792334950.414687-nde6hf",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792334950.414687,
+   "end_time": 1792335030.610575,
+   "zones": [
+    "parking",
+    "passage",
+    "mailbox"
+   ],
+   "sub_label": "resident",
+   "false_positive": false
+  },
+  {
+   "id": "1792258468.204707-u9y1va",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792258468.204707,
+   "end_time": 1792258522.661971,
+   "zones": [
+    "parking",
+    "mailbox",
+    "passage"
+   ],
+   "sub_label": "resident",
+   "false_positive": false
+  },
+  {
+   "id": "1792147586.793033-fbpzpj",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792147586.793033,
+   "end_time": 1792147612.615464,
+   "zones": [
+    "mailbox",
+    "parking",
+    "passage"
+   ],
+   "sub_label": "resident",
+   "false_positive": false
+  },
+  {
+   "id": "1792147577.828954-c6nipx",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792147577.828954,
+   "end_time": 1792147590.791066,
+   "zones": [
+    "parking",
+    "mailbox"
+   ],
+   "sub_label": "resident",
+   "false_positive": false
+  },
+  {
+   "id": "1792136746.381513-boliqr",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792136746.381513,
+   "end_time": 1792136758.564159,
+   "zones": [
+    "mailbox",
+    "parking"
+   ],
+   "sub_label": null,
+   "false_positive": false
+  },
+  {
+   "id": "1792136558.011492-mpo9jk",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792136558.011492,
+   "end_time": 1792136585.776318,
+   "zones": [
+    "passage",
+    "parking",
+    "mailbox"
+   ],
+   "sub_label": null,
+   "false_positive": false
+  },
+  {
+   "id": "1792136348.559407-a7kg36",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792136348.559407,
+   "end_time": 1792136380.007208,
+   "zones": [
+    "parking",
+    "mailbox"
+   ],
+   "sub_label": null,
+   "false_positive": false
+  },
+  {
+   "id": "1792070699.817032-31n23l",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792070699.817032,
+   "end_time": 1792070741.417394,
+   "zones": [
+    "passage",
+    "parking",
+    "mailbox"
+   ],
+   "sub_label": null,
+   "false_positive": false
+  },
+  {
+   "id": "1792047567.673606-x97vbn",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1792047567.673606,
+   "end_time": 1792047600.29199,
+   "zones": [
+    "parking",
+    "mailbox",
+    "passage"
+   ],
+   "sub_label": "resident",
+   "false_positive": false
+  },
+  {
+   "id": "1791991604.066752-42spal",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1791991604.066752,
+   "end_time": 1791991631.189446,
+   "zones": [
+    "passage",
+    "parking",
+    "mailbox"
+   ],
+   "sub_label": null,
+   "false_positive": false
+  },
+  {
+   "id": "1791957102.282127-co4k5d",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1791957102.282127,
+   "end_time": 1791957160.083283,
+   "zones": [
+    "parking",
+    "mailbox",
+    "street",
+    "passage"
+   ],
+   "sub_label": "resident",
+   "false_positive": false
+  },
+  {
+   "id": "1791903150.213851-aclrwm",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1791903150.213851,
+   "end_time": 1791903189.032648,
+   "zones": [
+    "passage",
+    "parking",
+    "mailbox"
+   ],
+   "sub_label": "resident",
+   "false_positive": false
+  },
+  {
+   "id": "1791813081.021605-9ha4ac",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1791813081.021605,
+   "end_time": 1791813087.032904,
+   "zones": [
+    "parking",
+    "mailbox"
+   ],
+   "sub_label": null,
+   "false_positive": false
+  },
+  {
+   "id": "1791813008.544012-6zxitp",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1791813008.544012,
+   "end_time": 1791813046.519614,
+   "zones": [
+    "passage",
+    "parking",
+    "mailbox"
+   ],
+   "sub_label": null,
+   "false_positive": false
+  },
+  {
+   "id": "1791789101.382818-oxnqsc",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1791789101.382818,
+   "end_time": 1791789138.83863,
+   "zones": [
+    "mailbox",
+    "parking",
+    "street"
+   ],
+   "sub_label": null,
+   "false_positive": false
+  },
+  {
+   "id": "1791787807.987516-pbtamf",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1791787807.987516,
+   "end_time": 1791787830.837867,
+   "zones": [
+    "parking",
+    "mailbox"
+   ],
+   "sub_label": null,
+   "false_positive": false
+  },
+  {
+   "id": "1791787723.202537-z2xkbl",
+   "camera": "front",
+   "label": "person",
+   "start_time": 1791787723.202537,
+   "end_time": 1791787736.787421,
+   "zones": [
+    "mailbox",
+    "parking",
+    "passage"
+   ],
+   "sub_label": null,
+   "false_positive": false
+  }
+ ]
+}

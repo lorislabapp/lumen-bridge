@@ -16,14 +16,17 @@
 	<key>com.apple.security.network.client</key>
 	<true/>
 	<!--
-	 `com.apple.security.network.server` was previously declared with a view
-	 to Phase 5 v0.2 (HomeKit / HAP accessory advertising on Bonjour). That
-	 phase ships only as a direct-download Developer ID build, NOT through
-	 the App Store, so the App Store build does not need the entitlement.
-	 Apple App Review (Submission ID fba1a7a8-c9f9-4df8-bfac-5377bf6196bb,
-	 Guideline 2.4.5(i)) flagged it because the Mac App Store binary has no
-	 matching server functionality. Removed 2026-05-06.
+	 `com.apple.security.network.server`: required since 1.1. The App Store
+	 build now runs an in-process HomeKit Accessory Protocol server
+	 (Bouke/HAP, Shared/HomeKit/HAPBridgeManager.swift) that publishes
+	 `_hap._tcp` on Bonjour and accepts connections from Apple Home hubs for
+	 the motion sensors and zone-alert doorbells. 1.0 was flagged under
+	 Guideline 2.4.5(i) (submission fba1a7a8…) because it declared this key
+	 with no server feature; 1.1 has one. Homebridge/Node/ffmpeg cameras
+	 stay out of this build (compiled only with LUMEN_HUB).
 	 -->
+	<key>com.apple.security.network.server</key>
+	<true/>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
 		<string>iCloud.com.lorislabapp.lumenbridge</string>
@@ -33,13 +36,14 @@
 		<string>CloudKit</string>
 	</array>
 	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
-	<string>$(TeamIdentifierPrefix)$(CFBundleIdentifier)</string>
+	<string>$(TeamIdentifierPrefix)com.lorislab.lumenforfrigate.Lumen-for-Frigate</string>
 	<!-- Keychain access groups: required when sandboxed so Bridge can
 	     read/write its own MQTT password entry. The team-id prefix is
 	     mandatory for iCloud Keychain sync (kSecAttrSynchronizable). -->
 	<key>keychain-access-groups</key>
 	<array>
 		<string>$(AppIdentifierPrefix)com.lorislabapp.lumenbridge</string>
+		<string>$(AppIdentifierPrefix)com.lorislab.lumen.automation</string>
 	</array>
 </dict>
 </plist>

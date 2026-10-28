@@ -14,6 +14,9 @@ private let logger = Logger(subsystem: "com.lorislabapp.lumenbridge", category: 
 /// must also be registered under the Apple Developer account the app is
 /// signed with.
 actor CloudKitBridge {
+    enum BridgeError: Error {
+        case missingReviewAuthority
+    }
     // MARK: - Configuration
 
     /// Matches the container configured in the Apple Developer account for
@@ -71,19 +74,34 @@ actor CloudKitBridge {
     /// only delivers the asset URL/checksum in the silent push, so the
     /// iOS subscriber decides whether to fetch the bytes. We write the
     /// JPEG to a temp file because CKAsset takes a file URL, not Data.
-    func persist(event: FrigateMQTTClient.Event, snapshot: Data? = nil) async throws {
+    func persist(
+        event: FrigateMQTTClient.Event,
+        snapshot: Data? = nil,
+        automationDecision: BridgeAutomationDecision? = nil
+    ) async throws {
+        guard let reviewID = event.reviewID, !reviewID.isEmpty,
+              let reviewSeverity = event.reviewSeverity,
+              reviewSeverity == "alert" || reviewSeverity == "detection" else {
+            throw BridgeError.missingReviewAuthority
+        }
         let recordID = CKRecord.ID(recordName: event.id)
         let record = CKRecord(recordType: Self.recordType, recordID: recordID)
+        record["source"] = "apple-bridge" as CKRecordValue
+        record["sourceSchema"] = "frigate-review-v1" as CKRecordValue
+        record["reviewId"] = reviewID as CKRecordValue
+        record["reviewSeverity"] = reviewSeverity as CKRecordValue
+        record["eventId"] = event.id as CKRecordValue
         record["camera"] = event.camera as CKRecordValue
         record["label"] = event.label as CKRecordValue
         record["zones"] = event.zones as CKRecordValue
         record["topScore"] = event.topScore as CKRecordValue
         record["detectedAt"] = event.startTime as CKRecordValue
+        Self.apply(automationDecision, to: record)
 
         var tempURL: URL?
         if let snapshot, !snapshot.isEmpty {
             let url = FileManager.default.temporaryDirectory
-                .appendingPathComponent("lumenbridge-\(event.id).jpg")
+                .appendingPathComponent("lumenbridge-\(UUID().uuidString).jpg")
             do {
                 try snapshot.write(to: url, options: .atomic)
                 record["snapshot"] = CKAsset(fileURL: url)
@@ -100,10 +118,37 @@ actor CloudKitBridge {
         do {
             _ = try await container.privateCloudDatabase.save(record)
         } catch let ck as CKError where ck.code == .serverRecordChanged {
-            // Already written by a previous run — that's fine, event ID is the
-            // natural dedupe key.
-            return
+            guard let existing = ck.userInfo[CKRecordChangedErrorServerRecordKey] as? CKRecord else { throw ck }
+            if existing["reviewSeverity"] as? String == reviewSeverity { return }
+            existing["source"] = "apple-bridge" as CKRecordValue
+            existing["sourceSchema"] = "frigate-review-v1" as CKRecordValue
+            existing["reviewId"] = reviewID as CKRecordValue
+            existing["reviewSeverity"] = reviewSeverity as CKRecordValue
+            existing["eventId"] = event.id as CKRecordValue
+            existing["camera"] = event.camera as CKRecordValue
+            existing["label"] = event.label as CKRecordValue
+            existing["zones"] = event.zones as CKRecordValue
+            existing["topScore"] = event.topScore as CKRecordValue
+            existing["detectedAt"] = event.startTime as CKRecordValue
+            Self.apply(automationDecision, to: existing)
+            _ = try await container.privateCloudDatabase.save(existing)
         }
+    }
+
+    private static func apply(_ decision: BridgeAutomationDecision?, to record: CKRecord) {
+        guard let decision else { return }
+        record["automationSchema"] = decision.automationSchema as CKRecordValue
+        record["policyRevision"] = decision.policyRevision as CKRecordValue
+        record["policyHash"] = decision.policyHash as CKRecordValue
+        record["ruleId"] = decision.ruleID as CKRecordValue
+        record["branchId"] = decision.branchID as CKRecordValue
+        record["decisionId"] = decision.decisionID as CKRecordValue
+        record["automationDisposition"] = decision.disposition.rawValue as CKRecordValue
+        record["automationPriority"] = decision.priority as CKRecordValue
+        record["decisionMAC"] = decision.decisionMAC as CKRecordValue
+        if let category = decision.category { record["automationCategory"] = category as CKRecordValue }
+        if let spokenTemplate = decision.spokenTemplate { record["automationSpokenTemplate"] = spokenTemplate as CKRecordValue }
+        if let criticalVolume = decision.criticalVolume { record["automationCriticalVolume"] = criticalVolume as CKRecordValue }
     }
 
     /// Phase 4 v0.2 — fetches the existing FrigateEvent record and adds the
@@ -118,7 +163,7 @@ actor CloudKitBridge {
         do {
             let record = try await db.record(for: recordID)
             let url = FileManager.default.temporaryDirectory
-                .appendingPathComponent("lumenbridge-clip-\(eventID).mp4")
+                .appendingPathComponent("lumenbridge-clip-\(UUID().uuidString).mp4")
             try clipMP4.write(to: url, options: .atomic)
             defer { try? FileManager.default.removeItem(at: url) }
             record["clip"] = CKAsset(fileURL: url)

@@ -19,7 +19,6 @@ final class BridgeCoordinator {
     private static let savedHostKey = "lumenbridge.frigate.host"
     private static let savedPortKey = "lumenbridge.frigate.port"
     private static let savedUserKey = "lumenbridge.frigate.mqtt_user"
-    private static let savedPassKey = "lumenbridge.frigate.mqtt_pass"
     /// True after the user has explicitly entered host details. When true,
     /// Bonjour discoveries do NOT auto-replace the configured host — only the
     /// user can override their own choice.
@@ -44,6 +43,9 @@ final class BridgeCoordinator {
     private let mqtt = FrigateMQTTClient()
     private let cloudKit = CloudKitBridge()
     private let configSync = BridgeConfigSync()
+    private let automationAuthority = AutomationPolicyAuthority()
+    private var automationAckTask: Task<Void, Never>?
+    private var isStopping = false
     #if os(macOS)
     private let hap: HAPBridgeManager
     private let homebridge: HomebridgeManager
@@ -59,15 +61,31 @@ final class BridgeCoordinator {
 
     func start() async {
         await refreshCloudKitStatus()
+        guard !isStopping else { return }
+        _ = automationAuthority.refreshAndAcknowledge()
+        automationAckTask?.cancel()
+        automationAckTask = Task { [weak self] in
+            while !Task.isCancelled {
+                do {
+                    try await Task.sleep(nanoseconds: 21_600_000_000_000)
+                } catch {
+                    return
+                }
+                guard let self else { return }
+                _ = self.automationAuthority.refreshAndAcknowledge()
+            }
+        }
         wireDiscovery()
         wireMQTT()
+        await applyZoneAlerts(ZoneAlertStore.load())
         #if os(macOS)
         // HomeKit is opt-in for Phase 5. Boot the HAP server only if the
         // user has flipped the flag (via Settings or onboarding).
         if UserDefaults.standard.bool(forKey: Self.hapEnabledKey) {
             await hap.start()
+            await hap.syncZoneDoorbells(zoneAlerts.filter(\.enabled).map { ($0.id, $0.name) })
         }
-        if UserDefaults.standard.bool(forKey: HomebridgeManager.camerasEnabledKey) {
+        if !isStopping, UserDefaults.standard.bool(forKey: HomebridgeManager.camerasEnabledKey) {
             await homebridge.start()
         }
         #endif
@@ -94,7 +112,7 @@ final class BridgeCoordinator {
             let savedPort = defaults.integer(forKey: Self.savedPortKey)
             let port = savedPort > 0 ? savedPort : 1883
             let user = defaults.string(forKey: Self.savedUserKey)
-            let pass = defaults.string(forKey: Self.savedPassKey)
+            let pass = MQTTCredentialsKeychain.get()
             state.frigateHost = savedHost
             state.frigatePort = port
             state.mqttUsername = user
@@ -139,7 +157,9 @@ final class BridgeCoordinator {
         defaults.set(trimmedHost, forKey: Self.savedHostKey)
         defaults.set(port, forKey: Self.savedPortKey)
         defaults.set(username, forKey: Self.savedUserKey)
-        defaults.set(password, forKey: Self.savedPassKey)
+        // Password persistence is Keychain-only. Explicitly purge the old
+        // plaintext defaults key in case this install predates migration.
+        defaults.removeObject(forKey: BridgeConfigSync.legacyLocalPassKey)
         defaults.set(true, forKey: Self.manualConfigKey)
 
         state.frigateHost = trimmedHost
@@ -162,6 +182,117 @@ final class BridgeCoordinator {
         UserDefaults.standard.bool(forKey: Self.manualConfigKey)
     }
 
+    // MARK: - MQTT encryption
+
+    static let mqttUseTLSKey = "lumenbridge.mqtt.use_tls"
+
+    /// Turns encrypted MQTT on/off and reconnects with the saved host.
+    func setMQTTUseTLS(_ enabled: Bool) async {
+        UserDefaults.standard.set(enabled, forKey: Self.mqttUseTLSKey)
+        guard let host = state.frigateHost else { return }
+        await mqtt.disconnect()
+        let port = state.frigatePort ?? (enabled ? 8883 : 1883)
+        await connectMQTT(host: host, port: port, username: state.mqttUsername,
+                          password: state.mqttPassword)
+    }
+
+    // MARK: - Zone alerts (mailbox, gate, front door…)
+
+    /// One monitor per enabled alert, keyed by alert id.
+    private var monitors: [UUID: MailboxMonitor] = [:]
+    private(set) var zoneAlerts: [ZoneAlert] = []
+
+    /// Saves the owner's alerts and applies them immediately.
+    func setZoneAlerts(_ alerts: [ZoneAlert]) async {
+        ZoneAlertStore.save(alerts)
+        await applyZoneAlerts(ZoneAlertStore.load())
+    }
+
+    private func applyZoneAlerts(_ alerts: [ZoneAlert]) async {
+        zoneAlerts = alerts
+        state.zoneAlerts = alerts
+        let active = alerts.filter(\.enabled)
+        monitors = monitors.filter { id, _ in active.contains { $0.id == id } }
+        for alert in active {
+            let monitor = monitors[alert.id] ?? MailboxMonitor()
+            monitor.configure(alert.configuration)
+            monitor.onVisit = { [weak self] visit in self?.handleVisit(visit, alert: alert) }
+            monitors[alert.id] = monitor
+        }
+        #if os(macOS)
+        if UserDefaults.standard.bool(forKey: Self.hapEnabledKey) {
+            await hap.syncZoneDoorbells(active.map { ($0.id, $0.name) })
+        }
+        #endif
+    }
+
+    /// Cameras announced by `frigate/stats`: known to the alert pickers and
+    /// each gets its HomeKit motion sensor right away.
+    private func learnCameras(_ cameras: [String]) {
+        for camera in cameras where state.seenZones[camera] == nil {
+            state.learn(camera: camera, zones: [], label: "person")
+        }
+        #if os(macOS)
+        if state.hapStatus.isRunning {
+            Task { @MainActor in
+                for camera in cameras { await self.hap.ensureCameraAccessory(cameraName: camera) }
+            }
+        }
+        #endif
+    }
+
+    private func feedZoneAlerts(_ observation: MailboxObservation) {
+        let newCamera = state.seenZones[observation.camera] == nil
+        state.learn(camera: observation.camera, zones: observation.zones, label: observation.label)
+        #if os(macOS)
+        // One HomeKit motion sensor per camera as soon as Frigate mentions it,
+        // not only after that camera's first correlated detection.
+        if newCamera, state.hapStatus.isRunning {
+            let camera = observation.camera
+            Task { @MainActor in await self.hap.ensureCameraAccessory(cameraName: camera) }
+        }
+        #endif
+        for monitor in monitors.values { monitor.consume(observation) }
+    }
+
+    private func handleVisit(_ visit: MailboxMonitor.Visit, alert: ZoneAlert) {
+        state.lastZoneVisits[alert.id] = visit.end
+        logger.info("zone alert visit on \(visit.camera, privacy: .public)")
+        #if os(macOS)
+        // One chime only: the camera doorbell (with snapshot) when the
+        // HomeKit cameras run, otherwise this alert's own doorbell.
+        Task { @MainActor in
+            if self.homebridge.isRunning {
+                await self.homebridge.triggerDoorbell(camera: visit.camera)
+            } else {
+                await self.hap.ringZoneDoorbell(id: alert.id)
+            }
+        }
+        #endif
+        let review = reviewByEvent[visit.eventIDs[0]]
+        Task { @MainActor in
+            let outcome = await self.mailboxPush.send(visit: visit, review: review, alertName: alert.name,
+                                                      zone: alert.configuration.mailboxZone)
+            self.state.lastZonePushOutcome[alert.id] = String(describing: outcome)
+            logger.info("zone alert push: \(String(describing: outcome), privacy: .public)")
+        }
+    }
+
+    /// Frigate review linked to each recent event (from the correlator), so a
+    /// mailbox visit can be pushed as that review. Bounded.
+    private var reviewByEvent: [String: MailboxPushSender.ReviewLink] = [:]
+    private var reviewOrder: [String] = []
+    private let mailboxPush = MailboxPushSender()
+
+    private func rememberReview(eventID: String, link: MailboxPushSender.ReviewLink) {
+        if reviewByEvent[eventID] == nil { reviewOrder.append(eventID) }
+        reviewByEvent[eventID] = link
+        if reviewOrder.count > 256 {
+            let drop = reviewOrder.removeFirst()
+            reviewByEvent[drop] = nil
+        }
+    }
+
     #if os(macOS)
     /// Toggle the HomeKit bridge at runtime — flips the persisted opt-in
     /// flag and starts or stops the HAP server immediately so the user
@@ -170,10 +301,25 @@ final class BridgeCoordinator {
         UserDefaults.standard.set(enabled, forKey: Self.hapEnabledKey)
         if enabled {
             await hap.start()
+            await hap.syncZoneDoorbells(zoneAlerts.filter(\.enabled).map { ($0.id, $0.name) })
         } else {
             await hap.stop()
         }
     }
+
+    /// Saves a checked Frigate web address and restarts the camera module
+    /// so it picks it up (it used to keep its startup error).
+    func setFrigateWebURL(_ url: String) async {
+        UserDefaults.standard.set(url, forKey: HomebridgeManager.frigateWebURLKey)
+        if UserDefaults.standard.bool(forKey: HomebridgeManager.camerasEnabledKey) {
+            await homebridge.stop()
+            if UserDefaults.standard.bool(forKey: HomebridgeManager.camerasEnabledKey) {
+                await homebridge.start()
+            }
+        }
+    }
+
+    func checkHomeKitCameraSources() async { await homebridge.refreshCameraChecks() }
 
     /// Toggle the Homebridge sidecar that powers HomeKit camera streaming.
     /// Independent of `setHAPEnabled` — motion sensors and cameras can
@@ -189,6 +335,13 @@ final class BridgeCoordinator {
     #endif
 
     func stop() async {
+        isStopping = true
+        #if os(macOS)
+        await homebridge.stop()
+        await hap.stop()
+        #endif
+        automationAckTask?.cancel()
+        automationAckTask = nil
         discovery.stop()
         await mqtt.disconnect()
     }
@@ -214,7 +367,9 @@ final class BridgeCoordinator {
             zones: ["entry"],
             topScore: 0.92,
             startTime: Date(),
-            kind: .new
+            kind: .new,
+            reviewID: id,
+            reviewSeverity: "alert"
         )
         do {
             try await cloudKit.persist(event: event)
@@ -233,7 +388,11 @@ final class BridgeCoordinator {
     ///   (2) Verify end-to-end push delivery (CKSubscription → APNs →
     ///       Lumen iOS BridgeNotificationPresenter) without needing a
     ///       running Frigate instance.
-    func sendTestEvent() async {
+    @discardableResult
+    func sendTestEvent() async -> Bool {
+        #if os(macOS)
+        state.notificationTestFailed = false
+        #endif
         let id = "test-\(Int(Date().timeIntervalSince1970))-\(UUID().uuidString.prefix(8))"
         let event = FrigateMQTTClient.Event(
             id: id,
@@ -242,7 +401,9 @@ final class BridgeCoordinator {
             zones: ["entry"],
             topScore: 0.92,
             startTime: Date(),
-            kind: .new
+            kind: .new,
+            reviewID: id,
+            reviewSeverity: "alert"
         )
         // For test events the camera/label is synthetic so latestSnapshot
         // returns nil. Try to attach ANY cached snapshot so the user can
@@ -250,19 +411,40 @@ final class BridgeCoordinator {
         // detection on a matching camera.
         state.eventsReceived += 1
         state.lastEventAt = Date()
+        _ = automationAuthority.refreshAndAcknowledge()
+        let automationDecision: BridgeAutomationDecision?
+        switch automationAuthority.evaluate(event: event) {
+        case .passthrough:
+            automationDecision = nil
+        case .suppress(let reason):
+            await mqtt.completeReviewDelivery(event, terminal: true)
+            logger.info("suppressed event \(event.id) before CloudKit: \(reason, privacy: .public)")
+            return false
+        case .deliver(let decision):
+            automationDecision = decision
+        }
         let snapshot = await mqtt.anyCachedSnapshot()?.data
         do {
-            try await cloudKit.persist(event: event, snapshot: snapshot)
+            try await cloudKit.persist(event: event, snapshot: snapshot, automationDecision: automationDecision)
+            await mqtt.completeReviewDelivery(event, terminal: true)
             state.eventsForwarded += 1
+            #if os(macOS)
+            state.notificationTestSentAt = Date()
+            #endif
             logger.info("test event \(id) persisted (\(snapshot != nil ? "with snapshot" : "no snapshot"))")
+            return true
         } catch {
+            #if os(macOS)
+            state.notificationTestFailed = true
+            #endif
             logger.error("test event persist failed: \(error.localizedDescription)")
+            return false
         }
     }
 
     // MARK: -
 
-    private func refreshCloudKitStatus() async {
+    func refreshCloudKitStatus() async {
         let status = await cloudKit.accountStatus()
         state.cloudKitStatus = status
     }
@@ -291,27 +473,37 @@ final class BridgeCoordinator {
     }
 
     private func wireMQTT() {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             await mqtt.setOnEvent { [weak self] event in
                 Task { @MainActor in
                     await self?.handleEvent(event)
                 }
             }
+            await mqtt.setOnObservation { [weak self] observation in
+                self?.feedZoneAlerts(observation)
+            }
+            await mqtt.setOnCameras { [weak self] cameras in
+                self?.learnCameras(cameras)
+            }
             await mqtt.setOnConnectionChange { [weak self] connected in
                 Task { @MainActor in
                     self?.state.mqttConnected = connected
+                    self?.monitors.values.forEach { $0.connectionChanged(connected: connected) }
                 }
             }
         }
     }
 
     private func connectMQTT(host: String, port: Int, username: String?, password: String?) async {
-        let config = FrigateMQTTClient.Config(
+        var config = FrigateMQTTClient.Config(
             host: host,
             port: port,
             username: username?.isEmpty == false ? username : nil,
             password: password?.isEmpty == false ? password : nil
         )
+        config.useTLS = UserDefaults.standard.bool(forKey: Self.mqttUseTLSKey)
+        state.mqttEncrypted = config.useTLS
         await mqtt.configure(config)
         do {
             try await mqtt.connect()
@@ -340,13 +532,34 @@ final class BridgeCoordinator {
         }
         state.eventsReceived += 1
         state.lastEventAt = Date()
+        if let reviewID = event.reviewID, let severity = event.reviewSeverity {
+            rememberReview(eventID: event.id, link: .init(reviewID: reviewID, severity: severity,
+                                                          topScore: event.topScore))
+        }
+        _ = automationAuthority.refreshAndAcknowledge()
+        let automationDecision: BridgeAutomationDecision?
+        switch automationAuthority.evaluate(event: event) {
+        case .passthrough:
+            automationDecision = nil
+        case .suppress(let reason):
+            await mqtt.completeReviewDelivery(event, terminal: true)
+            logger.info("suppressed event \(event.id) before CloudKit: \(reason, privacy: .public)")
+            return
+        case .deliver(let decision):
+            automationDecision = decision
+        }
         // Pull the most-recent snapshot Frigate published for this
         // camera+label off the MQTT actor's cache. May be nil for the
         // very first event of a session before any snapshot has been
         // published — that's fine, the record persists without preview.
         let snapshot = await mqtt.latestSnapshot(camera: event.camera, label: event.label)
         do {
-            try await cloudKit.persist(event: event, snapshot: snapshot)
+            try await cloudKit.persist(
+                event: event,
+                snapshot: snapshot,
+                automationDecision: automationDecision
+            )
+            await mqtt.completeReviewDelivery(event, terminal: true)
             state.eventsForwarded += 1
             if snapshot != nil {
                 logger.info("persisted event \(event.id) with snapshot")
@@ -354,6 +567,7 @@ final class BridgeCoordinator {
                 logger.info("persisted event \(event.id) (no snapshot yet)")
             }
         } catch {
+            await mqtt.completeReviewDelivery(event, terminal: false)
             logger.error("CloudKit persist failed for \(event.id): \(error.localizedDescription)")
         }
         #if os(macOS)
@@ -363,6 +577,11 @@ final class BridgeCoordinator {
         if state.hapStatus.isRunning {
             await hap.ensureCameraAccessory(cameraName: event.camera)
             await hap.reportMotion(cameraName: event.camera, detected: true)
+        }
+        // HomeKit cameras (Homebridge): pulse the camera's own motion sensor
+        // so Apple Home shows the alert with that camera's snapshot.
+        if homebridge.isRunning {
+            await homebridge.triggerMotion(camera: event.camera)
         }
         #endif
     }

@@ -23,22 +23,51 @@ struct MainWindow: View {
     var onToggleHomebridge: (@MainActor (_ enabled: Bool) async -> Void)? = nil
     var onSendTestEvent: (@MainActor () async -> Void)? = nil
 
-    @State private var section: Section? = .status
+    /// Last opened page, remembered across launches.
+    @AppStorage("lumenbridge.mainwindow.section") private var sectionRaw: String = Section.status.rawValue
+    private var section: Section? {
+        get {
+            guard let stored = Section(rawValue: sectionRaw), Section.visible.contains(stored) else { return .status }
+            return stored
+        }
+        nonmutating set { sectionRaw = (newValue ?? .status).rawValue }
+    }
+    private var sectionBinding: Binding<Section?> {
+        Binding(get: { section }, set: { section = $0 })
+    }
+    @State private var isSendingTestEvent = false
 
     enum Section: String, CaseIterable, Identifiable {
-        case status      = "Status"
-        case connection  = "Frigate"
-        case iCloud      = "iCloud"
-        case sensors     = "HomeKit · Sensors"
-        case cameras     = "HomeKit · Cameras"
-        case logs        = "Logs"
-        case about       = "About"
+        case status, connection, zoneAlerts, sensors, cameras, iCloud, logs, about
         var id: String { rawValue }
+
+        /// HomeKit cameras (Homebridge) exist only in the Developer ID Hub.
+        static var visible: [Section] {
+            #if LUMEN_HUB
+            allCases
+            #else
+            allCases.filter { $0 != .cameras }
+            #endif
+        }
+
+        var title: String {
+            switch self {
+            case .status:     return String(localized: "Status")
+            case .connection: return String(localized: "Frigate")
+            case .zoneAlerts: return String(localized: "Zone alerts")
+            case .sensors:    return String(localized: "HomeKit · Sensors")
+            case .cameras:    return String(localized: "HomeKit · Cameras")
+            case .iCloud:     return String(localized: "iCloud")
+            case .logs:       return String(localized: "Logs")
+            case .about:      return String(localized: "About")
+            }
+        }
 
         var systemImage: String {
             switch self {
             case .status:     return "bolt.circle.fill"
             case .connection: return "video.fill"
+            case .zoneAlerts: return "bell.badge.fill"
             case .iCloud:     return "icloud.fill"
             case .sensors:    return "sensor.fill"
             case .cameras:    return "video.bubble.fill"
@@ -48,29 +77,61 @@ struct MainWindow: View {
         }
     }
 
+    /// "Lumen Hub" (Developer ID) or "Lumen Bridge" (App Store).
+    static var appName: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "Lumen Bridge"
+    }
+
     var body: some View {
         NavigationSplitView {
-            List(selection: $section) {
-                ForEach(Section.allCases) { s in
+            List(selection: sectionBinding) {
+                ForEach(Section.visible) { s in
                     NavigationLink(value: s) {
-                        Label(s.rawValue, systemImage: s.systemImage)
+                        Label(s.title, systemImage: s.systemImage)
                     }
                 }
             }
+            // A real macOS sidebar keeps its rows below the window buttons
+            // (they used to scroll under the traffic lights).
+            .listStyle(.sidebar)
             .navigationSplitViewColumnWidth(min: 200, ideal: 220)
-            .navigationTitle("Lumen Bridge")
         } detail: {
-            switch section {
-            case .status, .none: statusPane
-            case .connection:    connectionPane
-            case .iCloud:        iCloudPane
-            case .sensors:       sensorsPane
-            case .cameras:       camerasPane
-            case .logs:          logsPane
-            case .about:         aboutPane
+            Group {
+                switch section {
+                case .status, .none: statusPane
+                case .connection:    connectionPane
+                case .zoneAlerts:    zoneAlertsPane
+                case .iCloud:        iCloudPane
+                case .sensors:       sensorsPane
+                case .cameras:       camerasPane
+                case .logs:          logsPane
+                case .about:         aboutPane
+                }
             }
+            // Pinned to the top and allowed to shrink: form pages used to
+            // report a min height taller than the window, which shifted the
+            // whole content (sidebar included) up under the title bar.
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
+            .navigationTitle((section ?? .status).title)
+            .navigationSubtitle(Self.appName)
         }
-        .frame(minWidth: 720, minHeight: 540)
+        .navigationSplitViewStyle(.balanced)
+        .frame(minWidth: 760, minHeight: 560)
+
+    }
+
+    // MARK: - Zone alerts pane
+
+    private var zoneAlertsPane: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            paneHeader(String(localized: "Zone alerts"),
+                       String(localized: "Mailbox, gate, front door… one alert per place you want to watch."))
+                .padding([.horizontal, .top], 28)
+            ZoneAlertsView(state: state) { [coordinator] alerts in
+                await coordinator?.setZoneAlerts(alerts)
+            }
+            .frame(minHeight: 0, maxHeight: .infinity)
+        }
     }
 
     // MARK: - Status pane (the dashboard)
@@ -79,31 +140,38 @@ struct MainWindow: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 paneHeader("Status",
-                           "What the Bridge is currently doing. Toggle features in the sidebar.")
+                           "What the Hub is doing right now.")
                 statusGrid
                 HStack(spacing: 12) {
                     Button {
-                        Task { await onSendTestEvent?() }
+                        guard !isSendingTestEvent else { return }
+                        isSendingTestEvent = true
+                        Task {
+                            defer { isSendingTestEvent = false }
+                            await onSendTestEvent?()
+                        }
                     } label: {
                         Label("Send test event", systemImage: "paperplane.fill")
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
+                    .disabled(isSendingTestEvent)
                     .help("Writes a synthetic FrigateEvent to CloudKit so you can verify the pipeline reaches your iPhone without waiting for a real detection.")
 
-                    NavigationLink {
-                        BugReportView(provider: LumenBridgeBugReportContext(state: state))
+                    Button {
+                        BridgeSupportWindow.shared.show(state: state)
                     } label: {
                         Label("Report a Bug", systemImage: "ant.fill")
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
-                    .help("Open the AI-augmented bug-report flow. The diagnostic bundle includes the live Bridge state.")
+                    .help("Open Help to contact the team, review optional diagnostics, and discover other LorisLabs apps.")
                 }
             }
             .padding(28)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .modifier(BridgeReviewOpportunity(interactionInProgress: isSendingTestEvent))
     }
 
     private var statusGrid: some View {
@@ -115,17 +183,17 @@ struct MainWindow: View {
                        healthy: state.mqttConnected)
             statusCard(title: "iCloud",
                        value: state.cloudKitStatus.humanReadable,
-                       detail: "Container: iCloud.com.lorislabapp.lumenbridge",
+                       detail: String(localized: "Private iCloud database"),
                        healthy: state.cloudKitStatus.isHealthy)
             statusCard(title: "Events",
                        value: "\(state.eventsForwarded)",
-                       detail: "\(state.eventsReceived) received · \(state.eventsForwarded) forwarded",
+                       detail: String(localized: "\(state.eventsReceived) received · \(state.eventsForwarded) forwarded"),
                        healthy: state.eventsForwarded > 0)
             statusCard(title: "HomeKit Sensors",
                        value: state.hapStatus.isRunning ? "Running" : "Off",
                        detail: hapStatusDetail,
                        healthy: state.hapStatus.isRunning)
-            #if os(macOS)
+            #if os(macOS) && LUMEN_HUB
             statusCard(title: "HomeKit Cameras",
                        value: state.homebridgeStatus.isRunning ? "Running" : "Off",
                        detail: homebridgeStatusDetail,
@@ -136,19 +204,21 @@ struct MainWindow: View {
 
     // MARK: - Connection pane
 
+    /// No outer ScrollView: the grouped Form scrolls on its own (two nested
+    /// scroll views showed two scroll bars).
     private var connectionPane: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                paneHeader("Frigate connection",
-                           "Where the Bridge subscribes to detection events. Same MQTT broker your Frigate config points at.")
-                SettingsView(
-                    state: state,
-                    onApply: onApplyConnection,
-                    onToggleHAP: nil,
-                    onToggleHomebridge: nil
-                )
-                .padding(.top, 8)
-            }
+        VStack(alignment: .leading, spacing: 0) {
+            paneHeader(String(localized: "Frigate connection"),
+                       String(localized: "Where the Hub receives detection events: the same MQTT broker as your Frigate."))
+                .padding([.horizontal, .top], 28)
+            SettingsView(
+                state: state,
+                onApply: onApplyConnection,
+                onSetTLS: { [coordinator] enabled in
+                    await coordinator?.setMQTTUseTLS(enabled)
+                }
+            )
+            .frame(minHeight: 0, maxHeight: .infinity)
         }
     }
 
@@ -206,7 +276,7 @@ CloudKit Console and click 'Deploy Schema Changes'.
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 paneHeader("HomeKit · Motion sensors",
-                           "Each Frigate camera appears as a HomeKit motion sensor. Native Swift HAP server (Bouke/HAP), in-process.")
+                           "Each Frigate camera appears in Apple Home as a motion sensor. Zone alerts appear as doorbells.")
                 Toggle("Enable HomeKit motion sensors", isOn: hapEnabledBinding)
                     .toggleStyle(.switch)
                     .controlSize(.large)
@@ -217,9 +287,9 @@ CloudKit Console and click 'Deploy Schema Changes'.
                 case .running(let setupCode, let setupID, let count):
                     #if os(macOS)
                     let uri = HAPBridgeManager.makeSetupURI(setupCode: setupCode, setupID: setupID)
-                    pairingCodeRow(setupCode, pairingURI: uri, accessoryCount: count, prefix: "Lumen Bridge")
+                    pairingCodeRow(setupCode, pairingURI: uri, accessoryCount: count, prefix: Self.appName)
                     #else
-                    pairingCodeRow(setupCode, pairingURI: nil, accessoryCount: count, prefix: "Lumen Bridge")
+                    pairingCodeRow(setupCode, pairingURI: nil, accessoryCount: count, prefix: Self.appName)
                     #endif
                 case .error(let reason):
                     Text(reason).foregroundStyle(.orange)
@@ -235,26 +305,46 @@ CloudKit Console and click 'Deploy Schema Changes'.
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 paneHeader("HomeKit · Live cameras",
-                           "Each Frigate go2rtc stream appears as a HomeKit camera with Live View. Powered by a private Homebridge sidecar (homebridge-camera-ffmpeg).")
+                           "Your Frigate cameras in Apple Home, with live view and motion. Zone alert cameras become video doorbells.")
                 #if os(macOS)
-                TextField("Frigate web URL", text: frigateWebURLBinding,
-                          prompt: Text("https://frigate.local:5000"))
+                FrigateWebURLRow(coordinator: coordinator)
+                if !state.cameraStatuses.isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
+                        ForEach(state.cameraStatuses) { camera in
+                            HStack(alignment: .top) {
+                                Image(systemName: camera.phase == .playing ? "video.fill" : "video")
+                                    .foregroundStyle(camera.phase == .unavailable ? Color.orange : Color.secondary)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(camera.displayName).font(.headline)
+                                    Text(camera.detail).font(.caption).foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                if camera.enabled, case .running(let code) = state.homebridgeStatus, code != "—" {
+                                    Button("Copy pairing code") {
+                                        NSPasteboard.general.clearContents()
+                                        NSPasteboard.general.setString(code, forType: .string)
+                                    }.buttonStyle(.bordered)
+                                }
+                            }
+                        }
+                        Button("Check video sources") { Task { await coordinator?.checkHomeKitCameraSources() } }
+                            .disabled(coordinator == nil)
+                        Text("In Home, choose Add Accessory, More Options, then select the camera by name. Your existing pairings are kept.")
+                            .font(.caption).foregroundStyle(.secondary)
+                    }
+                }
                 Toggle("Enable HomeKit cameras", isOn: homebridgeEnabledBinding)
                     .toggleStyle(.switch)
                     .controlSize(.large)
                 switch state.homebridgeStatus {
                 case .stopped:
-                    Text("Off. First-run install bootstraps homebridge + homebridge-camera-ffmpeg via npm (~30-90s).")
+                    Text("Off. The first start installs the camera module (about 1 minute).")
                         .foregroundStyle(.secondary)
                 case .running(let setupCode):
                     pairingCodeRow(setupCode, pairingURI: nil, accessoryCount: nil, prefix: "Lumen Bridge Cameras")
                 case .error(let reason):
-                    Text(reason).foregroundStyle(.orange)
+                    Text(Self.cameraErrorMessage(reason)).foregroundStyle(.orange)
                 }
-                Divider().padding(.vertical, 4)
-                Text("Distribution note: this feature requires a non-sandboxed direct-download build. The TestFlight build doesn't have permission to spawn the Homebridge subprocess.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
                 #else
                 Text("HomeKit cameras run on the macOS Bridge. Your Apple TV inherits the Frigate connection automatically — pair the cameras from any iOS device under the same Apple ID.")
                     .foregroundStyle(.secondary)
@@ -270,7 +360,7 @@ CloudKit Console and click 'Deploy Schema Changes'.
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 paneHeader("Logs",
-                           "Stream the Bridge's recent activity. Open Console.app and filter by subsystem com.lorislabapp.lumenbridge for the full unified log.")
+                           "Detailed activity is in the Console app (subsystem com.lorislabapp.lumenbridge).")
                 #if os(macOS)
                 Button {
                     NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Utilities/Console.app"))
@@ -288,22 +378,22 @@ CloudKit Console and click 'Deploy Schema Changes'.
     private var aboutPane: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                paneHeader("About", "Lumen Bridge connects Frigate to Apple's ecosystem.")
-                Text("Version 0.1.0 (build \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?"))")
+                paneHeader("About", String(localized: "\(Self.appName) connects Frigate to your Apple devices."))
+                Text("Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?") (build \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?"))")
                     .font(.callout)
                 Text("© 2026 LorisLabs · Christine Martin (TDV6D5L785)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Divider().padding(.vertical, 8)
                 infoBlock("Privacy",
-                    "Detection events stay in your private iCloud database. Apple cannot read them. The Bridge runs locally on your Mac and never sends data to LorisLabs servers.",
+                    "Detection events stay in your private iCloud database. Apple cannot read them. The Hub runs locally on your Mac. Optional support messages and reviewed technical diagnostics are sent to LorisLabs only after your confirmation.",
                     linkLabel: "Privacy Policy",
                     linkURL: "https://lorislab.fr/privacy.html")
 
                 Divider().padding(.vertical, 8)
 
-                NavigationLink {
-                    BugReportView(provider: LumenBridgeBugReportContext(state: state))
+                Button {
+                    BridgeSupportWindow.shared.show(state: state)
                 } label: {
                     Label("Report a Bug", systemImage: "ant.fill")
                 }
@@ -317,8 +407,9 @@ CloudKit Console and click 'Deploy Schema Changes'.
 
     private func paneHeader(_ title: String, _ subtitle: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title).font(.title.weight(.bold))
-            Text(subtitle).font(.callout).foregroundStyle(.secondary)
+            Text(LocalizedStringKey(title)).font(.title.weight(.bold))
+            Text(LocalizedStringKey(subtitle)).font(.callout).foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.bottom, 8)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -327,11 +418,11 @@ CloudKit Console and click 'Deploy Schema Changes'.
     private func statusCard(title: String, value: String, detail: String, healthy: Bool) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text(title).font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+                Text(LocalizedStringKey(title)).font(.caption.weight(.semibold)).foregroundStyle(.secondary)
                 Spacer()
                 Circle().fill(healthy ? .green : .orange).frame(width: 8, height: 8)
             }
-            Text(value).font(.title3.weight(.semibold))
+            Text(LocalizedStringKey(value)).font(.title3.weight(.semibold))
             Text(detail).font(.caption2).foregroundStyle(.secondary).lineLimit(2)
         }
         .padding(14)
@@ -341,7 +432,7 @@ CloudKit Console and click 'Deploy Schema Changes'.
 
     private func statusInline(label: String, value: String, healthy: Bool) -> some View {
         HStack {
-            Text(label).font(.callout).foregroundStyle(.secondary)
+            Text(LocalizedStringKey(label)).font(.callout).foregroundStyle(.secondary)
             Spacer()
             Text(value).font(.callout)
             Circle().fill(healthy ? .green : .orange).frame(width: 8, height: 8)
@@ -351,8 +442,8 @@ CloudKit Console and click 'Deploy Schema Changes'.
 
     private func infoBlock(_ title: String, _ body: String, linkLabel: String? = nil, linkURL: String? = nil) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(title).font(.subheadline.weight(.semibold))
-            Text(body).font(.caption).foregroundStyle(.secondary)
+            Text(LocalizedStringKey(title)).font(.subheadline.weight(.semibold))
+            Text(LocalizedStringKey(body)).font(.caption).foregroundStyle(.secondary)
             if let linkLabel, let linkURL, let url = URL(string: linkURL) {
                 Link(linkLabel, destination: url).font(.caption)
             }
@@ -392,12 +483,14 @@ CloudKit Console and click 'Deploy Schema Changes'.
                     .font(.system(.title2, design: .monospaced).weight(.bold))
                     .textSelection(.enabled)
                 if let accessoryCount {
-                    Text("\(accessoryCount) accessory \(accessoryCount == 1 ? "" : "ies") · \(prefix)")
+                    Text("\(accessoryCount) accessories · \(prefix)")
                         .font(.caption).foregroundStyle(.secondary)
                 } else {
                     Text(prefix).font(.caption).foregroundStyle(.secondary)
                 }
-                Text("Open Apple Home → Add Accessory → \"\(prefix)\" → scan the QR code or enter the code above.")
+                Text(prefix == "Lumen Bridge Cameras"
+                     ? String(localized: "Open Apple Home → Add Accessory → More Options, then add each camera individually using the code above.")
+                     : String(localized: "Open Apple Home → Add Accessory → \"\(prefix)\" → scan the QR code or enter the code above."))
                     .font(.caption).foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -427,29 +520,29 @@ CloudKit Console and click 'Deploy Schema Changes'.
         if let host = state.frigateHost, let port = state.frigatePort {
             return "\(host):\(port)"
         }
-        return "Not configured"
+        return String(localized: "Not configured")
     }
 
     private var hapStatusDetail: String {
         switch state.hapStatus {
-        case .stopped: return "HAP server off"
-        case .running(_, _, let count): return "\(count) sensor\(count == 1 ? "" : "s")"
-        case .error: return "Error — see HomeKit · Sensors"
+        case .stopped: return String(localized: "HomeKit bridge off")
+        case .running(_, _, let count): return String(localized: "\(count) HomeKit accessories")
+        case .error: return String(localized: "Error — see HomeKit · Sensors")
         }
     }
 
     private var homebridgeStatusDetail: String {
         #if os(macOS)
         switch state.homebridgeStatus {
-        case .stopped: return "Sidecar off"
-        case .running: return "Cameras live"
+        case .stopped: return String(localized: "Off")
+        case .running: return String(localized: "Cameras live")
         case .error(let reason):
             // Surface a recognizable hint for the most common failure modes
             // instead of the raw enum description, so the dashboard tile
             // tells the user where to look without drilling into the
             // sub-pane.
             let hint = Self.shortenHomebridgeError(reason)
-            return "Error — \(hint)"
+            return String(localized: "Error — \(hint)")
         }
         #else
         return ""
@@ -460,9 +553,20 @@ CloudKit Console and click 'Deploy Schema Changes'.
     /// Maps known `HomebridgeError` cases to a short, user-facing hint.
     /// Falls back to the first 60 chars of the raw error when the case
     /// isn't recognized.
+    static func cameraErrorMessage(_ raw: String) -> String {
+        switch raw {
+        case "frigateConfigUnreadable": return BridgeFrigateAccessError.invalidConfiguration.localizedDescription
+        case "missingFrigateURL": return BridgeFrigateAccessError.invalidAddress.localizedDescription
+        default: return raw
+        }
+    }
+
     private static func shortenHomebridgeError(_ raw: String) -> String {
+        if raw.contains("frigateConfigUnreadable") || raw.contains("3840") {
+            return String(localized: "check the Frigate address and login in HomeKit · Cameras")
+        }
         if raw.contains("missingFrigateURL") {
-            return "set Frigate web URL in HomeKit · Cameras"
+            return String(localized: "set the Frigate web address in HomeKit · Cameras")
         }
         if raw.contains("npmNotFound") {
             return "npm not found (install Node from nodejs.org)"
@@ -471,7 +575,7 @@ CloudKit Console and click 'Deploy Schema Changes'.
             return "node not found (install Node from nodejs.org)"
         }
         if raw.contains("installFailed") {
-            return "homebridge install failed — see HomeKit · Cameras"
+            return String(localized: "camera module install failed — see HomeKit · Cameras")
         }
         if raw.contains("homebridgeBinNotFound") {
             return "homebridge binary missing — re-toggle"
@@ -518,3 +622,131 @@ CloudKit Console and click 'Deploy Schema Changes'.
     }
     #endif
 }
+
+#if os(macOS)
+/// Authenticated API access is separate from the MQTT broker connection.
+struct FrigateWebURLRow: View {
+    var coordinator: BridgeCoordinator?
+    @State private var text: String
+    @State private var username = ""
+    @State private var password = ""
+    @State private var hasSavedLogin = false
+    @State private var result: HomebridgeManager.FrigateCheck?
+    @State private var checking = false
+    private let credentialStore = BridgeFrigateCredentialStore()
+
+    init(coordinator: BridgeCoordinator?, initialAddress: String? = nil) {
+        self.coordinator = coordinator
+        _text = State(initialValue: initialAddress ?? UserDefaults.standard.string(forKey: HomebridgeManager.frigateWebURLKey) ?? "")
+    }
+
+    private var normalized: String? { HomebridgeManager.normalizedWebURL(text) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Frigate web address").font(.subheadline.weight(.semibold))
+            TextField("Frigate web address", text: $text, prompt: Text("https://frigate.example.com"))
+                .textFieldStyle(.roundedBorder)
+                .autocorrectionDisabled()
+                .onSubmit { Task { await check() } }
+            TextField("Frigate username (if required)", text: $username)
+                .textFieldStyle(.roundedBorder)
+                .textContentType(.username)
+                .autocorrectionDisabled()
+            SecureField("Frigate password", text: $password,
+                        prompt: Text(hasSavedLogin ? "Saved password — leave blank to keep it" : "Password"))
+                .textFieldStyle(.roundedBorder)
+                .textContentType(.password)
+                .onSubmit { Task { await check() } }
+            Text("Use your Frigate account. The password stays in this Mac's Keychain. Leave both fields blank for an internal API without authentication.")
+                .font(.caption).foregroundStyle(.secondary)
+            HStack {
+                Button {
+                    Task { await check() }
+                } label: {
+                    if checking { ProgressView().controlSize(.small) } else { Text("Test and save") }
+                }
+                .buttonStyle(HubActionStyle())
+                .disabled(checking || normalized == nil || coordinator == nil)
+                if hasSavedLogin {
+                    Button("Forget saved login", role: .destructive) {
+                        Task { await forget() }
+                    }
+                    .disabled(checking)
+                }
+            }
+            switch result {
+            case .ok(let version, let cameras):
+                Label(String(localized: "Connected · Frigate \(version) · \(cameras) cameras"), systemImage: "checkmark.circle.fill")
+                    .font(.caption).foregroundStyle(.green)
+            case .failed(let reason):
+                Label(reason, systemImage: "xmark.octagon.fill")
+                    .font(.caption).foregroundStyle(.red)
+            case nil: EmptyView()
+            }
+            Text("Live video uses your Frigate connection. Keep this Mac awake and connected while watching in Apple Home.")
+                .font(.caption).foregroundStyle(.secondary)
+        }
+        .disabled(checking)
+        .task(id: normalized) {
+            // Do not read the user's real Keychain when rendering offline test fixtures.
+            guard coordinator != nil, let base = normalized else { return }
+            do {
+                try await Task.sleep(for: .milliseconds(300))
+                let saved = try await credentialStore.load(for: base)
+                guard !Task.isCancelled, normalized == base else { return }
+                if username.isEmpty { username = saved?.username ?? "" }
+                hasSavedLogin = saved != nil
+            } catch is CancellationError { }
+            catch { if normalized == base { result = .failed(BridgeFrigateEndpoint.message(for: error)) } }
+        }
+        .onChange(of: normalized) { _, _ in
+            username = ""
+            password = ""
+            hasSavedLogin = false
+            result = nil
+        }
+    }
+
+    private func check() async {
+        guard !checking, coordinator != nil, let clean = normalized else { return }
+        checking = true
+        defer { checking = false }
+        do {
+            let credentials: BridgeFrigateCredentials?
+            let user = username.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !user.isEmpty && !password.isEmpty {
+                credentials = .init(username: user, password: password)
+            } else if hasSavedLogin, password.isEmpty,
+                      let saved = try await credentialStore.load(for: clean), saved.username == user {
+                credentials = saved
+            } else if user.isEmpty && password.isEmpty {
+                credentials = nil
+            } else { throw BridgeFrigateAccessError.incompleteLogin }
+            let outcome = await HomebridgeManager.checkFrigate(webURL: clean, credentials: credentials)
+            guard case .ok = outcome else { result = outcome; return }
+            if let credentials { try await credentialStore.save(credentials, for: clean) }
+            await coordinator?.setFrigateWebURL(clean)
+            text = clean
+            password = ""
+            hasSavedLogin = credentials != nil
+            result = outcome
+        } catch { result = .failed(BridgeFrigateEndpoint.message(for: error)) }
+    }
+
+    private func forget() async {
+        guard !checking, let base = normalized else { return }
+        checking = true
+        defer { checking = false }
+        do {
+            // Drop the active session as well as the persisted login.
+            await coordinator?.setHomebridgeCamerasEnabled(false)
+            try await credentialStore.remove(for: base)
+            username = ""
+            password = ""
+            hasSavedLogin = false
+            result = nil
+        } catch { result = .failed(BridgeFrigateEndpoint.message(for: error)) }
+    }
+}
+#endif

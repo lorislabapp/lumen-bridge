@@ -29,11 +29,23 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2026 LorisLabs. All rights reserved.</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Lumen Bridge connects to your Frigate NVR on the local network to relay detection events to your Apple devices via iCloud.</string>
+	<string>Lumen Bridge connects to your Frigate NVR on the local network to relay detection events to your Apple devices via iCloud, and lets Apple Home reach its motion sensors and doorbells.</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_frigate._tcp</string>
 		<string>_hap._tcp</string>
 	</array>
+	<key>LorisReportsBackendAllowed</key>
+	<false/>
+	<key>LorisReportsAPNsEnvironment</key>
+	<string>$(LORIS_REPORTS_APNS_ENVIRONMENT)</string>
+	<key>LorisReportsMessagingVerified</key>
+	<false/>
+	<key>LorisReportsDiagnosticsVerified</key>
+	<false/>
+	<key>LorisReportsAssistantVerified</key>
+	<false/>
+	<key>LorisReportsPushVerified</key>
+	<false/>
 </dict>
 </plist>

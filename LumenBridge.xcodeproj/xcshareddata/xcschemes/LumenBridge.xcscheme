@@ -14,8 +14,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1FE096C5AA06162C7964EE41"
-               BuildableName = "Lumen Bridge.app"
+               BlueprintIdentifier = "FEE985999E048D7233A1EB7C"
+               BuildableName = "LumenBridge.app"
                BlueprintName = "LumenBridge"
                ReferencedContainer = "container:LumenBridge.xcodeproj">
             </BuildableReference>
@@ -30,13 +30,23 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1FE096C5AA06162C7964EE41"
-            BuildableName = "Lumen Bridge.app"
+            BlueprintIdentifier = "FEE985999E048D7233A1EB7C"
+            BuildableName = "LumenBridge.app"
             BlueprintName = "LumenBridge"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "38EE20B6AD9CEDD1339DB6A4"
+               BuildableName = "LumenBridgeTests.xctest"
+               BlueprintName = "LumenBridgeTests"
+               ReferencedContainer = "container:LumenBridge.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -53,8 +63,8 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1FE096C5AA06162C7964EE41"
-            BuildableName = "Lumen Bridge.app"
+            BlueprintIdentifier = "FEE985999E048D7233A1EB7C"
+            BuildableName = "LumenBridge.app"
             BlueprintName = "LumenBridge"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
          </BuildableReference>
@@ -70,8 +80,8 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1FE096C5AA06162C7964EE41"
-            BuildableName = "Lumen Bridge.app"
+            BlueprintIdentifier = "FEE985999E048D7233A1EB7C"
+            BuildableName = "LumenBridge.app"
             BlueprintName = "LumenBridge"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
          </BuildableReference>

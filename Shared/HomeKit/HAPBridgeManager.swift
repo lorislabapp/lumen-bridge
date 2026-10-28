@@ -90,8 +90,16 @@ final class HAPBridgeManager {
             let server = try HAP.Server(device: device, listenPort: 0)
             self.server = server
 
-            state.hapStatus = .running(setupCode: setupCode, setupID: setupID, accessoryCount: 0)
-            logger.info("HAP bridge started, setup code: \(setupCode), setup ID: \(setupID)")
+            // The QR code must use the setup ID the HAP library advertises
+            // (its `sh` hash). Our own stored ID could differ, and the iPhone
+            // then answers "accessory not found". The URI's last 4
+            // characters are that setup ID.
+            let realSetupID = String(device.setupURI.suffix(4))
+            if realSetupID != setupID {
+                UserDefaults.standard.set(realSetupID, forKey: Self.setupIDKey)
+            }
+            state.hapStatus = .running(setupCode: device.setupCode, setupID: realSetupID, accessoryCount: 0)
+            logger.info("HAP bridge started")
         } catch {
             state.hapStatus = .error(String(describing: error))
             logger.error("HAP start failed: \(String(describing: error))")
@@ -161,6 +169,47 @@ final class HAPBridgeManager {
         }
     }
 
+    // MARK: - Zone alert doorbells
+
+    /// One doorbell per enabled zone alert ("Boîte aux lettres", "Portail"…).
+    private var zoneDoorbells: [UUID: MailboxDoorbellAccessory] = [:]
+
+    /// Adds a doorbell for each alert and removes the ones of deleted or
+    /// disabled alerts. Ringing one makes HomeKit post its doorbell
+    /// notification and, on homes with HomePods, play the chime.
+    func syncZoneDoorbells(_ alerts: [(id: UUID, name: String)]) async {
+        guard let device else { return }
+        let wanted = Set(alerts.map(\.id))
+        let stale = zoneDoorbells.filter { !wanted.contains($0.key) }
+        if !stale.isEmpty {
+            device.removeAccessories(Array(stale.values), andForgetSerialNumbers: true)
+            stale.keys.forEach { zoneDoorbells[$0] = nil }
+        }
+        for alert in alerts where zoneDoorbells[alert.id] == nil {
+            let info = HAP.Service.Info(
+                name: alert.name,
+                serialNumber: "lumenbridge-zone-\(alert.id.uuidString.prefix(8))",
+                manufacturer: "LorisLabs",
+                model: "Zone Alert",
+                firmwareRevision: "0.2.0"
+            )
+            let accessory = MailboxDoorbellAccessory(info: info)
+            device.addAccessories([accessory])
+            zoneDoorbells[alert.id] = accessory
+        }
+        if case .running(let code, let id, _) = state.hapStatus {
+            state.hapStatus = .running(setupCode: code, setupID: id,
+                                       accessoryCount: configuredCameras.count + zoneDoorbells.count)
+        }
+    }
+
+    /// Single press (value 0) on the alert's doorbell.
+    func ringZoneDoorbell(id: UUID) async {
+        guard let doorbell = zoneDoorbells[id] else { return }
+        doorbell.doorbell.programmableSwitchEvent.value = 0
+        logger.info("HAP zone doorbell rang")
+    }
+
     // MARK: - Helpers
 
     private static func makeFileStorage() throws -> FileStorage {
@@ -171,8 +220,16 @@ final class HAPBridgeManager {
             create: true
         )
         let dir = appSupport.appendingPathComponent("Lumen Bridge", isDirectory: true)
-        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        return try FileStorage(filename: dir.appendingPathComponent("hap-config.json").path)
+        // Owner-only: hap-config.json holds the bridge's HomeKit long-term
+        // keys and the paired controllers.
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true,
+                                                attributes: [.posixPermissions: 0o700])
+        try FileManager.default.setAttributes([.posixPermissions: 0o700], ofItemAtPath: dir.path)
+        let file = dir.appendingPathComponent("hap-config.json")
+        if FileManager.default.fileExists(atPath: file.path) {
+            try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: file.path)
+        }
+        return FileStorage(filename: file.path)
     }
 
     private static func loadOrCreateSetupCode() -> String {
@@ -245,6 +302,17 @@ final class HAPBridgeManager {
         let uuid = UUID().uuidString
         UserDefaults.standard.set(uuid, forKey: key)
         return uuid
+    }
+}
+
+/// Doorbell-only accessory (no camera). Category "video doorbell" is what
+/// makes Apple Home treat the press as a doorbell ring; whether HomePods
+/// chime for a camera-less doorbell must be confirmed on a real home.
+final class MailboxDoorbellAccessory: HAP.Accessory {
+    let doorbell = HAP.Service.Doorbell()
+
+    init(info: HAP.Service.Info) {
+        super.init(info: info, type: .videoDoorbell, services: [doorbell])
     }
 }
 

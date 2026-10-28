@@ -1,9 +1,7 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "%@" : {
-
-    },
+    "%@" : {},
     "%@ accessory %@ · %@" : {
       "localizations" : {
         "en" : {
@@ -11,11 +9,84 @@
             "state" : "new",
             "value" : "%1$@ accessory %2$@ · %3$@"
           }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ accessoire %2$@ · %3$@"
+          }
+        }
+      }
+    },
+    "%@ connects Frigate to your Apple devices." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ relie Frigate à vos appareils Apple."
+          }
         }
       }
     },
     "%@ discovered — none paired yet" : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ détecté(s) — aucun appairé pour l’instant"
+          }
+        }
+      }
+    },
+    "%@ · quiet" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · calme"
+          }
+        }
+      }
+    },
+    "%@ · unrecognised person" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · personne non reconnue"
+          }
+        }
+      }
+    },
+    "%@, %lld things to set up" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %lld choses à régler"
+          }
+        }
+      }
+    },
+    "%@, all is well" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, tout va bien"
+          }
+        }
+      }
+    },
+    "%@, one thing to set up" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, une chose à régler"
+          }
+        }
+      }
     },
     "%@:%@" : {
       "localizations" : {
@@ -49,6 +120,46 @@
         }
       }
     },
+    "%lld HomeKit accessories" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld accessoires HomeKit"
+          }
+        }
+      }
+    },
+    "%lld accessories in the Home app · doorbells chime on HomePods" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld accessoires dans Maison · les sonnettes carillonnent sur les HomePod"
+          }
+        }
+      }
+    },
+    "%lld active" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld actives"
+          }
+        }
+      }
+    },
+    "%lld cameras seen · %lld events since launch" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld caméras vues · %lld événements depuis le lancement"
+          }
+        }
+      }
+    },
     "%lld discovered — none paired yet" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -60,13 +171,32 @@
         }
       }
     },
-    "© 2026 LorisLabs · Christine Martin (TDV6D5L785)" : {
-      "extractionState" : "manual",
+    "%lld received · %lld forwarded" : {
       "localizations" : {
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "© 2026 LorisLabs · Christine Martin (TDV6D5L785)"
+            "value" : "%lld reçus · %lld transmis"
+          }
+        }
+      }
+    },
+    "%lld responding · %lld unavailable · open Home to watch" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flux répondant : %1$lld · indisponibles : %2$lld · ouvrez Maison"
+          }
+        }
+      }
+    },
+    "%lld things to set up" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld choses à régler"
           }
         }
       }
@@ -78,6 +208,146 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1883"
+          }
+        }
+      }
+    },
+    "A person who is not recognised by Frigate passes through the mailbox zone. Rings the “Boîte aux lettres” doorbell in Apple Home when the HomeKit bridge is on." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une personne que Frigate ne reconnaît pas passe dans la zone de la boîte aux lettres. Fait sonner la sonnette « Boîte aux lettres » dans Maison quand le pont HomeKit est activé."
+          }
+        }
+      }
+    },
+    "AI (optional)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA (option)"
+          }
+        }
+      }
+    },
+    "AI on this Mac" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IA sur ce Mac"
+          }
+        }
+      }
+    },
+    "AI on this Mac, later" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’IA sur ce Mac, plus tard"
+          }
+        }
+      }
+    },
+    "About" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À propos"
+          }
+        }
+      }
+    },
+    "Active" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active"
+          }
+        }
+      }
+    },
+    "Add Frigate to Apple Home?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter Frigate à Maison ?"
+          }
+        }
+      }
+    },
+    "Add a mailbox, gate or another Frigate zone. Alerts save as you edit. You can also continue and add them later." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez une boîte aux lettres, un portail ou une autre zone Frigate. Les alertes sont enregistrées au fil des modifications. Vous pouvez aussi les ajouter plus tard."
+          }
+        }
+      }
+    },
+    "Add an alert" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter une alerte"
+          }
+        }
+      }
+    },
+    "Advanced settings" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réglages avancés"
+          }
+        }
+      }
+    },
+    "All is well" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout va bien"
+          }
+        }
+      }
+    },
+    "All set" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminé"
+          }
+        }
+      }
+    },
+    "Animals" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animaux"
+          }
+        }
+      }
+    },
+    "Approve Lumen Hub in System Settings > Login Items." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisez Lumen Hub dans Réglages Système > Ouverture."
           }
         }
       }
@@ -104,6 +374,46 @@
         }
       }
     },
+    "Back to the home screen" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retour à l’accueil"
+          }
+        }
+      }
+    },
+    "Camera" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caméra"
+          }
+        }
+      }
+    },
+    "Camera previews could not start. Turn the cameras off and try again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les aperçus des caméras n’ont pas pu démarrer. Désactivez les caméras et réessayez."
+          }
+        }
+      }
+    },
+    "Cameras live" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caméras en direct"
+          }
+        }
+      }
+    },
     "Cameras off. Toggle on to install Homebridge and start streaming." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -126,6 +436,140 @@
         }
       }
     },
+    "Cameras, sensors and doorbells in the Home app and on your HomePods." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caméras, détecteurs et sonnettes dans l’app Maison et sur vos HomePod."
+          }
+        }
+      }
+    },
+    "Check again" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier à nouveau"
+          }
+        }
+      }
+    },
+    "Check cameras" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier les caméras"
+          }
+        }
+      }
+    },
+    "Check the Frigate MQTT broker address and port in Settings." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check the Frigate MQTT broker address and port in Settings."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifiez l’adresse et le port du serveur MQTT Frigate dans les réglages."
+          }
+        }
+      }
+    },
+    "Check the connection" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier la connexion"
+          }
+        }
+      }
+    },
+    "Check video sources" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier les flux vidéo"
+          }
+        }
+      }
+    },
+    "Check your iCloud account when events are not forwarded." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check your iCloud account when events are not forwarded."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifiez votre compte iCloud si les événements ne sont pas transmis."
+          }
+        }
+      }
+    },
+    "Checking the video source…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérification du flux vidéo…"
+          }
+        }
+      }
+    },
+    "Checking your iCloud account." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérification de votre compte iCloud."
+          }
+        }
+      }
+    },
+    "Checking…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérification…"
+          }
+        }
+      }
+    },
+    "Choose a name, a camera and a zone to turn this alert on." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez un nom, une caméra et une zone pour activer cette alerte."
+          }
+        }
+      }
+    },
+    "Choose…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir…"
+          }
+        }
+      }
+    },
     "CloudKit" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -137,12 +581,78 @@
         }
       }
     },
+    "Coming soon" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bientôt"
+          }
+        }
+      }
+    },
+    "Connect Frigate" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connecter Frigate"
+          }
+        }
+      }
+    },
+    "Connect to Frigate" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connexion à Frigate"
+          }
+        }
+      }
+    },
+    "Connect to Frigate first (Frigate page): cameras and zones come from it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connectez d’abord Frigate (page Frigate) : les caméras et les zones viennent de lui."
+          }
+        }
+      }
+    },
+    "Connect to the MQTT broker used by Frigate. Continue once the connection is established." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connectez-vous au serveur MQTT utilisé par Frigate. Continuez une fois la connexion établie."
+          }
+        }
+      }
+    },
+    "Connected" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connecté"
+          }
+        }
+      }
+    },
     "Connected to %@:%@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Connected to %1$@:%2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connecté à %1$@:%2$@"
           }
         }
       }
@@ -158,6 +668,70 @@
         }
       }
     },
+    "Connected to iCloud" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connecté à iCloud"
+          }
+        }
+      }
+    },
+    "Connected · Frigate %@ · %lld cameras" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connecté · Frigate %@ · %lld caméras"
+          }
+        }
+      }
+    },
+    "Connecting…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connexion…"
+          }
+        }
+      }
+    },
+    "Connection help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connection help"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aide à la connexion"
+          }
+        }
+      }
+    },
+    "Contact the team" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact the team"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contacter l’équipe"
+          }
+        }
+      }
+    },
     "Continue" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -169,6 +743,73 @@
         }
       }
     },
+    "Copy pairing code" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier le code d’appairage"
+          }
+        }
+      }
+    },
+    "Cross-device clipboard manager" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cross-device clipboard manager"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre presse-papiers entre appareils"
+          }
+        }
+      }
+    },
+    "Current step" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étape actuelle"
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer"
+          }
+        }
+      }
+    },
+    "Describe each visit and recognise the mail carrier, without sending anything to the cloud." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Décrire chaque visite et reconnaître le facteur, sans rien envoyer dans le cloud."
+          }
+        }
+      }
+    },
+    "Detailed activity is in the Console app (subsystem com.lorislabapp.lumenbridge)." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’activité détaillée est dans l’app Console (sous-système com.lorislabapp.lumenbridge)."
+          }
+        }
+      }
+    },
     "Detection events are stored in your private iCloud database, scoped to the `iCloud.com.lorislabapp.lumenbridge` container. Only your Apple ID can read them." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -176,6 +817,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Les événements de détection sont stockés dans votre base iCloud privée, dans le conteneur `iCloud.com.lorislabapp.lumenbridge`. Seul votre identifiant Apple peut les lire."
+          }
+        }
+      }
+    },
+    "Disabled in Frigate" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactivée dans Frigate"
+          }
+        }
+      }
+    },
+    "Disconnected" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déconnecté"
           }
         }
       }
@@ -213,6 +874,53 @@
         }
       }
     },
+    "Do not include passwords, camera images, broker addresses or pairing codes in your message." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do not include passwords, camera images, broker addresses or pairing codes in your message."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "N’incluez aucun mot de passe, image de caméra, adresse de serveur ou code de jumelage dans votre message."
+          }
+        }
+      }
+    },
+    "Driveway" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allée"
+          }
+        }
+      }
+    },
+    "Each Frigate camera appears in Apple Home as a motion sensor. Zone alerts appear as doorbells." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque caméra Frigate apparaît dans Maison comme un détecteur de mouvement. Les alertes de zone apparaissent comme des sonnettes."
+          }
+        }
+      }
+    },
+    "Enable Apple Home" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer Maison"
+          }
+        }
+      }
+    },
     "Enable HomeKit bridge" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -246,6 +954,116 @@
         }
       }
     },
+    "Encrypted connection (TLS)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connexion chiffrée (TLS)"
+          }
+        }
+      }
+    },
+    "Enter a valid Frigate HTTP or HTTPS address without credentials in the URL." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez une adresse Frigate HTTP ou HTTPS valide, sans identifiants dans l’adresse."
+          }
+        }
+      }
+    },
+    "Enter both your Frigate username and password." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez votre nom d’utilisateur et votre mot de passe Frigate."
+          }
+        }
+      }
+    },
+    "Error" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur"
+          }
+        }
+      }
+    },
+    "Error — %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur — %@"
+          }
+        }
+      }
+    },
+    "Error — see HomeKit · Sensors" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur — voir HomeKit · Capteurs"
+          }
+        }
+      }
+    },
+    "Error: %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur : %@"
+          }
+        }
+      }
+    },
+    "Events" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Événements"
+          }
+        }
+      }
+    },
+    "Events are saved in your private iCloud database. Notification delivery also depends on your device settings and Apple's background delivery." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les événements sont enregistrés dans votre base iCloud privée. La réception des notifications dépend aussi des réglages de vos appareils et de la livraison en arrière-plan par Apple."
+          }
+        }
+      }
+    },
+    "Events forwarded to iCloud" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Événements transmis à iCloud"
+          }
+        }
+      }
+    },
+    "Events received" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Événements reçus"
+          }
+        }
+      }
+    },
     "Find this under Frigate → Settings → MQTT. Defaults to port 1883 (no TLS)." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -268,6 +1086,16 @@
         }
       }
     },
+    "Forget saved login" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oublier les identifiants"
+          }
+        }
+      }
+    },
     "Frigate" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -275,6 +1103,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Frigate"
+          }
+        }
+      }
+    },
+    "Frigate MQTT" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MQTT Frigate"
           }
         }
       }
@@ -290,6 +1128,123 @@
         }
       }
     },
+    "Frigate answered with error %lld." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frigate a répondu avec l’erreur %lld."
+          }
+        }
+      }
+    },
+    "Frigate asks for a login on this address. Use the internal port 5000." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frigate demande une connexion sur cette adresse. Utilisez le port interne 5000."
+          }
+        }
+      }
+    },
+    "Frigate cameras on your Apple TV" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frigate cameras on your Apple TV"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les caméras Frigate sur votre Apple TV"
+          }
+        }
+      }
+    },
+    "Frigate connected" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frigate connecté"
+          }
+        }
+      }
+    },
+    "Frigate connection" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connexion à Frigate"
+          }
+        }
+      }
+    },
+    "Frigate could not be reached. Check the address and your network, then try again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frigate est inaccessible. Vérifiez l’adresse et le réseau, puis réessayez."
+          }
+        }
+      }
+    },
+    "Frigate could not provide live video. Check that this camera has a working go2rtc live stream." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frigate ne fournit pas de vidéo en direct. Vérifiez que le flux go2rtc de cette caméra fonctionne."
+          }
+        }
+      }
+    },
+    "Frigate could not provide this camera stream. Check its live source and permissions." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frigate ne fournit pas ce flux. Vérifiez sa source de direct et les autorisations."
+          }
+        }
+      }
+    },
+    "Frigate disconnected" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frigate déconnecté"
+          }
+        }
+      }
+    },
+    "Frigate is not connected yet" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frigate n’est pas encore connecté"
+          }
+        }
+      }
+    },
+    "Frigate password" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot de passe Frigate"
+          }
+        }
+      }
+    },
     "Frigate publishes detection events to an MQTT broker (usually Mosquitto). The Bridge subscribes to those events and forwards them to your iCloud account." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -297,6 +1252,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Frigate publie les événements de détection vers un broker MQTT (en général Mosquitto). Le Bridge s’y abonne et les transfère vers votre compte iCloud."
+          }
+        }
+      }
+    },
+    "Frigate refused access. Check this account's permissions or the access proxy." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frigate refuse l’accès. Vérifiez les autorisations de ce compte ou du proxy d’accès."
+          }
+        }
+      }
+    },
+    "Frigate username (if required)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom d’utilisateur Frigate (si nécessaire)"
           }
         }
       }
@@ -312,6 +1287,16 @@
         }
       }
     },
+    "Frigate web address" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse web de Frigate"
+          }
+        }
+      }
+    },
     "Frigate, the Apple-native way." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -323,24 +1308,129 @@
         }
       }
     },
-    "frigate.local or 10.9.8.42" : {
-      "extractionState" : "manual",
+    "Front door" : {
       "localizations" : {
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "frigate.local ou 10.9.8.42"
+            "value" : "Porte d’entrée"
           }
         }
       }
     },
-    "frigate.local or 192.168.3.160" : {
-      "extractionState" : "manual",
+    "Gate" : {
       "localizations" : {
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "frigate.local ou 192.168.3.160"
+            "value" : "Portail"
+          }
+        }
+      }
+    },
+    "Get a notification, and a doorbell chime on your HomePods, when someone Frigate doesn't recognise passes through a zone." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recevez une notification, et un carillon de sonnette sur vos HomePod, quand quelqu’un que Frigate ne reconnaît pas passe dans une zone."
+          }
+        }
+      }
+    },
+    "Go back and restore the Frigate and iCloud connections before finishing." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revenez aux étapes précédentes pour rétablir les connexions Frigate et iCloud avant de terminer."
+          }
+        }
+      }
+    },
+    "Good evening" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bonsoir"
+          }
+        }
+      }
+    },
+    "Guided setup" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuration guidée"
+          }
+        }
+      }
+    },
+    "Hello" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bonjour"
+          }
+        }
+      }
+    },
+    "Help and ideas" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help and ideas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aide et idées"
+          }
+        }
+      }
+    },
+    "Home" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maison"
+          }
+        }
+      }
+    },
+    "Home bridge is running" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le pont Maison est démarré"
+          }
+        }
+      }
+    },
+    "HomeKit Cameras" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caméras HomeKit"
+          }
+        }
+      }
+    },
+    "HomeKit Sensors" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capteurs HomeKit"
           }
         }
       }
@@ -352,6 +1442,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Le bridge HomeKit est désactivé. Activez-le pour démarrer l’appairage."
+          }
+        }
+      }
+    },
+    "HomeKit bridge off" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pont HomeKit désactivé"
           }
         }
       }
@@ -389,6 +1489,63 @@
         }
       }
     },
+    "HomeKit pairing is configured in the Sensors and Cameras sections." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HomeKit pairing is configured in the Sensors and Cameras sections."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le jumelage HomeKit se configure dans les sections Capteurs et Caméras."
+          }
+        }
+      }
+    },
+    "HomeKit · Cameras" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HomeKit · Caméras"
+          }
+        }
+      }
+    },
+    "HomeKit · Live cameras" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HomeKit · Caméras en direct"
+          }
+        }
+      }
+    },
+    "HomeKit · Motion sensors" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HomeKit · Détecteurs de mouvement"
+          }
+        }
+      }
+    },
+    "HomeKit · Sensors" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HomeKit · Capteurs"
+          }
+        }
+      }
+    },
     "Host" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -400,13 +1557,82 @@
         }
       }
     },
-    "https://frigate.local:5000" : {
-      "extractionState" : "manual",
+    "Ignore people and plates Frigate recognises" : {
       "localizations" : {
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "https://frigate.local:5000"
+            "value" : "Ignorer les personnes et plaques reconnues par Frigate"
+          }
+        }
+      }
+    },
+    "In Apple Home, choose Add Accessory, then More Options, and select this bridge. Enter this code when asked:" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans Maison, choisissez Ajouter un accessoire, puis Plus d’options, et sélectionnez ce pont. Saisissez ce code à la demande :"
+          }
+        }
+      }
+    },
+    "In Home, choose Add Accessory, More Options, then select the camera by name. Your existing pairings are kept." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans Maison, choisissez Ajouter un accessoire, Plus d’options, puis la caméra par son nom. Vos appairages existants sont conservés."
+          }
+        }
+      }
+    },
+    "Install Node.js on this Mac, then enable HomeKit cameras again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installez Node.js sur ce Mac, puis réactivez les caméras HomeKit."
+          }
+        }
+      }
+    },
+    "Keep the Hub available on external power" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenir le Hub disponible sur secteur"
+          }
+        }
+      }
+    },
+    "Last visit: %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernière visite : %@"
+          }
+        }
+      }
+    },
+    "Last visit: %@, %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernière visite : %@, %@"
+          }
+        }
+      }
+    },
+    "Launch Lumen Hub at login" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir Lumen Hub au démarrage de session"
           }
         }
       }
@@ -422,6 +1648,46 @@
         }
       }
     },
+    "Live source missing · check this camera in Frigate" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source de direct absente · vérifiez cette caméra dans Frigate"
+          }
+        }
+      }
+    },
+    "Live video uses your Frigate connection. Keep this Mac awake and connected while watching in Apple Home." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La vidéo en direct utilise votre connexion Frigate. Gardez ce Mac éveillé et connecté pour regarder vos caméras dans Maison."
+          }
+        }
+      }
+    },
+    "Local visit descriptions and recognition are planned. There is nothing to enable or download in this version." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La description et la reconnaissance locales des visites sont prévues. Il n’y a rien à activer ou à télécharger dans cette version."
+          }
+        }
+      }
+    },
+    "Logs" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Journal"
+          }
+        }
+      }
+    },
     "Lumen Bridge" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -429,17 +1695,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lumen Bridge"
-          }
-        }
-      }
-    },
-    "Lumen Bridge — Frigate Connection" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lumen Bridge — Connexion Frigate"
           }
         }
       }
@@ -455,6 +1710,104 @@
         }
       }
     },
+    "Lumen Bridge — Frigate Connection" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lumen Bridge — Connexion Frigate"
+          }
+        }
+      }
+    },
+    "Mailbox" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîte aux lettres"
+          }
+        }
+      }
+    },
+    "Mailbox visit" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visite à la boîte aux lettres"
+          }
+        }
+      }
+    },
+    "Mailbox visits (beta)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visites à la boîte aux lettres (bêta)"
+          }
+        }
+      }
+    },
+    "Mailbox zone" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zone de la boîte aux lettres"
+          }
+        }
+      }
+    },
+    "Mailbox, gate, front door… be told when a stranger passes." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîte aux lettres, portail, porte d’entrée… soyez prévenu quand un inconnu passe."
+          }
+        }
+      }
+    },
+    "Mailbox, gate, front door… one alert per place you want to watch." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîte aux lettres, portail, porte d’entrée… une alerte par endroit à surveiller."
+          }
+        }
+      }
+    },
+    "Manage" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gérer"
+          }
+        }
+      }
+    },
+    "Messages" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Messages"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Messages"
+          }
+        }
+      }
+    },
     "More features coming to the Bridge" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -462,6 +1815,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "D’autres fonctionnalités arrivent sur le Bridge"
+          }
+        }
+      }
+    },
+    "More from LorisLabs" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More from LorisLabs"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les autres apps LorisLabs"
+          }
+        }
+      }
+    },
+    "Motion sensors and doorbells in the Home app and on your HomePods." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détecteurs de mouvement et sonnettes dans l’app Maison et sur vos HomePod."
+          }
+        }
+      }
+    },
+    "Name" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom"
+          }
+        }
+      }
+    },
+    "Name in Frigate" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom dans Frigate"
           }
         }
       }
@@ -477,6 +1877,80 @@
         }
       }
     },
+    "Native multi-platform Frigate NVR companion" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Native multi-platform Frigate NVR companion"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le compagnon natif de Frigate sur vos appareils"
+          }
+        }
+      }
+    },
+    "Network diagnostics, simplified" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network diagnostics, simplified"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le diagnostic réseau simplifié"
+          }
+        }
+      }
+    },
+    "New alert" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvelle alerte"
+          }
+        }
+      }
+    },
+    "No alert" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune alerte"
+          }
+        }
+      }
+    },
+    "No answer at this address. Check the IP and port (usually 5000)." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de réponse à cette adresse. Vérifiez l’IP et le port (souvent 5000)."
+          }
+        }
+      }
+    },
+    "No cameras are available to this Frigate account." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune caméra n’est accessible avec ce compte Frigate."
+          }
+        }
+      }
+    },
     "No instances discovered via Bonjour yet. If your Frigate is on a different VLAN or doesn't advertise `_frigate._tcp`, just enter the host above manually." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -484,6 +1958,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aucune instance détectée via Bonjour pour l’instant. Si votre Frigate est sur un autre VLAN ou n’annonce pas `_frigate._tcp`, saisissez l’hôte manuellement ci-dessus."
+          }
+        }
+      }
+    },
+    "Not configured" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non configuré"
           }
         }
       }
@@ -499,6 +1983,56 @@
         }
       }
     },
+    "Not encrypted: your MQTT password and events cross the network in clear text. Turn on TLS if your broker supports it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non chiffré : votre mot de passe MQTT et vos événements circulent en clair sur le réseau. Activez TLS si votre serveur le permet."
+          }
+        }
+      }
+    },
+    "Not visited" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non visitée"
+          }
+        }
+      }
+    },
+    "Notifications" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications"
+          }
+        }
+      }
+    },
+    "Notify your Apple devices?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prévenir vos appareils Apple ?"
+          }
+        }
+      }
+    },
+    "Off" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactivé"
+          }
+        }
+      }
+    },
     "Off. First-run install bootstraps homebridge + homebridge-camera-ffmpeg via npm (~30-90s)." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -506,6 +2040,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Désactivé. La première activation installe homebridge + homebridge-camera-ffmpeg via npm (~30-90 s)."
+          }
+        }
+      }
+    },
+    "Off. The first start installs the camera module (about 1 minute)." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Désactivé. Le premier démarrage installe le module caméras (environ 1 minute)."
           }
         }
       }
@@ -521,6 +2065,26 @@
         }
       }
     },
+    "One thing to set up" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une chose à régler"
+          }
+        }
+      }
+    },
+    "Open %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir %@"
+          }
+        }
+      }
+    },
     "Open Apple Home → Add Accessory → \"%@\" → scan the QR code or enter the code above." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -532,13 +2096,12 @@
         }
       }
     },
-    "Open Apple Home → Add Accessory → enter this code. The cameras bridge appears as ‘Lumen Bridge Cameras’ — separate from the motion-sensor bridge above." : {
-      "extractionState" : "manual",
+    "Open Apple Home → Add Accessory → More Options, then add each camera individually using the code above." : {
       "localizations" : {
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ouvrez Apple Home → Ajouter un accessoire → saisissez ce code. Le bridge des caméras apparaît sous le nom « Lumen Bridge Cameras » — distinct du bridge de capteurs de mouvement ci-dessus."
+            "value" : "Dans Maison → Ajouter un accessoire → Plus d’options, ajoutez chaque caméra séparément avec le code ci-dessus."
           }
         }
       }
@@ -549,6 +2112,23 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Open Apple Home → Add Accessory → More options → enter this code. %1$@ Frigate camera%2$@ exposed."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrez Maison → Ajouter un accessoire → Plus d’options → saisissez ce code. %1$@ caméra%2$@ Frigate exposée(s)."
+          }
+        }
+      }
+    },
+    "Open Apple Home → Add Accessory → enter this code. The cameras bridge appears as ‘Lumen Bridge Cameras’ — separate from the motion-sensor bridge above." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrez Apple Home → Ajouter un accessoire → saisissez ce code. Le bridge des caméras apparaît sous le nom « Lumen Bridge Cameras » — distinct du bridge de capteurs de mouvement ci-dessus."
           }
         }
       }
@@ -575,6 +2155,53 @@
         }
       }
     },
+    "Open Help to contact the team, review optional diagnostics, and discover other LorisLabs apps." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Help to contact the team, review optional diagnostics, and discover other LorisLabs apps."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrez l’aide pour contacter l’équipe, vérifier les diagnostics facultatifs et découvrir les autres apps LorisLabs."
+          }
+        }
+      }
+    },
+    "Open iCloud settings" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les réglages iCloud"
+          }
+        }
+      }
+    },
+    "Optional: expose motion sensors and zone doorbells to Apple Home." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Facultatif : ajoutez les détecteurs de mouvement et les sonnettes de zone à Maison."
+          }
+        }
+      }
+    },
+    "Optional: expose motion sensors and zone doorbells to Apple Home. Live cameras can be configured later in advanced settings." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Facultatif : ajoutez les détecteurs de mouvement et les sonnettes de zone à Maison. Les caméras en direct se configurent ensuite dans les réglages avancés."
+          }
+        }
+      }
+    },
     "Or enter it manually" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -582,6 +2209,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ou saisissez-le manuellement"
+          }
+        }
+      }
+    },
+    "Other place…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autre endroit…"
+          }
+        }
+      }
+    },
+    "Pair with Home" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appairer avec Maison"
           }
         }
       }
@@ -597,6 +2244,16 @@
         }
       }
     },
+    "Password" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot de passe"
+          }
+        }
+      }
+    },
     "Password (optional)" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -604,6 +2261,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mot de passe (facultatif)"
+          }
+        }
+      }
+    },
+    "People" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personnes"
           }
         }
       }
@@ -630,6 +2297,26 @@
         }
       }
     },
+    "Port must be a number between 1 and 65535" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le port doit être un nombre entre 1 et 65535"
+          }
+        }
+      }
+    },
+    "Private iCloud database" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Base iCloud privée"
+          }
+        }
+      }
+    },
     "Quit" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -637,6 +2324,33 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quitter"
+          }
+        }
+      }
+    },
+    "Remote access" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accès à distance"
+          }
+        }
+      }
+    },
+    "Replies appear here. Optional technical diagnostics require your review and confirmation." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Replies appear here. Optional technical diagnostics require your review and confirmation."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les réponses apparaissent ici. Les diagnostics techniques facultatifs nécessitent votre vérification et votre confirmation."
           }
         }
       }
@@ -652,6 +2366,26 @@
         }
       }
     },
+    "Running" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actif"
+          }
+        }
+      }
+    },
+    "Running does not confirm pairing. Check the accessories in Apple Home." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le démarrage ne confirme pas l’association. Vérifiez les accessoires dans Maison."
+          }
+        }
+      }
+    },
     "Save & Connect" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -659,6 +2393,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enregistrer et connecter"
+          }
+        }
+      }
+    },
+    "Save mailbox settings" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer"
+          }
+        }
+      }
+    },
+    "Saved password — leave blank to keep it" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot de passe enregistré — laissez vide pour le conserver"
           }
         }
       }
@@ -685,6 +2439,36 @@
         }
       }
     },
+    "See details" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir le détail"
+          }
+        }
+      }
+    },
+    "See your cameras away from home, end-to-end encrypted." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir vos caméras hors de chez vous, chiffré de bout en bout."
+          }
+        }
+      }
+    },
+    "Send a test and confirm it arrives on your iPhone." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyez un test et vérifiez sa réception sur votre iPhone."
+          }
+        }
+      }
+    },
     "Send test event" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -692,6 +2476,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Envoyer un événement test"
+          }
+        }
+      }
+    },
+    "Sending video" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoi de vidéo"
           }
         }
       }
@@ -718,6 +2512,76 @@
         }
       }
     },
+    "Sign in to Frigate again" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reconnectez-vous à Frigate"
+          }
+        }
+      }
+    },
+    "Sign in to iCloud in System Settings" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connectez-vous à iCloud dans Réglages Système"
+          }
+        }
+      }
+    },
+    "Sign in to iCloud on this Mac to notify your devices." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connectez-vous à iCloud sur ce Mac pour notifier vos appareils."
+          }
+        }
+      }
+    },
+    "Sign in to the same iCloud account on this Mac and in Lumen on your iPhone or iPad." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez le même compte iCloud sur ce Mac et dans Lumen sur votre iPhone ou iPad."
+          }
+        }
+      }
+    },
+    "Sign in with your Frigate username and password, then test again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez vos identifiants Frigate, puis testez à nouveau."
+          }
+        }
+      }
+    },
+    "Smart alerts" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alertes intelligentes"
+          }
+        }
+      }
+    },
+    "Some video sources need attention" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certains flux vidéo sont à vérifier"
+          }
+        }
+      }
+    },
     "Status" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -725,6 +2589,76 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "État"
+          }
+        }
+      }
+    },
+    "Step %lld: %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étape %lld : %@"
+          }
+        }
+      }
+    },
+    "Tell the Hub where your Frigate server is." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indiquez au Hub où se trouve votre serveur Frigate."
+          }
+        }
+      }
+    },
+    "Test and save" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tester et enregistrer"
+          }
+        }
+      }
+    },
+    "Test event sent" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Événement de test envoyé"
+          }
+        }
+      }
+    },
+    "Test notifications" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tester les notifications"
+          }
+        }
+      }
+    },
+    "Test saved to iCloud. Check that it appears on your other device." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test enregistré dans iCloud. Vérifiez sa réception sur votre autre appareil."
+          }
+        }
+      }
+    },
+    "Test sent to iCloud · receipt on your iPhone still needs confirmation" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test transmis à iCloud · vérifiez sa réception sur votre iPhone"
           }
         }
       }
@@ -751,6 +2685,233 @@
         }
       }
     },
+    "The HomeKit bridge could not start." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le pont HomeKit n’a pas pu démarrer."
+          }
+        }
+      }
+    },
+    "The HomeKit camera module could not be installed. Check the network and try again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le module des caméras HomeKit n’a pas pu être installé. Vérifiez le réseau et réessayez."
+          }
+        }
+      }
+    },
+    "The HomeKit camera module is incomplete. Turn cameras off and on to repair it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le module des caméras HomeKit est incomplet. Désactivez puis réactivez les caméras pour le réparer."
+          }
+        }
+      }
+    },
+    "The HomeKit camera service stopped. Turn cameras off and on to retry." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le service des caméras HomeKit s’est arrêté. Désactivez puis réactivez les caméras pour réessayer."
+          }
+        }
+      }
+    },
+    "The Hub cannot reach your MQTT server." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le Hub n’arrive pas à joindre votre serveur MQTT."
+          }
+        }
+      }
+    },
+    "The address of Frigate's web page on your network (internal port 5000, no login)." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’adresse de la page web de Frigate sur votre réseau (port interne 5000, sans connexion)."
+          }
+        }
+      }
+    },
+    "The camera engine could not be prepared. Check your connection and try again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le moteur des caméras n’a pas pu être préparé. Vérifiez votre connexion et réessayez."
+          }
+        }
+      }
+    },
+    "The camera module requires Node.js 22 or 24. Install Node.js 24 for the Hub, then try again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le module caméra nécessite Node.js 22 ou 24. Installez Node.js 24 pour le Hub, puis réessayez."
+          }
+        }
+      }
+    },
+    "The camera service is still stopping. Wait a few seconds, then try again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le service des caméras est encore en cours d’arrêt. Patientez quelques secondes, puis réessayez."
+          }
+        }
+      }
+    },
+    "The display may sleep. Closing the lid or choosing Sleep can still interrupt cameras and notifications." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’écran peut se mettre en veille. Fermer le capot ou choisir Suspendre l’activité peut interrompre les caméras et les notifications."
+          }
+        }
+      }
+    },
+    "The live source did not return playable video" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La source de direct ne fournit pas de vidéo lisible"
+          }
+        }
+      }
+    },
+    "The login could not be read or saved in this Mac's Keychain. Unlock the Mac and try again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les identifiants n’ont pas pu être lus ou enregistrés dans le Trousseau de ce Mac. Déverrouillez le Mac et réessayez."
+          }
+        }
+      }
+    },
+    "The login setting could not be changed. Check System Settings > Login Items." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le démarrage automatique n’a pas pu être modifié. Vérifiez Réglages Système > Ouverture."
+          }
+        }
+      }
+    },
+    "The test could not be saved. Check iCloud and try again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le test n’a pas pu être enregistré. Vérifiez iCloud et réessayez."
+          }
+        }
+      }
+    },
+    "This account cannot access this camera" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce compte ne peut pas accéder à cette caméra"
+          }
+        }
+      }
+    },
+    "This address did not return Frigate's camera configuration. Check the address and sign-in method." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette adresse ne renvoie pas la configuration des caméras Frigate. Vérifiez l’adresse et le mode de connexion."
+          }
+        }
+      }
+    },
+    "This address is not valid." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette adresse n’est pas valide."
+          }
+        }
+      }
+    },
+    "This address shows a web page (login?), not Frigate's API. Use the internal port 5000, e.g. http://frigate:5000." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette adresse affiche une page web (connexion ?), pas l’API de Frigate. Utilisez le port interne 5000, par ex. http://frigate:5000."
+          }
+        }
+      }
+    },
+    "This camera is disabled in Frigate." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette caméra est désactivée dans Frigate."
+          }
+        }
+      }
+    },
+    "To connect" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À connecter"
+          }
+        }
+      }
+    },
+    "To turn on" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À activer"
+          }
+        }
+      }
+    },
+    "Understand how you type" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Understand how you type"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprenez votre manière de taper"
+          }
+        }
+      }
+    },
     "Upload MP4 clip with each event" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -773,6 +2934,26 @@
         }
       }
     },
+    "Use an HTTPS address before entering your Frigate login." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez une adresse HTTPS avant de saisir vos identifiants Frigate."
+          }
+        }
+      }
+    },
+    "Use your Frigate account. The password stays in this Mac's Keychain. Leave both fields blank for an internal API without authentication." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez votre compte Frigate. Le mot de passe reste dans le Trousseau de ce Mac. Laissez les deux champs vides pour une API interne sans authentification."
+          }
+        }
+      }
+    },
     "Username (optional)" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -784,8 +2965,166 @@
         }
       }
     },
-    "Version 0.1.0 (build %@)" : {
-
+    "Vehicles" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Véhicules"
+          }
+        }
+      }
+    },
+    "Version 0.1.0 (build %@)" : {},
+    "Video connection failed · check the network and Frigate" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connexion vidéo impossible · vérifiez le réseau et Frigate"
+          }
+        }
+      }
+    },
+    "Video frames are being sent to Home" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Des images vidéo sont envoyées à Maison"
+          }
+        }
+      }
+    },
+    "Video not checked" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vidéo non vérifiée"
+          }
+        }
+      }
+    },
+    "Video source responding · open in Home to verify playback" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le flux répond · ouvrez Maison pour vérifier la lecture"
+          }
+        }
+      }
+    },
+    "Video sources" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flux vidéo"
+          }
+        }
+      }
+    },
+    "Video stopped arriving · reopen the camera in Home" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La vidéo ne parvient plus · rouvrez la caméra dans Maison"
+          }
+        }
+      }
+    },
+    "Video unavailable · test this camera again" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vidéo indisponible · testez à nouveau cette caméra"
+          }
+        }
+      }
+    },
+    "Visited" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visitée"
+          }
+        }
+      }
+    },
+    "Waiting for the first detection" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente de la première détection"
+          }
+        }
+      }
+    },
+    "Watch the mailbox 24/7" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surveiller la boîte aux lettres 24h/24"
+          }
+        }
+      }
+    },
+    "Welcome" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenue"
+          }
+        }
+      }
+    },
+    "Welcome to %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenue dans %@"
+          }
+        }
+      }
+    },
+    "What the Hub is doing right now." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce que fait le Hub en ce moment."
+          }
+        }
+      }
+    },
+    "What to watch?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Que surveiller ?"
+          }
+        }
+      }
+    },
+    "What's next" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La suite"
+          }
+        }
+      }
     },
     "When enabled, the Bridge fetches the finalised clip from Frigate and attaches it to the FrigateEvent record. Clips are 1-10 MB each — leaving this off saves iCloud storage." : {
       "extractionState" : "manual",
@@ -809,6 +3148,66 @@
         }
       }
     },
+    "Where is your Frigate?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Où se trouve votre Frigate ?"
+          }
+        }
+      }
+    },
+    "Where the Hub receives detection events: the same MQTT broker as your Frigate." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Là où le Hub reçoit les détections : le même serveur MQTT que votre Frigate."
+          }
+        }
+      }
+    },
+    "Which places should we watch?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quels lieux souhaitez-vous surveiller ?"
+          }
+        }
+      }
+    },
+    "Who" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qui"
+          }
+        }
+      }
+    },
+    "You can continue without enabling Apple Home." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous pouvez continuer sans activer Maison."
+          }
+        }
+      }
+    },
+    "You can return to guided setup from the Hub home screen at any time." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous pouvez relancer la configuration guidée à tout moment depuis l’accueil du Hub."
+          }
+        }
+      }
+    },
     "You're set up." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -816,6 +3215,220 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Configuration terminée."
+          }
+        }
+      }
+    },
+    "Your Frigate cameras in Apple Home, with live view and motion. Zone alert cameras become video doorbells." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos caméras Frigate dans Maison, avec direct et mouvement. Les caméras des alertes de zone deviennent des sonnettes vidéo."
+          }
+        }
+      }
+    },
+    "Your Mac connects Frigate to all your Apple devices. It keeps running in the background, even with this window closed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre Mac relie Frigate à tous vos appareils Apple. Il tourne en arrière-plan, même fenêtre fermée."
+          }
+        }
+      }
+    },
+    "Zone" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zone"
+          }
+        }
+      }
+    },
+    "Zone alerts" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alertes de zone"
+          }
+        }
+      }
+    },
+    "camera module install failed — see HomeKit · Cameras" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "l’installation du module caméras a échoué — voir HomeKit · Caméras"
+          }
+        }
+      }
+    },
+    "check the Frigate address and login in HomeKit · Cameras" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vérifiez l’adresse et les identifiants Frigate dans HomeKit · Caméras"
+          }
+        }
+      }
+    },
+    "frigate.local or 10.9.8.42" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "frigate.local ou 10.9.8.42"
+          }
+        }
+      }
+    },
+    "frigate.local or 192.168.3.160" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "frigate.local ou 192.168.3.160"
+          }
+        }
+      }
+    },
+    "https://frigate.local:5000" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://frigate.local:5000"
+          }
+        }
+      }
+    },
+    "iCloud" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud"
+          }
+        }
+      }
+    },
+    "iCloud needed" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud requis"
+          }
+        }
+      }
+    },
+    "iCloud ready" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud disponible"
+          }
+        }
+      }
+    },
+    "iCloud refused the connection." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud a refusé la connexion."
+          }
+        }
+      }
+    },
+    "iPhone notification: %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification iPhone : %@"
+          }
+        }
+      }
+    },
+    "iPhone, iPad, Watch and Mac · through your private iCloud, no server." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone, iPad, Watch et Mac · par votre iCloud privé, sans serveur."
+          }
+        }
+      }
+    },
+    "macOS could not keep the Hub available. Check the Mac's sleep settings." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS ne peut pas maintenir le Hub disponible. Vérifiez les réglages de veille du Mac."
+          }
+        }
+      }
+    },
+    "set the Frigate web address in HomeKit · Cameras" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "indiquez l’adresse web de Frigate dans HomeKit · Caméras"
+          }
+        }
+      }
+    },
+    "the Frigate address returns a web page (login?) — use the internal port 5000" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "l’adresse de Frigate renvoie une page web (connexion ?) — utilisez le port interne 5000"
+          }
+        }
+      }
+    },
+    "unrecognised person" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "personne non reconnue"
+          }
+        }
+      }
+    },
+    "vehicle" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "véhicule"
+          }
+        }
+      }
+    },
+    "© 2026 LorisLabs · Christine Martin (TDV6D5L785)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "© 2026 LorisLabs · Christine Martin (TDV6D5L785)"
           }
         }
       }
