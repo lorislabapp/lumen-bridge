@@ -40,14 +40,25 @@ final class LookService {
     @ObservationIgnored private let engineBox = EngineBox()
     @ObservationIgnored private let livePrefs: LiveValue<Prefs>
     private static let prefsKey = "LumenHub.Look.prefs.v1"
+    /// Under XCTest the Hub is a test host: Look never reads or prunes the owner's
+    /// areas and proofs, and never saves settings. A throwaway folder is used instead.
+    @ObservationIgnored private let isTestHost = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    #if DEBUG
+    /// Screen fixture: synthetic snapshots per camera, nothing fetched from Frigate.
+    @ObservationIgnored private var fixtureFrames: [String: CGImage]?
+    #endif
 
     private init() {
-        let loaded = UserDefaults.standard.data(forKey: Self.prefsKey).flatMap { try? JSONDecoder().decode(Prefs.self, from: $0) } ?? Prefs()
+        let testHost = isTestHost
+        let loaded = testHost ? Prefs()
+            : UserDefaults.standard.data(forKey: Self.prefsKey).flatMap { try? JSONDecoder().decode(Prefs.self, from: $0) } ?? Prefs()
         prefs = loaded
         livePrefs = LiveValue(loaded)
-        let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        store = LookStore(root: support.appendingPathComponent("Lumen Hub/Look", isDirectory: true),
-                          proofRetention: loaded.proofHours * 3600)
+        let root = testHost
+            ? FileManager.default.temporaryDirectory.appendingPathComponent("LumenHubLookTests-\(UUID().uuidString)", isDirectory: true)
+            : FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+                .appendingPathComponent("Lumen Hub/Look", isDirectory: true)
+        store = LookStore(root: root, proofRetention: loaded.proofHours * 3600)
         let live = livePrefs, box = engineBox
         verifier = LookVerifier(dependencies: .init(
             frames: frames, store: store,
@@ -93,11 +104,22 @@ final class LookService {
 
     /// Latest frame for the area editor.
     func snapshot(camera: String) async throws -> CGImage {
-        try await frames.frame(camera: camera, height: 720).image
+        #if DEBUG
+        if let fixtureFrames {
+            guard let image = fixtureFrames[camera] else { throw LookFrameError.cameraOffline }
+            return image
+        }
+        #endif
+        guard !isTestHost else { throw LookFrameError.cameraOffline }
+        return try await frames.frame(camera: camera, height: 720).image
     }
 
     func cameras() async -> [String] {
-        (try? await frames.cameraNames()) ?? []
+        #if DEBUG
+        if let fixtureFrames { return fixtureFrames.keys.sorted() }
+        #endif
+        guard !isTestHost else { return [] }
+        return (try? await frames.cameraNames()) ?? []
     }
 
     /// Saves the area and the frame it was drawn on (camera-moved reference).
@@ -157,10 +179,32 @@ final class LookService {
         guard next != prefs else { return }
         prefs = next
         livePrefs.value = next
-        if let data = try? JSONEncoder().encode(next) { UserDefaults.standard.set(data, forKey: Self.prefsKey) }
+        if !isTestHost, let data = try? JSONEncoder().encode(next) { UserDefaults.standard.set(data, forKey: Self.prefsKey) }
         let hours = next.proofHours
         Task { await store.setRetention(hours * 3600) }
     }
+
+    #if DEBUG
+    /// Synthetic state for the opt-in screen tests: areas and results go to the
+    /// throwaway test-host store, snapshots are drawn in memory, nothing is fetched.
+    func installScreenFixture(prefs: Prefs, targets list: [LookTarget], results: [LookResult],
+                              proofs: [String: CGImage], frames: [String: CGImage], vision: AssistantService.Connection) async {
+        precondition(isTestHost, "Look screen fixture is for XCTest only")
+        fixtureFrames = frames
+        self.prefs = prefs
+        livePrefs.value = prefs
+        for old in await store.allTargets { await store.remove(old.entityID) }
+        for t in list { await store.upsert(t) }
+        targets = await store.allTargets
+        lastResults = [:]
+        for var r in results {
+            if let image = proofs[r.entityID] { r.proofFile = await store.saveProof(image) }
+            await store.record(r)
+            lastResults[r.entityID] = r
+        }
+        self.vision = vision
+    }
+    #endif
 
     func testVision() async {
         guard let url = URL(string: prefs.visionURL) else { vision = .failed(LL("Invalid address")); return }
