@@ -81,6 +81,16 @@
         }
       }
     },
+    "Box drawn": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone dessinée"
+          }
+        }
+      }
+    },
     "Camera": {
       "localizations": {
         "fr": {
@@ -141,12 +151,22 @@
         }
       }
     },
+    "Door": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Porte"
+          }
+        }
+      }
+    },
     "Drag a box around the device itself: the lamp shade, the TV screen, the window, the door.": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dessinez la zone autour de l'appareil lui-même : l'abat-jour, l'écran de la télé, la fenêtre, la porte."
+            "value": "Dessinez la zone autour de l’appareil lui-même : l’abat-jour, l’écran de la télé, la fenêtre, la porte."
           }
         }
       }
@@ -156,7 +176,17 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dessinez une zone autour de l'appareil sur une caméra. Après une commande, Lumen regarde quand l'appareil a eu le temps de bouger. Il dit « vérifié » seulement s'il le voit."
+            "value": "Dessinez une zone autour de l’appareil sur une caméra. Après une commande, Lumen regarde quand l’appareil a eu le temps de bouger. Il dit « vérifié » seulement s’il le voit."
+          }
+        }
+      }
+    },
+    "Draw area for %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dessiner la zone pour %@"
           }
         }
       }
@@ -167,6 +197,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dessiner la zone sur la caméra"
+          }
+        }
+      }
+    },
+    "Frigate model": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "modèle Frigate"
           }
         }
       }
@@ -187,6 +227,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Garder les images de preuve"
+          }
+        }
+      }
+    },
+    "Light": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lumière"
           }
         }
       }
@@ -212,6 +262,16 @@
       }
     },
     "No area yet": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de zone"
+          }
+        }
+      }
+    },
+    "No box yet": {
       "localizations": {
         "fr": {
           "stringUnit": {
@@ -261,6 +321,16 @@
         }
       }
     },
+    "Redraw area for %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redessiner la zone pour %@"
+          }
+        }
+      }
+    },
     "Remove area": {
       "localizations": {
         "fr": {
@@ -281,12 +351,22 @@
         }
       }
     },
+    "Shutters": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volets"
+          }
+        }
+      }
+    },
     "TV": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "télé"
+            "value": "Télé"
           }
         }
       }
@@ -297,6 +377,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tester"
+          }
+        }
+      }
+    },
+    "Test %@ now": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tester %@ maintenant"
           }
         }
       }
@@ -321,22 +411,12 @@
         }
       }
     },
-    "door": {
+    "device": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "porte"
-          }
-        }
-      }
-    },
-    "light": {
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "lumière"
+            "value": "appareil"
           }
         }
       }
@@ -351,12 +431,32 @@
         }
       }
     },
-    "shutter": {
+    "picture": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "volets"
+            "value": "image"
+          }
+        }
+      }
+    },
+    "scene": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "scène"
+          }
+        }
+      }
+    },
+    "vision model": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "modèle de vision"
           }
         }
       }

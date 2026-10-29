@@ -76,9 +76,11 @@ struct LookSection: View {
                 }
                 Spacer()
                 Button(target == nil ? LL("Draw area on camera") : LL("Redraw")) { editing = device }
+                    .accessibilityLabel(String(format: LL(target == nil ? "Draw area for %@" : "Redraw area for %@"), device.name))
                 if target != nil {
                     Button(LL("Test")) { Task { await look.test(device.entityID) } }
                         .disabled(look.testing.contains(device.entityID))
+                        .accessibilityLabel(String(format: LL("Test %@ now"), device.name))
                 }
             }
             if let target {
@@ -88,7 +90,7 @@ struct LookSection: View {
                     Text(String(format: LL("Look after %@ s"), format(target.travelSeconds)))
                 }
                 if let result = look.lastResults[device.entityID] {
-                    LookResultRow(look: look, result: result)
+                    LookResultRow(look: look, result: result, kind: target.kind)
                 }
             }
         }
@@ -97,12 +99,14 @@ struct LookSection: View {
 
     private func format(_ s: Double) -> String { s.rounded() == s ? String(Int(s)) : String(format: "%.1f", s) }
 
-    func kindName(_ k: LookDeviceKind) -> String {
+    func kindName(_ k: LookDeviceKind) -> String { Self.kindName(k) }
+
+    static func kindName(_ k: LookDeviceKind) -> String {
         switch k {
-        case .light: LL("light")
+        case .light: LL("Light")
         case .tv: LL("TV")
-        case .shutter: LL("shutter")
-        case .door: LL("door")
+        case .shutter: LL("Shutters")
+        case .door: LL("Door")
         }
     }
 }
@@ -111,7 +115,25 @@ struct LookSection: View {
 struct LookResultRow: View {
     let look: LookService
     let result: LookResult
+    let kind: LookDeviceKind
     @State private var proof: CGImage?
+
+    /// The stored sentence is in the language of the command; the row follows the app.
+    private var sentence: String {
+        let lang = Bundle.main.preferredLocalizations.first?.hasPrefix("fr") == true ? "fr" : "en"
+        return LookPhrases.message(for: result.outcome, kind: kind, expected: result.expected, camera: result.camera,
+                                   source: result.source, retried: result.retried, language: lang)
+    }
+
+    private var sourceName: String {
+        switch result.source {
+        case .pixels: LL("picture")
+        case .frigateClassifier: LL("Frigate model")
+        case .visionModel: LL("vision model")
+        case .device: LL("device")
+        case .scene: LL("scene")
+        }
+    }
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
@@ -123,11 +145,11 @@ struct LookResultRow: View {
                     .accessibilityLabel(LL("Proof picture"))
             }
             VStack(alignment: .leading, spacing: 2) {
-                Label(result.message.isEmpty ? result.outcome.label : result.message, systemImage: icon)
+                Label(sentence, systemImage: icon)
                     .foregroundStyle(color)
                 Text(result.checkedAt, format: .dateTime.hour().minute().second())
                     .font(.caption).foregroundStyle(.secondary)
-                Text(String(format: LL("%@ ms · %@"), String(Int(result.timing.totalMs)), result.source.rawValue))
+                Text(String(format: LL("%@ ms · %@"), String(Int(result.timing.totalMs)), sourceName))
                     .font(.caption2.monospaced()).foregroundStyle(.tertiary)
             }
         }
@@ -175,14 +197,13 @@ struct LookAreaEditor: View {
                 Picker(LL("Camera"), selection: $camera) {
                     ForEach(cameras, id: \.self) { Text(LookPhrases.cameraName($0)).tag($0) }
                 }
-                .frame(maxWidth: 260)
+                .fixedSize()
                 Picker(LL("Check as"), selection: $kind) {
-                    Text(LL("light")).tag(LookDeviceKind.light)
-                    Text(LL("TV")).tag(LookDeviceKind.tv)
-                    Text(LL("shutter")).tag(LookDeviceKind.shutter)
-                    Text(LL("door")).tag(LookDeviceKind.door)
+                    ForEach(LookDeviceKind.allCases, id: \.self) { Text(LookSection.kindName($0)).tag($0) }
                 }
-                .frame(maxWidth: 220)
+                .fixedSize()
+                .padding(.leading, 12)
+                Spacer()
                 Button(LL("New snapshot")) { Task { await load() } }
             }
             ZStack {
@@ -211,6 +232,7 @@ struct LookAreaEditor: View {
                         }.onEnded { _ in dragStart = nil })
                         .offset(x: origin.x, y: origin.y)
                         .accessibilityLabel(LL("Camera snapshot. Drag to draw the box."))
+                        .accessibilityValue(rect == nil ? LL("No box yet") : LL("Box drawn"))
                     }
                 } else if let loadError {
                     Label(loadError, systemImage: "video.slash").foregroundStyle(.secondary)
