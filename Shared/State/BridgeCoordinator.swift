@@ -1,4 +1,7 @@
 import Foundation
+#if os(macOS) && LUMEN_HUB
+import LumenHearing
+#endif
 import os
 
 private let logger = Logger(subsystem: "com.lorislabapp.lumenbridge", category: "Coordinator")
@@ -34,7 +37,7 @@ final class BridgeCoordinator {
     /// Frigate web/API URL — used by both the Homebridge sidecar (macOS-
     /// only) AND the clip-fetch path (cross-platform). Defined here so
     /// both targets reference the same key.
-    static let frigateWebURLKey = "lumenbridge.homebridge.frigate_web_url"
+    nonisolated static let frigateWebURLKey = "lumenbridge.homebridge.frigate_web_url"
 
     // MARK: -
 
@@ -78,6 +81,9 @@ final class BridgeCoordinator {
         wireDiscovery()
         wireMQTT()
         await applyZoneAlerts(ZoneAlertStore.load())
+        #if os(macOS) && LUMEN_HUB
+        startHearing()
+        #endif
         #if os(macOS)
         // HomeKit is opt-in for Phase 5. Boot the HAP server only if the
         // user has flipped the flag (via Settings or onboarding).
@@ -280,6 +286,31 @@ final class BridgeCoordinator {
 
     /// Frigate review linked to each recent event (from the correlator), so a
     /// mailbox visit can be pushed as that review. Bounded.
+    #if os(macOS) && LUMEN_HUB
+    /// Speech transcription (Lumen Hub). Keyword alerts reuse the zone-alert
+    /// push channel; the envelope carries the camera only, never words.
+    private func startHearing() {
+        let service = HearingService.shared
+        service.alertHandler = { [weak self] alert in
+            guard let self else { return "" }
+            guard let review = self.reviewByEvent[alert.eventID] else {
+                return String(localized: "Keyword heard, but no Frigate review to link yet: no iPhone alert sent.")
+            }
+            let envelope = KeywordAlertEnvelope.make(
+                alert: alert, reviewID: review.reviewID, severity: review.severity,
+                title: String(localized: "Keyword heard", comment: "iPhone notification title for a transcription keyword"),
+                cameraDisplayName: alert.camera.replacingOccurrences(of: "_", with: " ").capitalized)
+            guard let body = try? JSONSerialization.data(withJSONObject: envelope) else { return "" }
+            switch await self.mailboxPush.send(envelopeJSON: body) {
+            case .sent: return String(localized: "Last keyword alert sent to your iPhone.")
+            case .noSecret: return String(localized: "Keyword heard, but Lumen on iPhone is not linked yet.")
+            default: return String(localized: "Keyword heard, but the iPhone alert failed.")
+            }
+        }
+        service.start()
+    }
+    #endif
+
     private var reviewByEvent: [String: MailboxPushSender.ReviewLink] = [:]
     private var reviewOrder: [String] = []
     private let mailboxPush = MailboxPushSender()
@@ -527,6 +558,11 @@ final class BridgeCoordinator {
         // `new` time. They never fire a notification or bump counters —
         // the original `new` did that.
         if event.kind == .end {
+            #if os(macOS) && LUMEN_HUB
+            if event.label == "speech" {
+                HearingService.shared.noteSpeechEventEnded(id: event.id, camera: event.camera, start: event.startTime)
+            }
+            #endif
             await enrichWithClip(eventID: event.id, camera: event.camera)
             return
         }

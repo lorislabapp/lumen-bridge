@@ -87,6 +87,12 @@ project.root_object.package_references << foundation_pkg
 FRIGATE_KIT_DIR = 'Packages/FrigateKit'
 frigate_kit_pkg = add_local_package(project, FRIGATE_KIT_DIR)
 
+# LumenHearing — Lumen Hub speech transcription (Parakeet v3 via FluidAudio,
+# Apple SpeechTranscriber fallback, SQLite FTS5). Used only under LUMEN_HUB;
+# see Packages/LumenHearing/README.md and THIRD_PARTY_NOTICES.md.
+LUMEN_HEARING_DIR = 'Packages/LumenHearing'
+lumen_hearing_pkg = add_local_package(project, LUMEN_HEARING_DIR)
+
 # Groups mirror the on-disk layout.
 shared_group = project.new_group('Shared',         'Shared')
 mac_group    = project.new_group('LumenBridge',    'LumenBridge')
@@ -163,6 +169,7 @@ add_bundle_resource(mac_group, mac_target, 'PrivacyInfo.xcprivacy')
 add_package_product(project, mac_target, mqtt_nio_pkg, 'MQTTNIO')
 add_package_product(project, mac_target, hap_pkg, 'HAP')
 add_package_product(project, mac_target, frigate_kit_pkg, 'FrigateKit')
+add_package_product(project, mac_target, lumen_hearing_pkg, 'LumenHearing')
 add_package_product(project, mac_target, foundation_pkg, 'LorisSecurity')
 add_package_product(project, mac_target, loris_labs_kit_pkg, 'LorisReports') if loris_labs_kit_pkg
 add_package_product(project, mac_target, loris_labs_kit_pkg, 'LorisLabsKit') if loris_labs_kit_pkg

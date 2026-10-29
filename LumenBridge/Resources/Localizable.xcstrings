@@ -3722,6 +3722,766 @@
           }
         }
       }
+    },
+    "Transcription" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transcription"
+          }
+        }
+      }
+    },
+    "Transcripts" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transcriptions"
+          }
+        }
+      }
+    },
+    "Transcribe speech from cameras" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transcrire la parole des caméras"
+          }
+        }
+      }
+    },
+    "Everything stays on this Mac. Nothing goes to LorisLabs or a cloud." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout reste sur ce Mac. Rien ne part chez LorisLabs ni dans un cloud."
+          }
+        }
+      }
+    },
+    "Staff present" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personnel présent"
+          }
+        }
+      }
+    },
+    "Nanny, cleaner or carer at home? Turn this on: all listening stops." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nounou, ménage ou aide à domicile ? Activez ceci : toute écoute s’arrête."
+          }
+        }
+      }
+    },
+    "Transcription uses the Frigate web address and login from the Frigate page." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La transcription utilise l’adresse web et l’identifiant Frigate de la page Frigate."
+          }
+        }
+      }
+    },
+    "Cameras" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caméras"
+          }
+        }
+      }
+    },
+    "Each camera is off until you turn it on and confirm. Outdoor and street cameras stay locked off." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque caméra reste coupée jusqu’à ce que vous l’activiez et confirmiez. Les caméras extérieures et côté rue restent bloquées."
+          }
+        }
+      }
+    },
+    "Place" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emplacement"
+          }
+        }
+      }
+    },
+    "Indoor" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intérieur"
+          }
+        }
+      }
+    },
+    "Outdoor" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extérieur"
+          }
+        }
+      }
+    },
+    "Facing the street" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Côté rue"
+          }
+        }
+      }
+    },
+    "Locked" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloquée"
+          }
+        }
+      }
+    },
+    "Outdoor and street cameras can never be transcribed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les caméras extérieures et côté rue ne sont jamais transcrites."
+          }
+        }
+      }
+    },
+    "Locked off: outdoor camera" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloquée : caméra extérieure"
+          }
+        }
+      }
+    },
+    "Transcribe" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transcrire"
+          }
+        }
+      }
+    },
+    "Add a word or phrase" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un mot ou une phrase"
+          }
+        }
+      }
+    },
+    "Add" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter"
+          }
+        }
+      }
+    },
+    "Remove %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer %@"
+          }
+        }
+      }
+    },
+    "Keyword alerts" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alertes mots-clés"
+          }
+        }
+      }
+    },
+    "Your iPhone gets “Keyword heard” and the camera name. The words themselves never leave this Mac." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre iPhone reçoit « Mot-clé entendu » et le nom de la caméra. Les mots eux-mêmes ne quittent jamais ce Mac."
+          }
+        }
+      }
+    },
+    "Engine" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moteur"
+          }
+        }
+      }
+    },
+    "Automatic" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatique"
+          }
+        }
+      }
+    },
+    "Parakeet (best accuracy)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parakeet (le plus précis)"
+          }
+        }
+      }
+    },
+    "Apple (built in)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple (intégré)"
+          }
+        }
+      }
+    },
+    "Language" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langue"
+          }
+        }
+      }
+    },
+    "French" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Français"
+          }
+        }
+      }
+    },
+    "English" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anglais"
+          }
+        }
+      }
+    },
+    "Parakeet v3" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parakeet v3"
+          }
+        }
+      }
+    },
+    "Download (about 480 MB)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Télécharger (environ 480 Mo)"
+          }
+        }
+      }
+    },
+    "Apple speech" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parole Apple"
+          }
+        }
+      }
+    },
+    "Install" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer"
+          }
+        }
+      }
+    },
+    "Last clip: %lld× faster than real time" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernier extrait : %lld× plus rapide que le temps réel"
+          }
+        }
+      }
+    },
+    "Speech engine" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moteur de parole"
+          }
+        }
+      }
+    },
+    "One shared engine works through clips one at a time. Automatic uses Parakeet once downloaded, else Apple." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un seul moteur partagé traite les extraits un par un. Automatique utilise Parakeet une fois téléchargé, sinon Apple."
+          }
+        }
+      }
+    },
+    "Ready" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prêt"
+          }
+        }
+      }
+    },
+    "Retry" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayer"
+          }
+        }
+      }
+    },
+    "Keep transcripts for" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garder les transcriptions"
+          }
+        }
+      }
+    },
+    "%lld days" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld jours"
+          }
+        }
+      }
+    },
+    "%lld transcripts on this Mac" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld transcriptions sur ce Mac"
+          }
+        }
+      }
+    },
+    "Delete all…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout supprimer…"
+          }
+        }
+      }
+    },
+    "%lld clips waiting" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld extraits en attente"
+          }
+        }
+      }
+    },
+    "Storage" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stockage"
+          }
+        }
+      }
+    },
+    "Older transcripts are deleted automatically." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les transcriptions plus anciennes sont supprimées automatiquement."
+          }
+        }
+      }
+    },
+    "Delete every transcript on this Mac?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer toutes les transcriptions de ce Mac ?"
+          }
+        }
+      }
+    },
+    "Delete all" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout supprimer"
+          }
+        }
+      }
+    },
+    "Credits" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crédits"
+          }
+        }
+      }
+    },
+    "Listen to “%@”?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écouter « %@ » ?"
+          }
+        }
+      }
+    },
+    "Speech becomes text on this Mac only. Nothing is sent to LorisLabs or a cloud." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La parole devient du texte sur ce Mac uniquement. Rien n’est envoyé à LorisLabs ni dans un cloud."
+          }
+        }
+      }
+    },
+    "In France, recording someone’s private words without consent is a crime (Code pénal, art. 226-1: up to 1 year and €45,000; 2 years and €60,000 between partners). Keeping or using the text is also an offence (art. 226-2)." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En France, enregistrer les paroles privées de quelqu’un sans son consentement est un délit (Code pénal, art. 226-1 : jusqu’à 1 an et 45 000 € ; 2 ans et 60 000 € entre conjoints). Garder ou utiliser le texte l’est aussi (art. 226-2)."
+          }
+        }
+      }
+    },
+    "Tell everyone who lives here. Tell every visitor too, and put up a visible sign." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prévenez tous les habitants. Prévenez aussi chaque visiteur et posez un panneau visible."
+          }
+        }
+      }
+    },
+    "Nanny, cleaner or carer at home? Turn on “Staff present”: listening stops." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nounou, ménage ou aide à domicile ? Activez « Personnel présent » : l’écoute s’arrête."
+          }
+        }
+      }
+    },
+    "Outdoor and street cameras are always locked off." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les caméras extérieures et côté rue sont toujours bloquées."
+          }
+        }
+      }
+    },
+    "No emotion or tone analysis. Text is deleted after the time you choose." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune analyse d’émotion ni de ton. Le texte est supprimé après la durée choisie."
+          }
+        }
+      }
+    },
+    "This camera is" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette caméra est"
+          }
+        }
+      }
+    },
+    "This camera stays locked off." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette caméra reste bloquée."
+          }
+        }
+      }
+    },
+    "I have told the people who live here, and I will tell visitors." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "J’ai prévenu les habitants et je préviendrai les visiteurs."
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        }
+      }
+    },
+    "Turn on" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer"
+          }
+        }
+      }
+    },
+    "Search what was said" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chercher ce qui a été dit"
+          }
+        }
+      }
+    },
+    "All cameras" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toutes les caméras"
+          }
+        }
+      }
+    },
+    "No transcripts yet" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune transcription"
+          }
+        }
+      }
+    },
+    "No match" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun résultat"
+          }
+        }
+      }
+    },
+    "Speech heard by the cameras you turned on appears here." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La parole entendue par les caméras activées apparaît ici."
+          }
+        }
+      }
+    },
+    "Turn on transcription first, on the Transcription page." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activez d’abord la transcription, page Transcription."
+          }
+        }
+      }
+    },
+    "Keyword heard" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot-clé entendu"
+          }
+        }
+      }
+    },
+    "Keyword heard, but no Frigate review to link yet: no iPhone alert sent." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot-clé entendu, mais aucun événement Frigate à lier : pas d’alerte iPhone."
+          }
+        }
+      }
+    },
+    "Last keyword alert sent to your iPhone." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernière alerte mot-clé envoyée à votre iPhone."
+          }
+        }
+      }
+    },
+    "Keyword heard, but Lumen on iPhone is not linked yet." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot-clé entendu, mais Lumen sur iPhone n’est pas encore relié."
+          }
+        }
+      }
+    },
+    "Keyword heard, but the iPhone alert failed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot-clé entendu, mais l’alerte iPhone a échoué."
+          }
+        }
+      }
+    },
+    "The transcript database could not open." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La base des transcriptions n’a pas pu s’ouvrir."
+          }
+        }
+      }
+    },
+    "Needs macOS 26 or later" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nécessite macOS 26 ou plus récent"
+          }
+        }
+      }
+    },
+    "Download failed. Check the network and try again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec du téléchargement. Vérifiez le réseau et réessayez."
+          }
+        }
+      }
+    },
+    "macOS could not install the speech model." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS n’a pas pu installer le modèle de parole."
+          }
+        }
+      }
+    },
+    "Search failed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La recherche a échoué."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

@@ -75,6 +75,10 @@
 		F7154ED7EE243BA47A7139AF /* LorisReports in Frameworks */ = {isa = PBXBuildFile; productRef = 0885A7D925465AAE7F236D7A /* LorisReports */; };
 		FDC64AC68E523821F8305BE7 /* mailbox-front-real-20261012-19.json in Resources */ = {isa = PBXBuildFile; fileRef = 1BAE4ABDA7387F0C77878979 /* mailbox-front-real-20261012-19.json */; };
 		FE14A42D10D8EB56D6DDCDC0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D1CFD873E117B3A28A6A397 /* Assets.xcassets */; };
+		4C5E4EA00000000000000107 /* HearingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E4EA00000000000000104 /* HearingService.swift */; };
+		4C5E4EA00000000000000108 /* HearingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E4EA00000000000000105 /* HearingSettingsView.swift */; };
+		4C5E4EA00000000000000109 /* TranscriptsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5E4EA00000000000000106 /* TranscriptsView.swift */; };
+		4C5E4EA00000000000000102 /* LumenHearing in Frameworks */ = {isa = PBXBuildFile; productRef = 4C5E4EA00000000000000101 /* LumenHearing */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +145,9 @@
 		CEB30162556420793277C4E4 /* LumenBridgeMacApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LumenBridgeMacApp.swift; sourceTree = "<group>"; };
 		E15647D215D88BE84EFED8CE /* FrigateMQTTClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FrigateMQTTClient.swift; sourceTree = "<group>"; };
 		F9549BF500F99550EAEC1A3C /* BridgeSupport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BridgeSupport.swift; sourceTree = "<group>"; };
+		4C5E4EA00000000000000104 /* HearingService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HearingService.swift; sourceTree = "<group>"; };
+		4C5E4EA00000000000000105 /* HearingSettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HearingSettingsView.swift; sourceTree = "<group>"; };
+		4C5E4EA00000000000000106 /* TranscriptsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TranscriptsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +167,7 @@
 				0C85861FC363A14EB32F1358 /* MQTTNIO in Frameworks */,
 				C4C72436C2F1927F035494AC /* HAP in Frameworks */,
 				047DCE4D01297396C42A7FDF /* FrigateKit in Frameworks */,
+				4C5E4EA00000000000000102 /* LumenHearing in Frameworks */,
 				699CFF760002000000000008 /* LorisSecurity in Frameworks */,
 				F7154ED7EE243BA47A7139AF /* LorisReports in Frameworks */,
 				CE2144AF9BB26CF9A636B90F /* LorisLabsKit in Frameworks */,
@@ -358,9 +366,21 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		4C5E4EA00000000000000103 /* Hearing */ = {
+			isa = PBXGroup;
+			children = (
+				4C5E4EA00000000000000104 /* HearingService.swift */,
+				4C5E4EA00000000000000105 /* HearingSettingsView.swift */,
+				4C5E4EA00000000000000106 /* TranscriptsView.swift */,
+			);
+			name = Hearing;
+			path = Hearing;
+			sourceTree = "<group>";
+		};
 		BFB2FB0786DF59F64BB4F952 /* Hub */ = {
 			isa = PBXGroup;
 			children = (
+				4C5E4EA00000000000000103 /* Hearing */,
 				8339EECB72D5304506025066 /* HubHomeView.swift */,
 			);
 			name = Hub;
@@ -482,6 +502,7 @@
 				FC78669B251DF223A0A96EC5 /* MQTTNIO */,
 				26A04D7D484BBFAD9275F28F /* HAP */,
 				81A24308D8995DEEB5EF9215 /* FrigateKit */,
+				4C5E4EA00000000000000101 /* LumenHearing */,
 				699CFF760002000000000007 /* LorisSecurity */,
 				0885A7D925465AAE7F236D7A /* LorisReports */,
 				B54A8DBC62DF576AF996E852 /* LorisLabsKit */,
@@ -515,6 +536,7 @@
 				AFB40695FF7DC61F8313CCA5 /* XCRemoteSwiftPackageReference "HAP" */,
 				9498805A25BB4ECF2A175101 /* XCLocalSwiftPackageReference "LorisLabsKit" */,
 				3D33538BC5184B3D1C47EB34 /* XCLocalSwiftPackageReference "FrigateKit" */,
+				4C5E4EA00000000000000100 /* XCLocalSwiftPackageReference "LumenHearing" */,
 			);
 			preferredProjectObjectVersion = 100;
 			productRefGroup = BC72AD6CD86FA60C97086DF0 /* Products */;
@@ -618,6 +640,9 @@
 				D14AFB626583B037F6855C23 /* BridgeState.swift in Sources */,
 				27605DF141A1D4558927C1D9 /* MQTTCredentialsKeychain.swift in Sources */,
 				A591E2535348A40BDEB0FF4F /* HubHomeView.swift in Sources */,
+				4C5E4EA00000000000000107 /* HearingService.swift in Sources */,
+				4C5E4EA00000000000000108 /* HearingSettingsView.swift in Sources */,
+				4C5E4EA00000000000000109 /* TranscriptsView.swift in Sources */,
 				0022941A615B99884CC0CDC0 /* LumenBridgeMacApp.swift in Sources */,
 				9F935279BCD2F98BCAB2E0AE /* MainWindow.swift in Sources */,
 				94B4A4E078A80AB86F806D46 /* MenuBarContent.swift in Sources */,
@@ -1076,6 +1101,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/LorisLabsKit;
 		};
+		4C5E4EA00000000000000100 /* XCLocalSwiftPackageReference "LumenHearing" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/LumenHearing;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -1142,6 +1171,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6FDB584144FB12BFE841F7C2 /* XCRemoteSwiftPackageReference "mqtt-nio" */;
 			productName = MQTTNIO;
+		};
+		4C5E4EA00000000000000101 /* LumenHearing */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C5E4EA00000000000000100 /* XCLocalSwiftPackageReference "LumenHearing" */;
+			productName = LumenHearing;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

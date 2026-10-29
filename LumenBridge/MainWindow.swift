@@ -38,15 +38,15 @@ struct MainWindow: View {
     @State private var isSendingTestEvent = false
 
     enum Section: String, CaseIterable, Identifiable {
-        case status, connection, zoneAlerts, sensors, cameras, iCloud, logs, about
+        case status, connection, zoneAlerts, sensors, cameras, transcription, transcripts, iCloud, logs, about
         var id: String { rawValue }
 
-        /// HomeKit cameras (Homebridge) exist only in the Developer ID Hub.
+        /// HomeKit cameras (Homebridge) and speech transcription exist only in the Developer ID Hub.
         static var visible: [Section] {
             #if LUMEN_HUB
             allCases
             #else
-            allCases.filter { $0 != .cameras }
+            allCases.filter { ![.cameras, .transcription, .transcripts].contains($0) }
             #endif
         }
 
@@ -57,6 +57,8 @@ struct MainWindow: View {
             case .zoneAlerts: return String(localized: "Zone alerts")
             case .sensors:    return String(localized: "HomeKit · Sensors")
             case .cameras:    return String(localized: "HomeKit · Cameras")
+            case .transcription: return String(localized: "Transcription")
+            case .transcripts: return String(localized: "Transcripts")
             case .iCloud:     return String(localized: "iCloud")
             case .logs:       return String(localized: "Logs")
             case .about:      return String(localized: "About")
@@ -71,6 +73,8 @@ struct MainWindow: View {
             case .iCloud:     return "icloud.fill"
             case .sensors:    return "sensor.fill"
             case .cameras:    return "video.bubble.fill"
+            case .transcription: return "waveform"
+            case .transcripts: return "text.bubble.fill"
             case .logs:       return "doc.text.fill"
             case .about:      return "info.circle.fill"
             }
@@ -104,6 +108,8 @@ struct MainWindow: View {
                 case .iCloud:        iCloudPane
                 case .sensors:       sensorsPane
                 case .cameras:       camerasPane
+                case .transcription: transcriptionPane
+                case .transcripts:   transcriptsPane
                 case .logs:          logsPane
                 case .about:         aboutPane
                 }
@@ -121,6 +127,22 @@ struct MainWindow: View {
     }
 
     // MARK: - Zone alerts pane
+
+    @ViewBuilder private var transcriptionPane: some View {
+        #if LUMEN_HUB
+        HearingSettingsView(service: HearingService.shared)
+        #else
+        EmptyView()
+        #endif
+    }
+
+    @ViewBuilder private var transcriptsPane: some View {
+        #if LUMEN_HUB
+        TranscriptsView(service: HearingService.shared)
+        #else
+        EmptyView()
+        #endif
+    }
 
     private var zoneAlertsPane: some View {
         VStack(alignment: .leading, spacing: 0) {
