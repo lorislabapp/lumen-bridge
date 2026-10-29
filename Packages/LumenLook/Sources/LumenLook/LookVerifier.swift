@@ -132,8 +132,10 @@ public actor LookVerifier {
         let request = LookRequest(entityID: entityID, expected: reported ?? target.kind.states.positive,
                                   commandAt: Date().addingTimeInterval(-30), language: Locale.current.language.languageCode?.identifier ?? "fr")
         var result = await check(request, target: target, attempt: 0, waitForTravel: false, allowRetry: false)
+        result.manualTest = true
         result.message = LookPhrases.message(for: result.outcome, kind: target.kind, expected: request.expected,
-                                             camera: target.camera, source: result.source, retried: false, language: request.language)
+                                             camera: target.camera, source: result.source, retried: false, language: request.language,
+                                             commandSent: false)
         await deps.store.record(result)
         for o in observers { o(result) }
         return result

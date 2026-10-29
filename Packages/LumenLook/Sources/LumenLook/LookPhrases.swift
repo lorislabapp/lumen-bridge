@@ -5,7 +5,8 @@ import Foundation
 /// "Commande envoyée, je ne vois pas les volets (nuit)"
 public enum LookPhrases {
     public static func message(for outcome: LookOutcome, kind: LookDeviceKind, expected: LookState, camera: String,
-                               source: LookSource, retried: Bool, language: String) -> String {
+                               source: LookSource, retried: Bool, language: String,
+                               commandSent: Bool = true) -> String {
         let cam = cameraName(camera)
         let fr = language != "en"
         switch outcome {
@@ -24,6 +25,10 @@ public enum LookPhrases {
                       : "\(enNoun(kind).capitalizedFirst) still \(enSeem(kind)) \(observed.rawValue) — seen on the \(cam) camera"
                 + (retried ? ", I tried again once" : "")
         case .unknown(let reason):
+            if !commandSent {
+                return fr ? "Je ne vois pas \(frArticleNoun(kind)) (\(frReason(reason)))"
+                          : "I can't see \(enArticleNoun(kind)) (\(enReason(reason)))"
+            }
             return fr ? "Commande envoyée, je ne vois pas \(frArticleNoun(kind)) (\(frReason(reason)))"
                       : "Command sent, I can't see \(enArticleNoun(kind)) (\(enReason(reason)))"
         }

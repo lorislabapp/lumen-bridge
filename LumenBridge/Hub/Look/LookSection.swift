@@ -122,7 +122,8 @@ struct LookResultRow: View {
     private var sentence: String {
         let lang = Bundle.main.preferredLocalizations.first?.hasPrefix("fr") == true ? "fr" : "en"
         return LookPhrases.message(for: result.outcome, kind: kind, expected: result.expected, camera: result.camera,
-                                   source: result.source, retried: result.retried, language: lang)
+                                   source: result.source, retried: result.retried, language: lang,
+                                   commandSent: result.manualTest != true)
     }
 
     private var sourceName: String {

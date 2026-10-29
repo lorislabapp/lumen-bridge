@@ -283,3 +283,11 @@ struct VerifierTests {
                                     retried: true, language: "en") == "TV: the device still reports off, I tried again once")
     }
 }
+
+@Test func manualTestUnknownDoesNotClaimACommand() {
+    #expect(LookPhrases.message(for: .unknown(.night), kind: .shutter, expected: .closed, camera: "living_room", source: .pixels,
+                                retried: false, language: "fr", commandSent: false) == "Je ne vois pas les volets (nuit)")
+    #expect(LookPhrases.message(for: .unknown(.night), kind: .shutter, expected: .closed, camera: "living_room", source: .pixels,
+                                retried: false, language: "en", commandSent: false) == "I can't see the shutters (night)")
+}
+

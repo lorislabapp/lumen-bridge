@@ -255,6 +255,9 @@ public struct LookResult: Codable, Sendable, Equatable, Identifiable {
     public var timing: LookTiming
     /// Owner-facing text (push body).
     public var message: String
+    /// True for the "Test" button: no command was sent. Optional so older
+    /// saved results still decode.
+    public var manualTest: Bool?
 
     public init(id: UUID = UUID(), entityID: String, camera: String, expected: LookState, outcome: LookOutcome,
                 source: LookSource, confidence: Double, evidence: String, deviceReported: String? = nil,
