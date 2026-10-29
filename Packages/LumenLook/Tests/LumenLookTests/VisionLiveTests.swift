@@ -17,6 +17,7 @@ struct VisionLiveTests {
             return
         }
         var right = 0, unknown = 0, wrong = 0, total = 0
+        var policyRight = 0, policyUnknown = 0, policyWrong = 0
         var times: [Double] = []
         let clock = ContinuousClock()
         for kind in LookDeviceKind.allCases {
@@ -45,6 +46,10 @@ struct VisionLiveTests {
                         total += 1
                         let said = answer.visible && answer.confidence >= LookPolicy.modelConfident ? answer.lookState : nil
                         if said == nil { unknown += 1 } else if said == shown { right += 1 } else { wrong += 1 }
+                        // Policy on the model alone (no pixel lean), as the verifier would apply it.
+                        let d = LookPolicy.decide(PolicyInput(expected: to, infrared: night, pixels: nil, model: answer, prior: from))
+                        let truth: LookOutcome = worked ? .confirmed : .contradicted(observed: from)
+                        if case .unknown = d.outcome { policyUnknown += 1 } else if d.outcome == truth { policyRight += 1 } else { policyWrong += 1 }
                         print(String(format: "VISION-LIVE %@ night=%d %@->%@ shown=%@: %@ conf %.2f visible %d changed %@ (%.0f ms)",
                                      kind.rawValue, night ? 1 : 0, from.rawValue, to.rawValue, shown.rawValue, answer.state,
                                      answer.confidence, answer.visible ? 1 : 0, answer.changed, ms))
@@ -54,6 +59,8 @@ struct VisionLiveTests {
         }
         times.sort()
         print("VISION-LIVE right \(right) unknown \(unknown) wrong \(wrong) of \(total); latency median \(Int(times[times.count / 2])) ms, max \(Int(times.last ?? 0)) ms, first \(Int(times.first ?? 0)) ms (sorted min)")
+        print("VISION-LIVE after policy (model alone): right \(policyRight) unknown \(policyUnknown) wrong \(policyWrong)")
         #expect(total == 32)
+        #expect(policyWrong == 0)
     }
 }

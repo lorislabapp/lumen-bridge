@@ -268,7 +268,7 @@ public actor LookVerifier {
         }
         let reported = await deps.device.state(of: target.entityID)
         var input = PolicyInput(expected: request.expected, infrared: afterScene.isInfrared, pixels: pixels,
-                                classifier: classified, device: reported)
+                                classifier: classified, device: reported, prior: request.prior)
 
         // 5. Vision model only when unsure.
         if settings.useModel, LookPolicy.needsModel(input), let judge = deps.judge, await judge.isAvailable(),

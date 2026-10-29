@@ -67,6 +67,23 @@ struct PolicyTests {
         #expect(LookPolicy.decide(PolicyInput(expected: .on, pixels: pixels(nil, 0.5), model: weak)).outcome == .unknown(.unsure))
     }
 
+    @Test func modelMustBeConsistentWithThePrior() {
+        // Live failure: door really open, expected closed, model "closed" but "changed: unknown".
+        let yesBias = JudgeAnswer(visible: true, state: "closed", changed: "unknown", confidence: 0.95)
+        #expect(LookPolicy.decide(PolicyInput(expected: .closed, pixels: pixels(nil, 0.5), model: yesBias, prior: .open)).outcome
+                == .unknown(.unsure))
+        let moved = JudgeAnswer(visible: true, state: "closed", changed: "yes", confidence: 0.95)
+        #expect(LookPolicy.decide(PolicyInput(expected: .closed, pixels: pixels(nil, 0.5), model: moved, prior: .open)).outcome
+                == .confirmed)
+        // "Still open" but "changed: yes" contradicts itself.
+        let odd = JudgeAnswer(visible: true, state: "open", changed: "yes", confidence: 0.95)
+        #expect(LookPolicy.decide(PolicyInput(expected: .closed, pixels: pixels(nil, 0.5), model: odd, prior: .open)).outcome
+                == .unknown(.unsure))
+        let stuck = JudgeAnswer(visible: true, state: "open", changed: "no", confidence: 0.95)
+        #expect(LookPolicy.decide(PolicyInput(expected: .closed, pixels: pixels(nil, 0.5), model: stuck, prior: .open)).outcome
+                == .contradicted(observed: .open))
+    }
+
     @Test func whenToAskTheModel() {
         #expect(!LookPolicy.needsModel(PolicyInput(expected: .on, pixels: pixels(.on, 0.9))))
         #expect(LookPolicy.needsModel(PolicyInput(expected: .on, pixels: pixels(.on, 0.7))))

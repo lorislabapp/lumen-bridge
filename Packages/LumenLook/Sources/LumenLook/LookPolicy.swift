@@ -11,10 +11,13 @@ public struct PolicyInput: Sendable {
     public var model: JudgeAnswer?
     /// Device-reported state at check time (Home Assistant), nil when unknown/unavailable.
     public var device: LookState?
+    /// Device-reported state before the command.
+    public var prior: LookState?
 
     public init(expected: LookState, sceneIssue: UnknownReason? = nil, infrared: Bool = false, pixels: PixelReading? = nil,
                 classifier: (state: LookState, confidence: Double)? = nil, model: JudgeAnswer? = nil,
-                device: LookState? = nil) {
+                device: LookState? = nil, prior: LookState? = nil) {
+        self.prior = prior
         self.expected = expected
         self.sceneIssue = sceneIssue
         self.infrared = infrared
@@ -86,6 +89,13 @@ public enum LookPolicy {
             let said = m.lookState!
             if input.infrared && lean != said { return PolicyDecision(outcome: .unknown(.night), source: .visionModel, confidence: 0.5) }
             if let lean, lean != said { return PolicyDecision(outcome: .unknown(.unsure), source: .visionModel, confidence: 0.5) }
+            // Its confidence is not calibrated (0.95 on right and wrong answers alike, live
+            // Qwen3-VL-4B run). Its "changed" answer must agree with what it claims: a move
+            // away from a known different prior to confirm, no move to contradict.
+            if let prior = input.prior, prior != expected {
+                if said == expected && m.changed != "yes" { return PolicyDecision(outcome: .unknown(.unsure), source: .visionModel, confidence: 0.5) }
+                if said != expected && m.changed == "yes" { return PolicyDecision(outcome: .unknown(.unsure), source: .visionModel, confidence: 0.5) }
+            }
             return said == expected
                 ? PolicyDecision(outcome: .confirmed, source: .visionModel, confidence: m.confidence)
                 : PolicyDecision(outcome: .contradicted(observed: said), source: .visionModel, confidence: m.confidence)
