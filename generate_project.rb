@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
-# Generates LumenBridge.xcodeproj with two application targets sharing the
+# Generates LumenBridge.xcodeproj with three application targets sharing the
 # Shared/ source tree:
-#   - LumenBridge   (macOS 14+, menu-bar SwiftUI)
-#   - LumenBridgeTV (tvOS   17+, focus-based SwiftUI)
+#   - LumenBridge   (macOS 15+, menu-bar SwiftUI) — Mac App Store build
+#   - LumenHub      (macOS 15+, same sources, LUMEN_HUB) — Developer ID build;
+#                   the only target that links LumenHearing / FluidAudio
+#   - LumenBridgeTV (tvOS   18+, focus-based SwiftUI)
 #
 # Both targets point at the same bundle ID `com.lorislabapp.lumenbridge`
 # (registered universal via App Store Connect API).
@@ -87,9 +89,11 @@ project.root_object.package_references << foundation_pkg
 FRIGATE_KIT_DIR = 'Packages/FrigateKit'
 frigate_kit_pkg = add_local_package(project, FRIGATE_KIT_DIR)
 
-# LumenHearing — Lumen Hub speech transcription (Parakeet v3 via FluidAudio,
-# Apple SpeechTranscriber fallback, SQLite FTS5). Used only under LUMEN_HUB;
-# see Packages/LumenHearing/README.md and THIRD_PARTY_NOTICES.md.
+# LumenHearing — Lumen Hub speech transcription and voices (Parakeet v3,
+# pyannote community-1 diarization via FluidAudio, SQLite). Linked ONLY into
+# the LumenHub target, never into the App Store LumenBridge app (it would ship
+# FluidAudio code and an unused resource bundle). See
+# Packages/LumenHearing/README.md and THIRD_PARTY_NOTICES.md.
 LUMEN_HEARING_DIR = 'Packages/LumenHearing'
 lumen_hearing_pkg = add_local_package(project, LUMEN_HEARING_DIR)
 
@@ -140,53 +144,34 @@ shared_swift = swift_files_in(shared_group)
 mac_swift    = swift_files_in(mac_group)
 tv_swift     = swift_files_in(tv_group)
 
-# --- macOS target ---
+# --- macOS targets ---
 # macOS 15+ because LorisReports requires it. Bridge has
 # no users yet so the bump is free.
-mac_target = project.new_target(:application, 'LumenBridge', :osx, '15.0')
-(shared_swift + mac_swift).each { |f| mac_target.source_build_phase.add_file_reference(f) }
-
-# Asset catalog — macOS icon. The .xcassets folder is a "blue folder" in Xcode
-# but for xcodebuild purposes we add the folder as a file reference with the
-# .xcassets path and Xcode auto-picks it up as an asset catalog resource.
-mac_xcassets = mac_group.recursive_children.find { |f|
-  f.is_a?(Xcodeproj::Project::Object::PBXFileReference) && f.path == 'Assets.xcassets'
-}
-mac_target.resources_build_phase.add_file_reference(mac_xcassets) if mac_xcassets
-
-# Bundle resources required by Apple's Asset Validation:
-#   - Localizable.xcstrings — string catalog (compiled to .strings at build)
-#   - PrivacyInfo.xcprivacy — privacy manifest, mandatory since Spring 2024
+#
+# LumenBridge (App Store) and LumenHub (Developer ID) compile the same
+# sources. They are separate targets, not just configurations, because an
+# Xcode target cannot link a Swift package product in one configuration only:
+# LumenHearing (FluidAudio) must never reach the App Store binary.
 def add_bundle_resource(group, target, basename)
   ref = group.recursive_children.find { |f|
     f.is_a?(Xcodeproj::Project::Object::PBXFileReference) && f.path == basename
   }
   target.resources_build_phase.add_file_reference(ref) if ref
 end
-add_bundle_resource(mac_group, mac_target, 'Localizable.xcstrings')
-add_bundle_resource(mac_group, mac_target, 'PrivacyInfo.xcprivacy')
 
-add_package_product(project, mac_target, mqtt_nio_pkg, 'MQTTNIO')
-add_package_product(project, mac_target, hap_pkg, 'HAP')
-add_package_product(project, mac_target, frigate_kit_pkg, 'FrigateKit')
-add_package_product(project, mac_target, lumen_hearing_pkg, 'LumenHearing')
-add_package_product(project, mac_target, foundation_pkg, 'LorisSecurity')
-add_package_product(project, mac_target, loris_labs_kit_pkg, 'LorisReports') if loris_labs_kit_pkg
-add_package_product(project, mac_target, loris_labs_kit_pkg, 'LorisLabsKit') if loris_labs_kit_pkg
-
-mac_target.build_configurations.each do |config|
-  config.build_settings.merge!(
+def mac_app_settings(config_name)
+  {
     'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge',
     'PRODUCT_NAME' => 'Lumen Bridge',
     'MARKETING_VERSION' => '1.1',
-    'CURRENT_PROJECT_VERSION' => '19',
+    'CURRENT_PROJECT_VERSION' => '20',
     'MACOSX_DEPLOYMENT_TARGET' => '15.0',
     'SWIFT_VERSION' => '6.0',
     'DEVELOPMENT_TEAM' => 'TDV6D5L785',
     'CODE_SIGN_STYLE' => 'Automatic',
     'CODE_SIGN_ENTITLEMENTS' => 'LumenBridge/Resources/LumenBridge.entitlements',
     'INFOPLIST_FILE' => 'LumenBridge/Resources/Info.plist',
-    'LORIS_REPORTS_APNS_ENVIRONMENT' => config.name == 'Debug' ? 'sandbox' : 'production',
+    'LORIS_REPORTS_APNS_ENVIRONMENT' => config_name == 'Debug' ? 'sandbox' : 'production',
     'ENABLE_HARDENED_RUNTIME' => 'YES',
     'LD_RUNPATH_SEARCH_PATHS' => '$(inherited) @executable_path/../Frameworks',
     'COMBINE_HIDPI_IMAGES' => 'YES',
@@ -197,7 +182,58 @@ mac_target.build_configurations.each do |config|
     'INFOPLIST_KEY_LSUIElement' => 'YES',
     'SDKROOT' => 'macosx',
     'SUPPORTED_PLATFORMS' => 'macosx'
-  )
+  }
+end
+
+# Lumen Hub: Developer ID / local, no sandbox (LumenHub.entitlements drops the
+# App Sandbox so the HomeKit accessory server and sidecars can run). Same
+# bundle ID; distinct app name so it never overwrites the App Store app.
+def hub_app_settings
+  {
+    'CODE_SIGN_ENTITLEMENTS' => 'LumenBridge/Resources/LumenHub.entitlements',
+    'PRODUCT_NAME' => 'Lumen Hub',
+    # Hub keeps its own pilot version track (Developer ID DMG).
+    'MARKETING_VERSION' => '0.1.0',
+    'CURRENT_PROJECT_VERSION' => '15',
+    'PRODUCT_MODULE_NAME' => 'Lumen_Bridge',
+    # Homebridge/Node/ffmpeg and hearing code compile only here.
+    'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => '$(inherited) LUMEN_HUB'
+  }
+end
+
+def add_mac_app(project, name, sources, mac_group)
+  target = project.new_target(:application, name, :osx, '15.0')
+  sources.each { |f| target.source_build_phase.add_file_reference(f) }
+  # Asset catalog — macOS icon. The .xcassets folder is added as a file
+  # reference and Xcode picks it up as an asset catalog resource.
+  xcassets = mac_group.recursive_children.find { |f|
+    f.is_a?(Xcodeproj::Project::Object::PBXFileReference) && f.path == 'Assets.xcassets'
+  }
+  target.resources_build_phase.add_file_reference(xcassets) if xcassets
+  # Bundle resources required by Apple's Asset Validation:
+  #   - Localizable.xcstrings — string catalog (compiled to .strings at build)
+  #   - PrivacyInfo.xcprivacy — privacy manifest, mandatory since Spring 2024
+  add_bundle_resource(mac_group, target, 'Localizable.xcstrings')
+  add_bundle_resource(mac_group, target, 'PrivacyInfo.xcprivacy')
+  target
+end
+
+mac_target = add_mac_app(project, 'LumenBridge', shared_swift + mac_swift, mac_group)
+hub_target = add_mac_app(project, 'LumenHub', shared_swift + mac_swift, mac_group)
+
+[mac_target, hub_target].each do |target|
+  add_package_product(project, target, mqtt_nio_pkg, 'MQTTNIO')
+  add_package_product(project, target, hap_pkg, 'HAP')
+  add_package_product(project, target, frigate_kit_pkg, 'FrigateKit')
+  add_package_product(project, target, lumen_hearing_pkg, 'LumenHearing') if target == hub_target
+  add_package_product(project, target, foundation_pkg, 'LorisSecurity')
+  add_package_product(project, target, loris_labs_kit_pkg, 'LorisReports') if loris_labs_kit_pkg
+  add_package_product(project, target, loris_labs_kit_pkg, 'LorisLabsKit') if loris_labs_kit_pkg
+end
+
+mac_target.build_configurations.each { |config| config.build_settings.merge!(mac_app_settings(config.name)) }
+hub_target.build_configurations.each do |config|
+  config.build_settings.merge!(mac_app_settings(config.name)).merge!(hub_app_settings)
 end
 
 # --- tvOS target ---
@@ -249,59 +285,52 @@ end
 
 project.save
 
-# --- Hub unit tests (hosted by the macOS app) ---
-hub_tests_target = project.new_target(:unit_test_bundle, 'LumenBridgeTests', :osx, '15.0')
-hub_tests_swift = swift_files_in(hub_tests_group)
-hub_tests_swift.each { |f| hub_tests_target.source_build_phase.add_file_reference(f) }
-hub_tests_group.recursive_children.each do |f|
-  next unless f.is_a?(Xcodeproj::Project::Object::PBXFileReference) && f.path.end_with?('.json')
-  hub_tests_target.resources_build_phase.add_file_reference(f)
-end
-hub_tests_target.add_dependency(mac_target)
+# --- Unit tests (hosted by the macOS apps) ---
+# LumenBridgeTests runs in the App Store app, LumenHubTests in Lumen Hub
+# (same files; LUMEN_HUB-only tests compile only in the latter).
 # FrigateKit / MQTTNIO are static: the host app already links them and
 # BUNDLE_LOADER exposes their symbols, so linking again would duplicate them.
-hub_tests_target.build_configurations.each do |config|
-  config.build_settings.merge!(
-    'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge.tests',
-    'MACOSX_DEPLOYMENT_TARGET' => '15.0',
-    'SWIFT_VERSION' => '6.0',
-    'DEVELOPMENT_TEAM' => 'TDV6D5L785',
-    'CODE_SIGN_STYLE' => 'Automatic',
-    'GENERATE_INFOPLIST_FILE' => 'YES',
-    'TEST_HOST' => '$(BUILT_PRODUCTS_DIR)/Lumen Bridge.app/Contents/MacOS/Lumen Bridge',
-    'BUNDLE_LOADER' => '$(TEST_HOST)',
-    'SDKROOT' => 'macosx'
-  )
+hub_tests_swift = swift_files_in(hub_tests_group)
+hub_tests_json = hub_tests_group.recursive_children.select { |f|
+  f.is_a?(Xcodeproj::Project::Object::PBXFileReference) && f.path.end_with?('.json')
+}
+def add_test_target(project, name, host, app_name, files, resources, hub)
+  t = project.new_target(:unit_test_bundle, name, :osx, '15.0')
+  files.each { |f| t.source_build_phase.add_file_reference(f) }
+  resources.each { |f| t.resources_build_phase.add_file_reference(f) }
+  t.add_dependency(host)
+  t.build_configurations.each do |config|
+    config.build_settings.merge!(
+      'PRODUCT_BUNDLE_IDENTIFIER' => 'com.lorislabapp.lumenbridge.tests',
+      'MACOSX_DEPLOYMENT_TARGET' => '15.0',
+      'SWIFT_VERSION' => '6.0',
+      'DEVELOPMENT_TEAM' => 'TDV6D5L785',
+      'CODE_SIGN_STYLE' => 'Automatic',
+      'GENERATE_INFOPLIST_FILE' => 'YES',
+      'TEST_HOST' => "$(BUILT_PRODUCTS_DIR)/#{app_name}.app/Contents/MacOS/#{app_name}",
+      'BUNDLE_LOADER' => '$(TEST_HOST)',
+      'SDKROOT' => 'macosx'
+    )
+    config.build_settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] = '$(inherited) LUMEN_HUB' if hub
+  end
+  t
 end
+hub_tests_target = add_test_target(project, 'LumenBridgeTests', mac_target, 'Lumen Bridge', hub_tests_swift, hub_tests_json, false)
+lumen_hub_tests_target = add_test_target(project, 'LumenHubTests', hub_target, 'Lumen Hub', hub_tests_swift, hub_tests_json, true)
 
-# --- "Hub" configuration (Lumen Hub: Developer ID / local, no sandbox) ---
-# Same target and identity as the App Store build; only the entitlements
-# differ (LumenHub.entitlements drops the App Sandbox so the HomeKit
-# accessory server can accept connections and sidecars can run).
+# --- "Hub" configuration ---
+# Kept so `-configuration Hub` keeps working: on the LumenHub target it is the
+# Developer ID release build; on the other targets it equals Release.
 project.add_build_configuration('Hub', :release)
-[mac_target, tv_target, hub_tests_target].each do |target|
+[mac_target, hub_target, tv_target, hub_tests_target, lumen_hub_tests_target].each do |target|
   release = target.build_configurations.find { |c| c.name == 'Release' }
   hub = target.build_configurations.find { |c| c.name == 'Hub' }
   hub ||= target.add_build_configuration('Hub', :release)
   hub.build_settings = release.build_settings.dup
 end
-mac_target.build_configurations.find { |c| c.name == 'Hub' }.build_settings.merge!(
-  'CODE_SIGN_ENTITLEMENTS' => 'LumenBridge/Resources/LumenHub.entitlements',
-  'LORIS_REPORTS_APNS_ENVIRONMENT' => 'production',
-  # Distinct app name so it never overwrites the App Store "Lumen Bridge".
-  'PRODUCT_NAME' => 'Lumen Hub',
-  # Hub keeps its own pilot version track (Developer ID DMG).
-  'MARKETING_VERSION' => '0.1.0',
-  'CURRENT_PROJECT_VERSION' => '15',
-  'PRODUCT_MODULE_NAME' => 'Lumen_Bridge',
-  # Homebridge/Node/ffmpeg code compiles only here, never in the App Store build.
-  'SWIFT_ACTIVE_COMPILATION_CONDITIONS' => '$(inherited) LUMEN_HUB'
-)
-hub_tests_target.build_configurations.find { |c| c.name == 'Hub' }.build_settings['TEST_HOST'] =
-  '$(BUILT_PRODUCTS_DIR)/Lumen Hub.app/Contents/MacOS/Lumen Hub'
-hub_tests_target.build_configurations.find { |c| c.name == 'Hub' }.build_settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] =
-  '$(inherited) LUMEN_HUB'
-mac_target.build_configurations.find { |c| c.name == 'Debug' }.build_settings['ENABLE_TESTABILITY'] = 'YES'
+[mac_target, hub_target].each do |target|
+  target.build_configurations.find { |c| c.name == 'Debug' }.build_settings['ENABLE_TESTABILITY'] = 'YES'
+end
 project.save
 
 # Schemes — one per target so xcodebuild can build each independently.
@@ -313,11 +342,11 @@ project.save
   scheme.save_as(PROJECT_PATH, target.name, true)
 end
 
-# Lumen Hub scheme: same app, "Hub" configuration (no sandbox).
+# Lumen Hub scheme: the LumenHub target, "Hub" configuration (no sandbox).
 hub_scheme = Xcodeproj::XCScheme.new
-hub_scheme.add_build_target(mac_target)
-hub_scheme.set_launch_target(mac_target)
-hub_scheme.add_test_target(hub_tests_target)
+hub_scheme.add_build_target(hub_target)
+hub_scheme.set_launch_target(hub_target)
+hub_scheme.add_test_target(lumen_hub_tests_target)
 hub_scheme.launch_action.build_configuration = 'Hub'
 hub_scheme.profile_action.build_configuration = 'Hub'
 hub_scheme.archive_action.build_configuration = 'Hub'
@@ -325,5 +354,6 @@ hub_scheme.save_as(PROJECT_PATH, 'LumenHub', true)
 
 puts "Generated #{PROJECT_PATH}"
 puts "Targets:"
-puts "  - LumenBridge    (macOS 15+)  — #{(shared_swift + mac_swift).size} swift files"
+puts "  - LumenBridge    (macOS 15+)  — #{(shared_swift + mac_swift).size} swift files (App Store, no LumenHearing)"
+puts "  - LumenHub       (macOS 15+)  — #{(shared_swift + mac_swift).size} swift files (Developer ID, LUMEN_HUB + LumenHearing)"
 puts "  - LumenBridgeTV  (tvOS 17+)   — #{(shared_swift + tv_swift).size} swift files"
