@@ -54,8 +54,22 @@ public actor AppleSpeechEngine: TranscriptionEngine {
     }
 
     public func transcribe(_ audio: PCMAudio, language: HearingLanguage) async throws -> EngineTranscript {
+        let first = try await transcribe(audio, locale: locale(for: language))
+        guard language == .automatic else { return first }
+        // SpeechTranscriber has no language ID. Live UAT 0.18 run: an English
+        // clip through the French model gave 8% WER ("I le the package"); the
+        // same clip in English gave 0%. When the text reads as the other
+        // language, run once more in that language (cheap: ~0.02 RTF).
+        let firstCode = first.language
+        guard let guessed = LanguageGuess.detect(first.text), guessed != firstCode,
+              let other = HearingLanguage(rawValue: guessed) else { return first }
+        var second = try await transcribe(audio, locale: locale(for: other))
+        second.processingSeconds += first.processingSeconds
+        return second.text.isEmpty ? first : second
+    }
+
+    private func transcribe(_ audio: PCMAudio, locale requested: Locale) async throws -> EngineTranscript {
         let started = ContinuousClock.now
-        let requested = locale(for: language)
         guard let locale = await SpeechTranscriber.supportedLocale(equivalentTo: requested) else {
             throw HearingError.engineUnavailable("Locale \(requested.identifier) not supported")
         }
