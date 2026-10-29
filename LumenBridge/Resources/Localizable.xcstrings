@@ -4633,12 +4633,22 @@
         }
       }
     },
-    "Forget me…" : {
+    "Forget %@…" : {
       "localizations" : {
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oubliez-moi…"
+            "value" : "Oublier %@…"
+          }
+        }
+      }
+    },
+    "Deletes this person’s voice samples and name" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Efface les extraits de voix et le prénom de cette personne"
           }
         }
       }
@@ -4939,12 +4949,12 @@
         }
       }
     },
-    "Speaker labels follow the transcript retention. People stay until “Forget me”." : {
+    "Speaker labels follow the transcript retention. People stay until someone presses “Forget” next to their name." : {
       "localizations" : {
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les étiquettes d’interlocuteurs suivent la durée de conservation des transcriptions. Les personnes restent jusqu’à « Oubliez-moi »."
+            "value" : "Les étiquettes d’interlocuteurs suivent la durée de conservation des transcriptions. Les personnes restent jusqu’à ce qu’on appuie sur « Oublier » à côté de leur prénom."
           }
         }
       }

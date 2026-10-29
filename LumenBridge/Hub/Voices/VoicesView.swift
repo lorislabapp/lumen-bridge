@@ -157,7 +157,8 @@ struct VoicesView: View {
                     Spacer()
                     Button("Teach from clips…") { teach = profile }
                         .disabled(!service.canEnableNew)
-                    Button("Forget me…", role: .destructive) { forgetting = profile }
+                    Button("Forget \(profile.name)…", role: .destructive) { forgetting = profile }
+                        .accessibilityHint("Deletes this person’s voice samples and name")
                 }
             }
             Button("Add a person…") { consentFor = NewPerson() }
@@ -279,7 +280,7 @@ struct VoicesView: View {
         } header: {
             Text("Storage")
         } footer: {
-            Text("Speaker labels follow the transcript retention. People stay until “Forget me”.")
+            Text("Speaker labels follow the transcript retention. People stay until someone presses “Forget” next to their name.")
         }
     }
 
@@ -376,13 +377,13 @@ enum ConsentText {
             ("lock.shield", "On enregistre une empreinte vocale (des nombres calculés depuis votre voix). C’est une donnée biométrique (RGPD, art. 9). Elle est chiffrée et reste sur ce Mac. Rien n’est envoyé à LorisLabs, Apple ou un cloud."),
             ("hand.raised", "Elle sert seulement à afficher votre prénom. Elle n’ouvre, ne déverrouille et n’autorise jamais rien."),
             ("waveform.slash", "Aucune analyse d’émotion ou de ton. Jamais avec les caméras extérieures, ni en mode « Personnel présent »."),
-            ("trash", "Vous pouvez retirer votre accord à tout moment : « Oubliez-moi » efface votre empreinte et votre prénom de toutes les transcriptions."),
+            ("trash", "Vous pouvez retirer votre accord à tout moment : « Oublier » à côté de votre prénom efface votre empreinte et votre prénom de toutes les transcriptions."),
         ] : [
             ("waveform", "Lumen Hub learns your voice from 3 to 5 clips from the indoor cameras, so transcripts show your name instead of “S1”."),
             ("lock.shield", "A voice signature is stored (numbers computed from your voice). This is biometric data (GDPR, art. 9). It is encrypted and stays on this Mac. Nothing is sent to LorisLabs, Apple or a cloud."),
             ("hand.raised", "It is only used to show your name. It never opens, unlocks or allows anything."),
             ("waveform.slash", "No emotion or tone analysis. Never with outdoor cameras, nor in “Staff present” mode."),
-            ("trash", "You can withdraw at any time: “Forget me” deletes your voice signature and your name from every transcript."),
+            ("trash", "You can withdraw at any time: “Forget” next to your name deletes your voice signature and your name from every transcript."),
         ]
     }
 

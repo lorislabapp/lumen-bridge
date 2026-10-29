@@ -218,7 +218,7 @@ final class VoiceService {
         return false
     }
 
-    /// "Forget me": samples, name, face link and labels of this person.
+    /// "Forget <name>": samples, name, face link and labels of this person.
     func forget(_ profileID: String) async {
         try? await store?.forget(profileID: profileID)
         message = String(localized: "Voice and name deleted.")
