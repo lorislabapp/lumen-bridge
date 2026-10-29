@@ -1,0 +1,736 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Add": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter"
+          }
+        }
+      }
+    },
+    "Address": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adresse"
+          }
+        }
+      }
+    },
+    "Answer out loud on this Mac": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Répondre à voix haute sur ce Mac"
+          }
+        }
+      }
+    },
+    "Assistant": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assistant"
+          }
+        }
+      }
+    },
+    "Audio stream lost, retrying": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flux audio perdu, nouvel essai"
+          }
+        }
+      }
+    },
+    "Check the log": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifier le journal"
+          }
+        }
+      }
+    },
+    "Children's voices: T0 only. A voice can only lower rights, never raise them. Say “non, annule” within 10 seconds to undo.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voix d’enfants : T0 seulement. Une voix peut seulement réduire les droits, jamais les augmenter. Dites « non, annule » dans les 10 secondes pour défaire."
+          }
+        }
+      }
+    },
+    "Connected": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecté"
+          }
+        }
+      }
+    },
+    "Connecting…": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connexion…"
+          }
+        }
+      }
+    },
+    "Create the token in Home Assistant › Profile › Security. A user without admin rights is safer; rooms then need to be set here.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créez le jeton dans Home Assistant › Profil › Sécurité. Un utilisateur sans droits d’administration est plus sûr ; les pièces se règlent alors ici."
+          }
+        }
+      }
+    },
+    "Delete the log": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer le journal"
+          }
+        }
+      }
+    },
+    "Devices the assistant may use": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appareils que l’assistant peut utiliser"
+          }
+        }
+      }
+    },
+    "Dismiss": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignorer"
+          }
+        }
+      }
+    },
+    "Each line is chained to the one before it, so an edit made outside Lumen Hub shows up.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque ligne est liée à la précédente : une modification faite hors de Lumen Hub se voit."
+          }
+        }
+      }
+    },
+    "Enter the Home Assistant address (http://…:8123).": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saisissez l’adresse de Home Assistant (http://…:8123)."
+          }
+        }
+      }
+    },
+    "Failed": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échec"
+          }
+        }
+      }
+    },
+    "Get devices": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récupérer les appareils"
+          }
+        }
+      }
+    },
+    "Heard by:": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entendue par :"
+          }
+        }
+      }
+    },
+    "Heating, camera privacy: only for a recognised adult voice.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chauffage, confidentialité des caméras : seulement pour une voix d’adulte reconnue."
+          }
+        }
+      }
+    },
+    "Home Assistant": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home Assistant"
+          }
+        }
+      }
+    },
+    "Home Assistant did not answer.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home Assistant n’a pas répondu."
+          }
+        }
+      }
+    },
+    "Home Assistant refused the token.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home Assistant a refusé le jeton."
+          }
+        }
+      }
+    },
+    "How to talk to it": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comment lui parler"
+          }
+        }
+      }
+    },
+    "Invalid address": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adresse non valide"
+          }
+        }
+      }
+    },
+    "Last result": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier résultat"
+          }
+        }
+      }
+    },
+    "Lights, TV, music, shutters, plugs: done right away, for anyone.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lumières, télé, musique, volets, prises : fait tout de suite, pour tout le monde."
+          }
+        }
+      }
+    },
+    "Listening": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À l’écoute"
+          }
+        }
+      }
+    },
+    "Locks, alarm, garage: never done from a camera. You get a request to confirm with Face ID on your iPhone.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serrures, alarme, garage : jamais depuis une caméra. Vous recevez une demande à confirmer avec Face ID sur votre iPhone."
+          }
+        }
+      }
+    },
+    "Long-lived access token": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeton d’accès longue durée"
+          }
+        }
+      }
+    },
+    "Lumen AI assistant. Everything runs on this Mac. Only accepted commands are written to the log below; nothing else heard is kept.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assistant IA Lumen. Tout se passe sur ce Mac. Seules les commandes acceptées sont écrites dans le journal ci-dessous ; rien d’autre de ce qui est entendu n’est gardé."
+          }
+        }
+      }
+    },
+    "Lumen Pro is needed to turn this on.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lumen Pro est nécessaire pour l’activer."
+          }
+        }
+      }
+    },
+    "Microphones": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Micros"
+          }
+        }
+      }
+    },
+    "Natural (no wake word)": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Naturel (sans mot d’appel)"
+          }
+        }
+      }
+    },
+    "Natural mode only does harmless things (lights, TV, shutters). It needs a known voice and a person seen in that room. “Lumen, …” still works for the rest.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le mode naturel ne fait que des choses sans risque (lumières, télé, volets). Il faut une voix connue et une personne vue dans la pièce. « Lumen, … » marche toujours pour le reste."
+          }
+        }
+      }
+    },
+    "New devices are off until you allow them.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les nouveaux appareils restent désactivés jusqu’à votre accord."
+          }
+        }
+      }
+    },
+    "New room": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouvelle pièce"
+          }
+        }
+      }
+    },
+    "No AAC audio on this camera stream": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas d’audio AAC sur le flux de cette caméra"
+          }
+        }
+      }
+    },
+    "No camera yet. Check the Frigate connection.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune caméra pour l’instant. Vérifiez la connexion à Frigate."
+          }
+        }
+      }
+    },
+    "No room": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune pièce"
+          }
+        }
+      }
+    },
+    "Not checked": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non vérifié"
+          }
+        }
+      }
+    },
+    "Nothing yet.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rien pour l’instant."
+          }
+        }
+      }
+    },
+    "Off": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Désactivé"
+          }
+        }
+      }
+    },
+    "Only indoor cameras with consent in Transcription can listen. Outdoor and doorbell cameras never give orders. Staff mode pauses everything.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seules les caméras intérieures avec consentement dans Transcription peuvent écouter. Les caméras extérieures et la sonnette ne donnent jamais d’ordres. Le mode « personnel présent » met tout en pause."
+          }
+        }
+      }
+    },
+    "Paused (camera not eligible)": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En pause (caméra non autorisée)"
+          }
+        }
+      }
+    },
+    "Press “Get devices” to list what Home Assistant has.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appuyez sur « Récupérer les appareils » pour lister ceux de Home Assistant."
+          }
+        }
+      }
+    },
+    "Preview only (nothing is sent to the house)": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu seulement (rien n’est envoyé à la maison)"
+          }
+        }
+      }
+    },
+    "Refused": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refusé"
+          }
+        }
+      }
+    },
+    "Remove": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer"
+          }
+        }
+      }
+    },
+    "Rooms": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pièces"
+          }
+        }
+      }
+    },
+    "Safety": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sécurité"
+          }
+        }
+      }
+    },
+    "Safety tier": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau de sécurité"
+          }
+        }
+      }
+    },
+    "Save": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer"
+          }
+        }
+      }
+    },
+    "Say “Lumen, …” first": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dire « Lumen, … » d’abord"
+          }
+        }
+      }
+    },
+    "Say “Lumen” then your request, for example “Lumen, allume la lumière du salon”.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dites « Lumen » puis votre demande, par exemple « Lumen, allume la lumière du salon »."
+          }
+        }
+      }
+    },
+    "Simple French and English requests are understood by rules, instantly. The model is asked only when rules are unsure, and it can only pick from the devices you allowed.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les demandes simples en français et en anglais sont comprises par des règles, tout de suite. Le modèle n’est consulté que si les règles hésitent, et il ne peut choisir que parmi les appareils autorisés."
+          }
+        }
+      }
+    },
+    "Tell my iPhone what was done": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prévenir mon iPhone de ce qui est fait"
+          }
+        }
+      }
+    },
+    "Test": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tester"
+          }
+        }
+      }
+    },
+    "The assistant log could not open.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le journal de l’assistant n’a pas pu s’ouvrir."
+          }
+        }
+      }
+    },
+    "The log was changed outside Lumen Hub (chain broken).": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le journal a été modifié hors de Lumen Hub (chaîne rompue)."
+          }
+        }
+      }
+    },
+    "The token could not be saved in the Keychain.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le jeton n’a pas pu être enregistré dans le trousseau."
+          }
+        }
+      }
+    },
+    "Token saved in the Keychain": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeton enregistré dans le trousseau"
+          }
+        }
+      }
+    },
+    "Turn it on in Transcription first (indoor, with consent)": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activez-la d’abord dans Transcription (intérieur, avec consentement)"
+          }
+        }
+      }
+    },
+    "Understanding": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compréhension"
+          }
+        }
+      }
+    },
+    "Undo last action": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défaire la dernière action"
+          }
+        }
+      }
+    },
+    "Use https, or a local network address.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilisez https, ou une adresse du réseau local."
+          }
+        }
+      }
+    },
+    "Use the local AI model for unusual phrasing": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utiliser le modèle d’IA local pour les tournures inhabituelles"
+          }
+        }
+      }
+    },
+    "Voice assistant": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assistant vocal"
+          }
+        }
+      }
+    },
+    "Waiting for iPhone confirmation": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente de confirmation sur l’iPhone"
+          }
+        }
+      }
+    },
+    "What the assistant did": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce que l’assistant a fait"
+          }
+        }
+      }
+    },
+    "When nobody names a room, the room of the camera that heard it is used.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si personne ne nomme de pièce, on prend celle de la caméra qui a entendu."
+          }
+        }
+      }
+    },
+    "entities": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "entités"
+          }
+        }
+      }
+    },
+    "llama-server address": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adresse de llama-server"
+          }
+        }
+      }
+    },
+    "llama-server is not running.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "llama-server ne tourne pas."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -38,7 +38,7 @@ struct MainWindow: View {
     @State private var isSendingTestEvent = false
 
     enum Section: String, CaseIterable, Identifiable {
-        case status, connection, zoneAlerts, sensors, cameras, transcription, transcripts, voices, iCloud, logs, about
+        case status, connection, zoneAlerts, sensors, cameras, transcription, transcripts, voices, assistant, iCloud, logs, about
         var id: String { rawValue }
 
         /// HomeKit cameras (Homebridge) and speech transcription exist only in the Developer ID Hub.
@@ -46,7 +46,7 @@ struct MainWindow: View {
             #if LUMEN_HUB
             allCases
             #else
-            allCases.filter { ![.cameras, .transcription, .transcripts, .voices].contains($0) }
+            allCases.filter { ![.cameras, .transcription, .transcripts, .voices, .assistant].contains($0) }
             #endif
         }
 
@@ -60,6 +60,7 @@ struct MainWindow: View {
             case .transcription: return String(localized: "Transcription")
             case .transcripts: return String(localized: "Transcripts")
             case .voices:     return String(localized: "Voices")
+            case .assistant:  return AssistantTitle.text
             case .iCloud:     return String(localized: "iCloud")
             case .logs:       return String(localized: "Logs")
             case .about:      return String(localized: "About")
@@ -77,6 +78,7 @@ struct MainWindow: View {
             case .transcription: return "waveform"
             case .transcripts: return "text.bubble.fill"
             case .voices:     return "person.wave.2.fill"
+            case .assistant:  return "waveform.and.mic"
             case .logs:       return "doc.text.fill"
             case .about:      return "info.circle.fill"
             }
@@ -113,6 +115,7 @@ struct MainWindow: View {
                 case .transcription: transcriptionPane
                 case .transcripts:   transcriptsPane
                 case .voices:        voicesPane
+                case .assistant:     assistantPane
                 case .logs:          logsPane
                 case .about:         aboutPane
                 }
@@ -142,6 +145,14 @@ struct MainWindow: View {
     @ViewBuilder private var voicesPane: some View {
         #if LUMEN_HUB
         VoicesView(service: VoiceService.shared, hearing: HearingService.shared)
+        #else
+        EmptyView()
+        #endif
+    }
+
+    @ViewBuilder private var assistantPane: some View {
+        #if LUMEN_HUB
+        AssistantView(service: AssistantService.shared, hearing: HearingService.shared)
         #else
         EmptyView()
         #endif
@@ -785,3 +796,8 @@ struct FrigateWebURLRow: View {
     }
 }
 #endif
+
+/// Sidebar title of the Hub-only Assistant pane (its strings live in Assistant.xcstrings).
+enum AssistantTitle {
+    static var text: String { Bundle.main.localizedString(forKey: "Assistant", value: "Assistant", table: "Assistant") }
+}

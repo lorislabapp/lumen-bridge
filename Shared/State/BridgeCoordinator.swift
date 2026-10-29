@@ -308,6 +308,7 @@ final class BridgeCoordinator {
             }
         }
         service.start()
+        AssistantService.shared.start()
     }
     #endif
 

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "34AF9213D158A12BF0BB0BD3"
+               BlueprintIdentifier = "9E68F30E86E3B37CA24C2136"
                BuildableName = "LumenHub.app"
                BlueprintName = "LumenHub"
                ReferencedContainer = "container:LumenBridge.xcodeproj">
@@ -30,7 +30,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "34AF9213D158A12BF0BB0BD3"
+            BlueprintIdentifier = "9E68F30E86E3B37CA24C2136"
             BuildableName = "LumenHub.app"
             BlueprintName = "LumenHub"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
@@ -41,7 +41,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0A1B5617EA17AA255DB8E443"
+               BlueprintIdentifier = "8943E2E3E4D4C715057DB04A"
                BuildableName = "LumenHubTests.xctest"
                BlueprintName = "LumenHubTests"
                ReferencedContainer = "container:LumenBridge.xcodeproj">
@@ -63,7 +63,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "34AF9213D158A12BF0BB0BD3"
+            BlueprintIdentifier = "9E68F30E86E3B37CA24C2136"
             BuildableName = "LumenHub.app"
             BlueprintName = "LumenHub"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
@@ -80,7 +80,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "34AF9213D158A12BF0BB0BD3"
+            BlueprintIdentifier = "9E68F30E86E3B37CA24C2136"
             BuildableName = "LumenHub.app"
             BlueprintName = "LumenHub"
             ReferencedContainer = "container:LumenBridge.xcodeproj">

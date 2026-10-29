@@ -51,6 +51,10 @@ final class HearingService {
 
     nonisolated static let cursorKey = "lumenhub.hearing.cursor.v1"
 
+    /// The one shared Parakeet engine (the assistant reuses it, never a second copy).
+    var sharedParakeet: ParakeetEngine { parakeet }
+    var modelsRoot: URL { HearingModelLocation.root(default: root.appendingPathComponent("Models", isDirectory: true)) }
+
     private init() {
         let loaded = settingsStore.load()
         settings = loaded
