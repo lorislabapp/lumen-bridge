@@ -17,6 +17,7 @@ struct HearingSettingsView: View {
 
     var body: some View {
         Form {
+            HubProBanner(status: HubProStatus.shared)
             Section {
                 Toggle("Transcribe speech from cameras", isOn: binding(\.enabled))
                     .toggleStyle(.switch)
@@ -25,6 +26,10 @@ struct HearingSettingsView: View {
                     .foregroundStyle(.secondary)
                 if let error = service.storeError {
                     Label(error, systemImage: "exclamationmark.triangle").foregroundStyle(.orange)
+                }
+                if service.proBlocked {
+                    Label("Lumen Pro is needed to turn this on.", systemImage: "star.circle")
+                        .foregroundStyle(.orange)
                 }
             }
 

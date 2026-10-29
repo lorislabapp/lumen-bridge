@@ -30,6 +30,8 @@ final class HearingService {
     private(set) var lastAlertNote: String?
     private(set) var transcripts: [TranscriptRecord] = []
     private(set) var transcriptCount = 0
+    /// Set when turning something on was refused because Lumen Pro is not confirmed.
+    private(set) var proBlocked = false
 
     /// Set by the coordinator: delivers a keyword alert through the Hub's push channel.
     @ObservationIgnored var alertHandler: (@MainActor (KeywordAlert) async -> String)?
@@ -77,6 +79,13 @@ final class HearingService {
         let live = liveSettings
         let silero = silero
         let sink = ServiceAlertSink()
+        // Lumen Pro gate (read-only CloudKit check) and Phase 2 voices.
+        HubProStatus.shared.start()
+        HubProStatus.shared.onChange { [weak self] _ in
+            self?.proBlocked = false
+            self?.applyRunningState()
+        }
+        let speakers = VoiceService.shared.makeStage(hearing: { live.value }, frigate: frigate)
         let pipeline = HearingPipeline(
             settings: { live.value },
             audioSource: frigate,
@@ -86,6 +95,7 @@ final class HearingService {
                 return EnergyVoiceGate()
             },
             engines: EngineSelector(parakeet: parakeet, apple: apple),
+            speakers: speakers,
             store: store, alerts: sink)
         self.pipeline = pipeline
         Task { [weak self] in
@@ -114,7 +124,8 @@ final class HearingService {
     /// no eligible camera → nothing is polled and the queue is emptied.
     private func applyRunningState() {
         guard let ingestor, let pipeline else { return }
-        let shouldRun = !settings.activeCameras.isEmpty
+        // A definite "not Pro" pauses work (data is kept); "unknown" does not.
+        let shouldRun = !settings.activeCameras.isEmpty && HubProStatus.shared.access.allowsProcessing
         Task {
             if shouldRun {
                 await ingestor.start()
@@ -133,6 +144,19 @@ final class HearingService {
         var next = settings
         try change(&next)
         guard next != settings else { return }
+        // Pro gate: anything newly switched on needs a confirmed Lumen Pro.
+        // Turning things off, staff mode and retention always work.
+        // Leaving staff mode only resumes cameras already on, so it is ignored here.
+        var after = next, before = settings
+        after.staffPresent = false
+        before.staffPresent = false
+        let turnsOn = (next.enabled && !settings.enabled)
+            || !Set(after.activeCameras).isSubset(of: Set(before.activeCameras))
+        if turnsOn && !HubProStatus.shared.access.canEnableNew {
+            proBlocked = true
+            return
+        }
+        proBlocked = false
         let retentionChanged = next.retentionDays != settings.retentionDays
         settings = next
         liveSettings.value = next
@@ -231,6 +255,12 @@ final class HearingService {
         }
     }
 
+    /// Newest transcripts, for the Voices page ("teach from clips").
+    func recent(limit: Int) async -> [TranscriptRecord] {
+        guard let store else { return [] }
+        return (try? await store.recent(limit: limit)) ?? []
+    }
+
     func deleteAllTranscripts() async {
         guard let store else { return }
         try? await store.deleteAll()
@@ -271,7 +301,8 @@ actor HearingFrigateSource: SpeechEventFeed, SpeechAudioSource {
     private var session: BridgeFrigateSession?
     private var base: String?
 
-    private func current() async throws -> BridgeFrigateSession {
+    /// Internal so the Voices module reuses the same session (face events).
+    func current() async throws -> BridgeFrigateSession {
         guard let raw = UserDefaults.standard.string(forKey: BridgeCoordinator.frigateWebURLKey),
               let normalized = BridgeFrigateEndpoint.normalized(raw) else { throw BridgeFrigateAccessError.invalidAddress }
         if let session, base == normalized { return session }

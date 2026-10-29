@@ -120,12 +120,17 @@ protocol BridgeFrigateTransport: Sendable {
     func speechEvents(after: Double, limit: Int) async throws -> [FrigateEvent]
     /// Downloads one event's clip (same origin, size-capped) to a temporary file the caller deletes.
     func eventClip(id: String) async throws -> URL
+    /// `person` events on one camera that started in a window (Hub face ↔ voice suggestions).
+    func personEvents(camera: String, after: Double, before: Double, limit: Int) async throws -> [FrigateEvent]
 }
 
 extension BridgeFrigateTransport {
     func video(camera: String) async throws -> BridgeFrigateVideoStream { throw BridgeFrigateAccessError.videoUnavailable }
     func speechEvents(after: Double, limit: Int) async throws -> [FrigateEvent] { throw BridgeFrigateAccessError.invalidConfiguration }
     func eventClip(id: String) async throws -> URL { throw BridgeFrigateAccessError.videoUnavailable }
+    func personEvents(camera: String, after: Double, before: Double, limit: Int) async throws -> [FrigateEvent] {
+        throw BridgeFrigateAccessError.invalidConfiguration
+    }
 }
 
 private struct NativeFrigateTransport: BridgeFrigateTransport {
@@ -140,6 +145,9 @@ private struct NativeFrigateTransport: BridgeFrigateTransport {
     func eventClip(id: String) async throws -> URL {
         // 64 MB is FrigateKit's cap; a speech clip is far smaller. Never over cellular.
         try await client.downloadClipForCache(eventID: id, maximumBytes: 64 * 1024 * 1024, allowsCellular: false)
+    }
+    func personEvents(camera: String, after: Double, before: Double, limit: Int) async throws -> [FrigateEvent] {
+        try await client.getEvents(camera: camera, label: "person", after: after, before: before, limit: limit)
     }
     func video(camera: String) async throws -> BridgeFrigateVideoStream {
         let cameras = try await client.getCameras()
@@ -192,6 +200,9 @@ actor BridgeFrigateSession {
     }
     func eventClip(id: String) async throws -> URL {
         try await authenticated { try await self.transport.eventClip(id: id) }
+    }
+    func personEvents(camera: String, after: Double, before: Double, limit: Int) async throws -> [FrigateEvent] {
+        try await authenticated { try await self.transport.personEvents(camera: camera, after: after, before: before, limit: limit) }
     }
     private func authenticated<T: Sendable>(_ operation: @Sendable () async throws -> T) async throws -> T {
         if hasCredentials && generation == 0 {

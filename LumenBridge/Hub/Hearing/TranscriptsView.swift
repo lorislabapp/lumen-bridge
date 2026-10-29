@@ -45,6 +45,9 @@ struct TranscriptsView: View {
             await refresh()
         }
         .onChange(of: camera) { Task { await refresh() } }
+        .task(id: service.transcripts.map(\.eventID)) {
+            await VoiceService.shared.refreshLabels(eventIDs: service.transcripts.map(\.eventID))
+        }
     }
 
     private func refresh() async { await service.search(query, camera: camera) }
@@ -60,9 +63,13 @@ struct TranscriptsView: View {
                 Text(r.engine == EngineKind.parakeetV3.rawValue ? "Parakeet" : "Apple")
                     .font(.caption2).foregroundStyle(.secondary)
             }
-            Text(r.snippet.map(highlight) ?? AttributedString(r.text))
-                .textSelection(.enabled)
-                .fixedSize(horizontal: false, vertical: true)
+            if r.snippet == nil, r.segments.contains(where: { $0.speaker != nil }) {
+                SpeakerLinesView(record: r, voices: VoiceService.shared)
+            } else {
+                Text(r.snippet.map(highlight) ?? AttributedString(r.text))
+                    .textSelection(.enabled)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
         .padding(.vertical, 4)
         .accessibilityElement(children: .combine)

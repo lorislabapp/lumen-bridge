@@ -577,6 +577,11 @@ public actor VoiceStore {
                 [.int(clusterID), .text(face), .text(eventID), .real(date.timeIntervalSince1970)])
     }
 
+    /// "Not this person": drops the face evidence of one cluster.
+    public func clearFaceEvidence(clusterID: Int64) throws {
+        try run("DELETE FROM face_voice_evidence WHERE cluster_id = ?", [.int(clusterID)])
+    }
+
     public func faceCounts(clusterID: Int64) throws -> [String: Int] {
         let rows = try query("SELECT face_name, COUNT(*) FROM face_voice_evidence WHERE cluster_id = ? GROUP BY face_name",
                              [.int(clusterID)]) { (Self.text($0, 0) ?? "", Int(sqlite3_column_int64($0, 1))) }

@@ -4482,6 +4482,756 @@
           }
         }
       }
+    },
+    "Voices" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voix"
+          }
+        }
+      }
+    },
+    "Speakers" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interlocuteurs"
+          }
+        }
+      }
+    },
+    "Separate speakers" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Séparer les interlocuteurs"
+          }
+        }
+      }
+    },
+    "Transcript lines show who spoke: S1, S2… No voice is saved for this." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les lignes de transcription indiquent qui parle : S1, S2… Aucune voix n’est enregistrée pour cela."
+          }
+        }
+      }
+    },
+    "Recognise named voices" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reconnaître les voix nommées"
+          }
+        }
+      }
+    },
+    "Only people who agreed. A name is a label only: it never unlocks or allows anything." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seulement les personnes qui ont donné leur accord. Un prénom n’est qu’une étiquette : il ne déverrouille et n’autorise jamais rien."
+          }
+        }
+      }
+    },
+    "Group unknown voices" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regrouper les voix inconnues"
+          }
+        }
+      }
+    },
+    "Learn from very sure matches (adults only)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apprendre des reconnaissances très sûres (adultes seulement)"
+          }
+        }
+      }
+    },
+    "Names on %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prénoms sur %@"
+          }
+        }
+      }
+    },
+    "Only indoor cameras with transcription on. “Staff present” stops this too. No emotion or tone analysis." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seulement les caméras intérieures avec la transcription activée. « Personnel présent » l’arrête aussi. Aucune analyse d’émotion ou de ton."
+          }
+        }
+      }
+    },
+    "No one yet. Each person agrees first, then you pick 3 to 5 clips of their voice." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personne pour l’instant. Chaque personne donne d’abord son accord, puis vous choisissez 3 à 5 extraits de sa voix."
+          }
+        }
+      }
+    },
+    "Child" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enfant"
+          }
+        }
+      }
+    },
+    "%lld samples · agreed %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld échantillons · accord du %@"
+          }
+        }
+      }
+    },
+    "Frigate face: %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visage Frigate : %@"
+          }
+        }
+      }
+    },
+    "A child’s voice changes. Teach it again with new clips." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La voix d’un enfant change. Réapprenez-la avec de nouveaux extraits."
+          }
+        }
+      }
+    },
+    "Teach from clips…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apprendre depuis des extraits…"
+          }
+        }
+      }
+    },
+    "Forget me…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oubliez-moi…"
+          }
+        }
+      }
+    },
+    "Add a person…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter une personne…"
+          }
+        }
+      }
+    },
+    "A voice sample is biometric data. It is encrypted and never leaves this Mac." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un échantillon de voix est une donnée biométrique. Il est chiffré et ne quitte jamais ce Mac."
+          }
+        }
+      }
+    },
+    "Voices nobody named yet appear here after they are heard." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les voix que personne n’a encore nommées apparaissent ici après avoir été entendues."
+          }
+        }
+      }
+    },
+    "Ignored voice #%lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voix ignorée n° %lld"
+          }
+        }
+      }
+    },
+    "Unknown voice #%lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voix inconnue n° %lld"
+          }
+        }
+      }
+    },
+    "Heard %lld times · last %@ · %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entendue %lld fois · dernière fois %@ · %@"
+          }
+        }
+      }
+    },
+    "Actions" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actions"
+          }
+        }
+      }
+    },
+    "This is…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "C’est…"
+          }
+        }
+      }
+    },
+    "Someone new…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelqu’un de nouveau…"
+          }
+        }
+      }
+    },
+    "Same voice as…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Même voix que…"
+          }
+        }
+      }
+    },
+    "Stop ignoring" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ne plus ignorer"
+          }
+        }
+      }
+    },
+    "Ignore (TV, radio…)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignorer (télé, radio…)"
+          }
+        }
+      }
+    },
+    "Forget this voice" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oublier cette voix"
+          }
+        }
+      }
+    },
+    "Unknown voices" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voix inconnues"
+          }
+        }
+      }
+    },
+    "Forgotten automatically when not heard for %lld days. A guest is never given a household name unless the match is very sure." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oubliées automatiquement si elles ne sont pas entendues pendant %lld jours. Un invité ne reçoit jamais le prénom d’un membre du foyer, sauf si la reconnaissance est très sûre."
+          }
+        }
+      }
+    },
+    "Heard %lld times with %@’s face. Is it %@?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entendue %lld fois avec le visage de %@. Est-ce %@ ?"
+          }
+        }
+      }
+    },
+    "Yes" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oui"
+          }
+        }
+      }
+    },
+    "Yes…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oui…"
+          }
+        }
+      }
+    },
+    "No" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non"
+          }
+        }
+      }
+    },
+    "Speaker model (pyannote community-1, 21 MB)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modèle d’interlocuteurs (pyannote community-1, 21 Mo)"
+          }
+        }
+      }
+    },
+    "Download" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Télécharger"
+          }
+        }
+      }
+    },
+    "Last event: %d speakers, %d named, %.2f s for %.1f s of speech." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernier événement : %d interlocuteurs, %d nommés, %.2f s pour %.1f s de parole."
+          }
+        }
+      }
+    },
+    "Model" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modèle"
+          }
+        }
+      }
+    },
+    "Delete all voices…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer toutes les voix…"
+          }
+        }
+      }
+    },
+    "Speaker labels follow the transcript retention. People stay until “Forget me”." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les étiquettes d’interlocuteurs suivent la durée de conservation des transcriptions. Les personnes restent jusqu’à « Oubliez-moi »."
+          }
+        }
+      }
+    },
+    "Forget" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oublier"
+          }
+        }
+      }
+    },
+    "Deletes this person’s voice samples, name and face link, and removes the name from every transcript line." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprime les échantillons de voix, le prénom et le lien de visage de cette personne, et retire son prénom de toutes les lignes de transcription."
+          }
+        }
+      }
+    },
+    "Delete every voice on this Mac?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer toutes les voix de ce Mac ?"
+          }
+        }
+      }
+    },
+    "Delete all voices" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer toutes les voix"
+          }
+        }
+      }
+    },
+    "Forget %@?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oublier %@ ?"
+          }
+        }
+      }
+    },
+    "Teach %@’s voice" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apprendre la voix de %@"
+          }
+        }
+      }
+    },
+    "Pick 3 to 5 clips where only %@ speaks for that speaker. Clips from different cameras work best." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez 3 à 5 extraits où cet interlocuteur est bien %@. Des extraits de plusieurs caméras donnent de meilleurs résultats."
+          }
+        }
+      }
+    },
+    "No clips yet" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas encore d’extraits"
+          }
+        }
+      }
+    },
+    "Speech heard by the indoor cameras appears here once speakers are separated." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La parole entendue par les caméras intérieures apparaît ici une fois les interlocuteurs séparés."
+          }
+        }
+      }
+    },
+    "%lld of 3–5" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld sur 3 à 5"
+          }
+        }
+      }
+    },
+    "Save voice" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer la voix"
+          }
+        }
+      }
+    },
+    "Lumen Pro needed" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lumen Pro requis"
+          }
+        }
+      }
+    },
+    "Lumen Pro is not active on this iCloud account. Listening is paused. Your transcripts and voices are kept." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lumen Pro n’est pas actif sur ce compte iCloud. L’écoute est en pause. Vos transcriptions et vos voix sont conservées."
+          }
+        }
+      }
+    },
+    "This build of Lumen Hub cannot read your Lumen Pro status yet. You cannot turn on new features; what already runs keeps running." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette version de Lumen Hub ne peut pas encore lire votre statut Lumen Pro. Vous ne pouvez pas activer de nouvelles fonctions ; ce qui fonctionne déjà continue."
+          }
+        }
+      }
+    },
+    "Sign in to iCloud with the account you use in Lumen." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connectez-vous à iCloud avec le compte que vous utilisez dans Lumen."
+          }
+        }
+      }
+    },
+    "Open Lumen on your iPhone once, with iCloud on, so Lumen Hub can see your Pro status." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrez Lumen une fois sur votre iPhone, avec iCloud activé, pour que Lumen Hub voie votre statut Pro."
+          }
+        }
+      }
+    },
+    "Lumen Pro could not be checked. You cannot turn on new features until it is." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lumen Pro n’a pas pu être vérifié. Vous ne pouvez pas activer de nouvelles fonctions tant que ce n’est pas fait."
+          }
+        }
+      }
+    },
+    "Lumen Pro is needed to turn this on." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lumen Pro est nécessaire pour activer ceci."
+          }
+        }
+      }
+    },
+    "Lumen Pro is needed to add a voice." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lumen Pro est nécessaire pour ajouter une voix."
+          }
+        }
+      }
+    },
+    "Lumen Pro is needed to teach a voice." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lumen Pro est nécessaire pour apprendre une voix."
+          }
+        }
+      }
+    },
+    "The voice database could not open. Speakers are still separated, but not saved." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La base des voix n’a pas pu s’ouvrir. Les interlocuteurs sont toujours séparés, mais pas enregistrés."
+          }
+        }
+      }
+    },
+    "This person could not be added." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette personne n’a pas pu être ajoutée."
+          }
+        }
+      }
+    },
+    "Download the speaker model first." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Téléchargez d’abord le modèle d’interlocuteurs."
+          }
+        }
+      }
+    },
+    "%lld voice samples saved." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld échantillons de voix enregistrés."
+          }
+        }
+      }
+    },
+    "One clip has too little speech from this person. Pick a longer one." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un extrait contient trop peu de parole de cette personne. Choisissez-en un plus long."
+          }
+        }
+      }
+    },
+    "Pick 3 to 5 clips." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez 3 à 5 extraits."
+          }
+        }
+      }
+    },
+    "The clips could not be read. Frigate may have deleted them." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les extraits n’ont pas pu être lus. Frigate les a peut-être supprimés."
+          }
+        }
+      }
+    },
+    "Voice and name deleted." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voix et prénom supprimés."
+          }
+        }
+      }
+    },
+    "Voice named." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voix nommée."
+          }
+        }
+      }
+    },
+    "This voice could not be named." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette voix n’a pas pu être nommée."
+          }
+        }
+      }
+    },
+    "Every voice, name and speaker label was deleted." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toutes les voix, tous les prénoms et toutes les étiquettes d’interlocuteurs ont été supprimés."
+          }
+        }
+      }
+    },
+    "%@?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ?"
+          }
+        }
+      }
+    },
+    "Ignored voice" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voix ignorée"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

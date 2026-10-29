@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2ACB7075945AFE705CAF56B3"
+               BlueprintIdentifier = "63A83EFFF001EE4E2F235B10"
                BuildableName = "LumenBridge.app"
                BlueprintName = "LumenBridge"
                ReferencedContainer = "container:LumenBridge.xcodeproj">
@@ -30,7 +30,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2ACB7075945AFE705CAF56B3"
+            BlueprintIdentifier = "63A83EFFF001EE4E2F235B10"
             BuildableName = "LumenBridge.app"
             BlueprintName = "LumenBridge"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
@@ -41,7 +41,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "98877F7531205D2FDDBEE6BA"
+               BlueprintIdentifier = "E54F1C30CD474F1D01A12837"
                BuildableName = "LumenBridgeTests.xctest"
                BlueprintName = "LumenBridgeTests"
                ReferencedContainer = "container:LumenBridge.xcodeproj">
@@ -63,7 +63,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2ACB7075945AFE705CAF56B3"
+            BlueprintIdentifier = "63A83EFFF001EE4E2F235B10"
             BuildableName = "LumenBridge.app"
             BlueprintName = "LumenBridge"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
@@ -80,7 +80,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2ACB7075945AFE705CAF56B3"
+            BlueprintIdentifier = "63A83EFFF001EE4E2F235B10"
             BuildableName = "LumenBridge.app"
             BlueprintName = "LumenBridge"
             ReferencedContainer = "container:LumenBridge.xcodeproj">
