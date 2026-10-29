@@ -64,6 +64,11 @@ Schema changes are numbered migrations in `VoiceStore.migrations`.
 Diarization integration test (real model, ≈ 21 MB once):
 `LUMEN_HEARING_DIARIZER=1 LUMEN_HEARING_MODELS_DIR=<dir> swift test --filter VoiceIntegration`.
 Fixtures come from `Scripts/make-voice-fixtures.sh` (macOS `say`).
+Measured 2026-10-29 on an M5 Pro (synthetic FR + EN dialogue, 17.9 s, AAC
+32 kb/s): 2 speakers found, 96.3 % of speech time attributed correctly,
+diarization 0.24 s (≈ 73× real time, release build; 0.50 s debug). Same-voice
+cosine 0.79–0.91, different-voice ≤ 0.19. TTS voices are far easier than
+real camera audio: re-check thresholds on a labelled set from real cameras.
 
 ## Pro gate (`ProGate.swift`)
 
