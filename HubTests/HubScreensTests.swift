@@ -1,6 +1,7 @@
 #if LUMEN_HUB && DEBUG
 import AppKit
 import CryptoKit
+import LumenAssistant
 import LumenHearing
 import SwiftUI
 import XCTest
@@ -92,21 +93,47 @@ final class HubScreensTests: XCTestCase {
         try await show("17-light-voices", section: .voices)
     }
 
+    /// Assistant pane: fake Home Assistant address, no token in the Keychain
+    /// (the "saved" state is faked), made-up devices and rooms, one pending T2
+    /// confirmation, a few log lines, preview-only on. Nothing listens.
+    @MainActor
+    func testAssistantScreens() async throws {
+        let f = try await Fixture.make(in: dir.appendingPathComponent("asst-\(lang)", isDirectory: true))
+        await f.install(hearing: f.onSettings, voices: f.voiceSettings)
+        await HubProStatus.shared.refresh()
+        let a = try await AssistantFixture.make(in: dir.appendingPathComponent("asst-\(lang)", isDirectory: true))
+
+        for look in [NSAppearance.Name.darkAqua, .aqua] {
+            appearance = look
+            let tag = look == .darkAqua ? "dark" : "light"
+            await a.install()
+            try await show("assistant-\(tag)-1-top", section: .assistant)
+            await a.install()
+            try await show("assistant-\(tag)-2-home-assistant", section: .assistant, scroll: 0.3)
+            await a.install()
+            try await show("assistant-\(tag)-3-rooms", section: .assistant, scroll: 0.62)
+            await a.install()
+            try await show("assistant-\(tag)-4-log", section: .assistant, scroll: 1)
+        }
+    }
+
     // MARK: - Showing and capture handshake
 
     @MainActor
-    private func show(_ name: String, section: MainWindow.Section, scrollToEnd: Bool = false) async throws {
+    private func show(_ name: String, section: MainWindow.Section, scrollToEnd: Bool = false,
+                      scroll: CGFloat? = nil) async throws {
         UserDefaults.standard.set(section.rawValue, forKey: Self.sectionKey)
         try await show(name, root: MainWindow(state: BridgeState(), coordinator: nil,
                                               onApplyConnection: { _, _, _, _ in },
                                               onToggleHAP: { _ in },
                                               onToggleHomebridge: { _ in },
                                               onSendTestEvent: {}),
-                       scrollToEnd: scrollToEnd)
+                       scroll: scroll ?? (scrollToEnd ? 1 : nil))
     }
 
     @MainActor
-    private func show<V: View>(_ name: String, root: V, scrollToEnd: Bool = false) async throws {
+    private func show<V: View>(_ name: String, root: V, scrollToEnd: Bool = false, scroll: CGFloat? = nil) async throws {
+        let fraction = scroll ?? (scrollToEnd ? 1 : nil)
         let scheme: ColorScheme = appearance == .darkAqua ? .dark : .light
         let hosting = NSHostingView(rootView: root.environment(\.colorScheme, scheme))
         hosting.appearance = NSAppearance(named: appearance)
@@ -128,10 +155,13 @@ final class HubScreensTests: XCTestCase {
             window.close()
         }
         try await settle(2.0)
-        if scrollToEnd {
+        if let fraction {
             Self.scrollViews(in: hosting).forEach { scroll in
                 if let doc = scroll.documentView {
-                    doc.scroll(NSPoint(x: 0, y: doc.isFlipped ? doc.bounds.height : 0))
+                    let travel = max(0, doc.bounds.height - scroll.contentView.bounds.height)
+                    let y = doc.isFlipped ? travel * fraction : travel * (1 - fraction)
+                    scroll.contentView.scroll(to: NSPoint(x: 0, y: y))
+                    scroll.reflectScrolledClipView(scroll.contentView)
                 }
             }
             try await settle(0.6)
@@ -140,18 +170,40 @@ final class HubScreensTests: XCTestCase {
         NSApp.activate(ignoringOtherApps: true)
         window.makeKeyAndOrderFront(nil)
         try await settle(0.4)
+        for _ in 0..<20 where !(NSApp.isActive && (window.attachedSheet ?? window).isKeyWindow) {
+            NSApp.activate(ignoringOtherApps: true)
+            window.makeKeyAndOrderFront(nil)
+            try await settle(0.3)
+        }
+        try await settle(0.3) // let controls redraw in the active style
         // Sheets and dialogs are their own windows: capture that one instead.
         let target = window.attachedSheet ?? window
         let request = dir.appendingPathComponent("req/\(lang)-\(name).id")
         let output = dir.appendingPathComponent("out/\(lang)-\(name).png")
-        try? FileManager.default.removeItem(at: output)
-        try "\(target.windowNumber)".write(to: request, atomically: true, encoding: .utf8)
-        let deadline = Date().addingTimeInterval(45)
-        while !FileManager.default.fileExists(atPath: output.path), Date() < deadline {
-            try await settle(0.3)
+        // The Mac is shared: another app can take the front between frames.
+        // A capture of an inactive window (grey close button) is taken again.
+        for attempt in 1...5 {
+            try? FileManager.default.removeItem(at: output)
+            try "\(target.windowNumber)".write(to: request, atomically: true, encoding: .utf8)
+            let deadline = Date().addingTimeInterval(45)
+            while !FileManager.default.fileExists(atPath: output.path), Date() < deadline {
+                try await settle(0.3)
+            }
+            try await settle(0.3) // let the capture finish writing
+            if target !== window || Self.looksActive(output) || attempt == 5 { break }
+            NSApp.activate(ignoringOtherApps: true)
+            window.makeKeyAndOrderFront(nil)
+            try await settle(0.8)
         }
         XCTAssertTrue(FileManager.default.fileExists(atPath: output.path), "no capture for \(name)")
-        try await settle(0.3) // let the capture finish writing
+    }
+
+    /// Red close button = the window was key when captured.
+    private static func looksActive(_ png: URL) -> Bool {
+        guard let data = try? Data(contentsOf: png), let rep = NSBitmapImageRep(data: data) else { return true }
+        let scale = CGFloat(rep.pixelsWide) / size.width
+        guard let c = rep.colorAt(x: Int(26 * scale), y: Int(26 * scale))?.usingColorSpace(.sRGB) else { return true }
+        return c.redComponent - c.greenComponent > 0.2
     }
 
     @MainActor
@@ -311,6 +363,94 @@ private struct Fixture {
             }
         }
         return Fixture(transcripts: transcripts, voices: voices, searchWord: fr ? "colis" : "parcel")
+    }
+}
+#endif
+
+#if LUMEN_HUB && DEBUG
+/// Made-up household devices for the Assistant pane. The address is a
+/// reserved test domain; the token is never written to the Keychain.
+@MainActor
+private struct AssistantFixture {
+    let log: AuditLog
+    let registry: DeviceRegistry
+    let lock: Device
+    let living: Device
+    static var fr: Bool { Locale.preferredLanguages.first?.hasPrefix("fr") ?? false }
+
+    static func make(in root: URL) async throws -> AssistantFixture {
+        let fr = Self.fr
+        let livingRoom = fr ? "Salon" : "Living room", kitchenRoom = fr ? "Cuisine" : "Kitchen"
+        let living = Device(entityID: "light.salon_plafonnier", name: fr ? "Plafonnier du salon" : "Living room ceiling light",
+                            kind: .light, room: livingRoom)
+        let kitchen = Device(entityID: "light.cuisine", name: fr ? "Lumières de la cuisine" : "Kitchen lights",
+                             kind: .light, room: kitchenRoom)
+        let tv = Device(entityID: "media_player.salon_tv", name: fr ? "Télé du salon" : "Living room TV", kind: .tv, room: livingRoom)
+        let shutters = Device(entityID: "cover.salon_volets", name: fr ? "Volets du salon" : "Living room shutters",
+                              kind: .shutter, room: livingRoom)
+        let heating = Device(entityID: "climate.maison", name: fr ? "Chauffage" : "Heating", kind: .thermostat)
+        let lock = Device(entityID: "lock.porte_entree", name: fr ? "Serrure de l’entrée" : "Front door lock", kind: .lock)
+        let coffee = Device(entityID: "switch.cafetiere", name: fr ? "Cafetière" : "Coffee machine", kind: .outlet,
+                            room: kitchenRoom, exposed: false)
+        let registry = DeviceRegistry(devices: [living, kitchen, tv, shutters, heating, lock, coffee],
+                                      rooms: [Room(name: livingRoom, cameras: ["living_room"]),
+                                              Room(name: kitchenRoom, cameras: ["kitchen"])])
+
+        let url = root.appendingPathComponent("assistant-audit.jsonl")
+        try? FileManager.default.removeItem(at: url)
+        let log = try AuditLog(url: url)
+        let now = Date()
+        let adult = "adult:fixture-camille", child = "child:fixture-leo"
+        try await log.append(outcome: .executed, camera: "kitchen", mode: .wakePhrase, speaker: adult,
+                             plan: ActionPlan(action: .turnOn, targets: [kitchen]), source: .rules,
+                             command: fr ? "lumen allume la cuisine" : "lumen turn on the kitchen lights",
+                             reason: "light.turn_on", latencyMs: 212, at: now.addingTimeInterval(-26 * 3600))
+        try await log.append(outcome: .refused, camera: "living_room", mode: .wakePhrase, speaker: child,
+                             plan: ActionPlan(action: .raise, targets: [heating]), source: .rules, command: nil,
+                             reason: RefusalReason.childProfile.rawValue, at: now.addingTimeInterval(-5 * 3600))
+        try await log.append(outcome: .answered, camera: "kitchen", mode: .wakePhrase, speaker: adult,
+                             plan: ActionPlan(action: .query, targets: [kitchen]), source: .rules,
+                             command: fr ? "lumen la lumière de la cuisine est allumée" : "lumen is the kitchen light on",
+                             latencyMs: 164, at: now.addingTimeInterval(-3 * 3600))
+        let proposal = ActionProposal(plan: ActionPlan(action: .unlock, targets: [lock]), effect: .destructive,
+                                      createdAt: now, expiresAt: now.addingTimeInterval(25),
+                                      camera: "living_room", speaker: adult)
+        try await log.append(outcome: .proposed, camera: "living_room", mode: .wakePhrase, speaker: adult,
+                             plan: proposal.plan, source: .rules,
+                             command: fr ? "lumen déverrouille la porte" : "lumen unlock the front door",
+                             reason: proposal.id.uuidString, at: now.addingTimeInterval(-40))
+        try await log.append(outcome: .previewed, camera: "living_room", mode: .wakePhrase, speaker: adult,
+                             plan: ActionPlan(action: .turnOn, targets: [living]), source: .llm,
+                             command: fr ? "lumen il fait un peu sombre ici" : "lumen it is a bit dark in here",
+                             reason: "light.turn_on", latencyMs: 640, at: now.addingTimeInterval(-12))
+        return AssistantFixture(log: log, registry: registry, lock: lock, living: living)
+    }
+
+    func install() async {
+        var s = AssistantSettings()
+        s.enabled = true
+        s.mode = .wakePhrase
+        s.cameras = ["living_room", "kitchen"]
+        s.dryRun = true
+        s.notifyPhone = true
+        s.speakReplies = false
+        s.homeAssistantURL = "http://ha.example.test:8123"
+        s.llmURL = "http://127.0.0.1:8012"
+        s.llmEnabled = true
+        let lang = Self.fr ? "fr" : "en"
+        // A fresh pending T2 request each time, so it always shows "in 25 seconds".
+        let now = Date()
+        let book = ProposalBook(key: SymmetricKey(size: .bits256))
+        await book.add(ActionProposal(plan: ActionPlan(action: .unlock, targets: [lock]), effect: .destructive,
+                                      createdAt: now, expiresAt: now.addingTimeInterval(25),
+                                      camera: "living_room", speaker: "adult:fixture-camille"),
+                       lifetime: .seconds(3600))
+        await AssistantService.shared.installScreenFixture(
+            settings: s, registry: registry, log: log, book: book, hasToken: true,
+            homeAssistant: .ok(148), llm: .ok(0),
+            listening: ["living_room": AL("Listening"), "kitchen": AL("Listening")],
+            lastResult: ReplyPhrases.preview(ActionPlan(action: .turnOn, targets: [living], room: living.room), language: lang),
+            canUndo: false)
     }
 }
 #endif
