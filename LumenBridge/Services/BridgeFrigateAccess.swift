@@ -116,10 +116,16 @@ protocol BridgeFrigateTransport: Sendable {
     func config() async throws -> Data
     func snapshot(camera: String) async throws -> Data
     func video(camera: String) async throws -> BridgeFrigateVideoStream
+    /// Frigate audio events labelled `speech` (newest first), for Hub transcription.
+    func speechEvents(after: Double, limit: Int) async throws -> [FrigateEvent]
+    /// Downloads one event's clip (same origin, size-capped) to a temporary file the caller deletes.
+    func eventClip(id: String) async throws -> URL
 }
 
 extension BridgeFrigateTransport {
     func video(camera: String) async throws -> BridgeFrigateVideoStream { throw BridgeFrigateAccessError.videoUnavailable }
+    func speechEvents(after: Double, limit: Int) async throws -> [FrigateEvent] { throw BridgeFrigateAccessError.invalidConfiguration }
+    func eventClip(id: String) async throws -> URL { throw BridgeFrigateAccessError.videoUnavailable }
 }
 
 private struct NativeFrigateTransport: BridgeFrigateTransport {
@@ -128,6 +134,13 @@ private struct NativeFrigateTransport: BridgeFrigateTransport {
     func version() async throws -> String { try await client.getVersion().version ?? "" }
     func config() async throws -> Data { try await client.getConfigRaw() }
     func snapshot(camera: String) async throws -> Data { try await client.getSnapshot(camera: camera) }
+    func speechEvents(after: Double, limit: Int) async throws -> [FrigateEvent] {
+        try await client.getEvents(label: "speech", after: after, limit: limit)
+    }
+    func eventClip(id: String) async throws -> URL {
+        // 64 MB is FrigateKit's cap; a speech clip is far smaller. Never over cellular.
+        try await client.downloadClipForCache(eventID: id, maximumBytes: 64 * 1024 * 1024, allowsCellular: false)
+    }
     func video(camera: String) async throws -> BridgeFrigateVideoStream {
         let cameras = try await client.getCameras()
         guard let selected = cameras[camera] else { throw BridgeFrigateAccessError.noCameras }
@@ -173,6 +186,12 @@ actor BridgeFrigateSession {
     }
     func video(camera: String) async throws -> BridgeFrigateVideoStream {
         try await authenticated { try await self.transport.video(camera: camera) }
+    }
+    func speechEvents(after: Double, limit: Int) async throws -> [FrigateEvent] {
+        try await authenticated { try await self.transport.speechEvents(after: after, limit: limit) }
+    }
+    func eventClip(id: String) async throws -> URL {
+        try await authenticated { try await self.transport.eventClip(id: id) }
     }
     private func authenticated<T: Sendable>(_ operation: @Sendable () async throws -> T) async throws -> T {
         if hasCredentials && generation == 0 {

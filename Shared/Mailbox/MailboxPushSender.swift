@@ -74,12 +74,24 @@ struct MailboxPushSender: Sendable {
         guard let secret = secretProvider()?.trimmingCharacters(in: .whitespacesAndNewlines),
               secret.count == 32, secret.allSatisfy(\.isHexDigit) else { return .noSecret }
         guard let review else { return .noReview }
+        guard let body = try? JSONSerialization.data(
+            withJSONObject: Self.envelope(visit: visit, review: review, alertName: alertName, zone: zone)) else { return .failed }
+        return await post(body: body, secret: secret)
+    }
+
+    /// Posts an already-built `frigate-review-v1` envelope on the same channel
+    /// (used by Hub keyword alerts, whose envelope carries no transcript words).
+    func send(envelopeJSON body: Data) async -> Outcome {
+        guard let secret = secretProvider()?.trimmingCharacters(in: .whitespacesAndNewlines),
+              secret.count == 32, secret.allSatisfy(\.isHexDigit) else { return .noSecret }
+        return await post(body: body, secret: secret)
+    }
+
+    private func post(body: Data, secret: String) async -> Outcome {
         let url = Self.workerBase.appendingPathComponent("v2/notify/\(Self.channelID(forSecret: secret))")
         var request = URLRequest(url: url, timeoutInterval: 15)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        guard let body = try? JSONSerialization.data(
-            withJSONObject: Self.envelope(visit: visit, review: review, alertName: alertName, zone: zone)) else { return .failed }
         request.httpBody = body
         do {
             let (_, response) = try await session.data(for: request)

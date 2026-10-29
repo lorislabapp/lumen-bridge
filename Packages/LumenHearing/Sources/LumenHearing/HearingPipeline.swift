@@ -70,6 +70,7 @@ public actor HearingPipeline {
         public var lastRealTimeFactor: Double?
         public var lastEngine: EngineKind?
         public var lastError: String?
+        public init() {}
     }
 
     public struct Configuration: Sendable {
