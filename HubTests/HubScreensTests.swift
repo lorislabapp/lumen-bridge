@@ -233,7 +233,9 @@ final class HubScreensTests: XCTestCase {
     private static func looksActive(_ png: URL, width: CGFloat = size.width) -> Bool {
         guard let data = try? Data(contentsOf: png), let rep = NSBitmapImageRep(data: data) else { return true }
         let scale = CGFloat(rep.pixelsWide) / width
-        guard let c = rep.colorAt(x: Int(26 * scale), y: Int(26 * scale))?.usingColorSpace(.sRGB) else { return true }
+        // The main window has a toolbar (button at 26 pt); a plain window's sits at 16 pt.
+        let point = width == size.width ? 26.0 : 16.0
+        guard let c = rep.colorAt(x: Int(point * scale), y: Int(point * scale))?.usingColorSpace(.sRGB) else { return true }
         return c.redComponent - c.greenComponent > 0.2
     }
 
