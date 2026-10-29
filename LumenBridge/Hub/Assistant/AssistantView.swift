@@ -374,6 +374,7 @@ struct AssistantView: View {
             }
         }
         if raw == "would propose (T2)" { return AL("Preview only: no iPhone request was sent.") }
+        if raw == "camera contradicted; retried once" { return AL("Sent again: the camera did not see the change.") }
         if e.outcome == .executed || e.outcome == .previewed || e.outcome == .proposed || e.outcome == .confirmed
             || UUID(uuidString: raw) != nil { return nil }
         return raw

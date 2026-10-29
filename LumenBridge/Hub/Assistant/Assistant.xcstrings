@@ -791,6 +791,16 @@
         }
       }
     },
+    "Sent again: the camera did not see the change.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renvoyé : la caméra n’a pas vu le changement."
+          }
+        }
+      }
+    },
     "Sent to iPhone": {
       "localizations": {
         "fr": {
