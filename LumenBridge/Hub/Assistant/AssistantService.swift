@@ -51,6 +51,8 @@ final class AssistantService {
     @ObservationIgnored private var book: ProposalBook?
     @ObservationIgnored private var tasks: [String: Task<Void, Never>] = [:]
     @ObservationIgnored private var started = false
+    /// Screen fixture (DEBUG tests): nothing is saved, no Keychain, no network, no listening.
+    @ObservationIgnored private var isFixture = false
 
     private init() {
         let loaded = settingsStore.load()
@@ -237,6 +239,7 @@ final class AssistantService {
         let needsRebuild = next.homeAssistantURL != settings.homeAssistantURL || next.llmURL != settings.llmURL
         settings = next
         live.value = next
+        guard !isFixture else { return }
         settingsStore.save(next)
         if needsRebuild { rebuild() } else { applyRunningState() }
     }
@@ -250,7 +253,7 @@ final class AssistantService {
 
     func saveToken(_ token: String) async {
         let clean = token.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !clean.isEmpty else { return }
+        guard !clean.isEmpty, !isFixture else { return }
         do {
             try await HATokenStore().save(clean)
             hasToken = true
@@ -261,12 +264,14 @@ final class AssistantService {
     }
 
     func removeToken() async {
+        guard !isFixture else { return }
         try? await HATokenStore().remove()
         hasToken = false
         homeAssistant = .unknown
     }
 
     func testHomeAssistant() async {
+        guard !isFixture else { return }
         guard let backend = HomeAssistantFactory.backend(url: settings.homeAssistantURL) else {
             homeAssistant = .failed(AL("Enter the Home Assistant address (http://…:8123)."))
             return
@@ -288,6 +293,7 @@ final class AssistantService {
     /// Pulls entities (and areas when the token is an admin's) into the registry.
     /// New devices arrive not exposed: the owner chooses.
     func syncDevices() async {
+        guard !isFixture else { return }
         guard let backend = HomeAssistantFactory.backend(url: settings.homeAssistantURL) else { return }
         do {
             let entities = try await backend.states()
@@ -339,12 +345,14 @@ final class AssistantService {
     private func setRegistry(_ next: DeviceRegistry) {
         registry = next
         liveRegistry.value = next
+        guard !isFixture else { return }
         registryStore.save(next)
     }
 
     // MARK: LLM
 
     func testLLM() async {
+        guard !isFixture else { return }
         guard let url = URL(string: settings.llmURL) else { llm = .failed(AL("Invalid address")); return }
         llm = .checking
         llm = await LlamaServerLLM(baseURL: url).isReachable() ? .ok(0) : .failed(AL("llama-server is not running."))
@@ -377,6 +385,33 @@ final class AssistantService {
         await book?.dismiss(proposal.id)
         proposals = await book?.all ?? []
     }
+
+    #if DEBUG
+    /// Synthetic state for the opt-in screen tests: a throwaway log and proposal
+    /// book, no engine (so nothing listens), nothing saved, no Keychain.
+    func installScreenFixture(settings: AssistantSettings, registry: DeviceRegistry, log: AuditLog, book: ProposalBook,
+                              hasToken: Bool, homeAssistant: Connection, llm: Connection,
+                              listening: [String: String], lastResult: String?, canUndo: Bool) async {
+        isFixture = true
+        started = true
+        stopAll()
+        engine = nil
+        self.settings = settings
+        live.value = settings
+        self.registry = registry
+        liveRegistry.value = registry
+        self.log = log
+        self.book = book
+        self.hasToken = hasToken
+        self.homeAssistant = homeAssistant
+        self.llm = llm
+        self.listening = listening
+        self.lastResult = lastResult
+        self.canUndo = canUndo
+        proBlocked = false
+        await refreshAudit()
+    }
+    #endif
 
     func deleteLog() async {
         try? await log?.deleteAll()

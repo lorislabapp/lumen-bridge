@@ -31,6 +31,26 @@
         }
       }
     },
+    "Answered": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Répondu"
+          }
+        }
+      }
+    },
+    "Arm": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer l’alarme"
+          }
+        }
+      }
+    },
     "Assistant": {
       "localizations": {
         "fr": {
@@ -51,6 +71,16 @@
         }
       }
     },
+    "Check": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifier"
+          }
+        }
+      }
+    },
     "Check the log": {
       "localizations": {
         "fr": {
@@ -61,12 +91,42 @@
         }
       }
     },
-    "Children's voices: T0 only. A voice can only lower rights, never raise them. Say “non, annule” within 10 seconds to undo.": {
+    "Children's voices can only use lights, TV, music and shutters.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les voix d’enfants peuvent seulement utiliser lumières, télé, musique et volets."
+          }
+        }
+      }
+    },
+    "Children's voices: T0 only. A voice can only lower rights, never raise them. Say “no, cancel” within 10 seconds to undo.": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Voix d’enfants : T0 seulement. Une voix peut seulement réduire les droits, jamais les augmenter. Dites « non, annule » dans les 10 secondes pour défaire."
+          }
+        }
+      }
+    },
+    "Close": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer"
+          }
+        }
+      }
+    },
+    "Confirmed on iPhone": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmé sur l’iPhone"
           }
         }
       }
@@ -121,12 +181,32 @@
         }
       }
     },
+    "Disarm": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Désactiver l’alarme"
+          }
+        }
+      }
+    },
     "Dismiss": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Ignorer"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fait"
           }
         }
       }
@@ -251,6 +331,16 @@
         }
       }
     },
+    "Lets the assistant use this device": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permet à l’assistant d’utiliser cet appareil"
+          }
+        }
+      }
+    },
     "Lights, TV, music, shutters, plugs: done right away, for anyone.": {
       "localizations": {
         "fr": {
@@ -271,6 +361,26 @@
         }
       }
     },
+    "Lock": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verrouiller"
+          }
+        }
+      }
+    },
+    "Locks, alarm and garage need a recognised adult voice.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serrures, alarme et garage demandent une voix d’adulte reconnue."
+          }
+        }
+      }
+    },
     "Locks, alarm, garage: never done from a camera. You get a request to confirm with Face ID on your iPhone.": {
       "localizations": {
         "fr": {
@@ -287,6 +397,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jeton d’accès longue durée"
+          }
+        }
+      }
+    },
+    "Lower": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baisser"
           }
         }
       }
@@ -331,12 +451,52 @@
         }
       }
     },
+    "Natural mode needs a known voice.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le mode naturel demande une voix connue."
+          }
+        }
+      }
+    },
+    "Natural mode needs a person seen in the room.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le mode naturel demande une personne vue dans la pièce."
+          }
+        }
+      }
+    },
     "Natural mode only does harmless things (lights, TV, shutters). It needs a known voice and a person seen in that room. “Lumen, …” still works for the rest.": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Le mode naturel ne fait que des choses sans risque (lumières, télé, volets). Il faut une voix connue et une personne vue dans la pièce. « Lumen, … » marche toujours pour le reste."
+          }
+        }
+      }
+    },
+    "Natural mode only does harmless things.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le mode naturel ne fait que des choses sans risque."
+          }
+        }
+      }
+    },
+    "Needs a recognised adult voice.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il faut une voix d’adulte reconnue."
           }
         }
       }
@@ -391,6 +551,16 @@
         }
       }
     },
+    "Not allowed from a camera.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interdit depuis une caméra."
+          }
+        }
+      }
+    },
     "Not checked": {
       "localizations": {
         "fr": {
@@ -401,12 +571,32 @@
         }
       }
     },
+    "Not said to the assistant.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas adressé à l’assistant."
+          }
+        }
+      }
+    },
     "Nothing yet.": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Rien pour l’instant."
+          }
+        }
+      }
+    },
+    "Notify the paired iPhones of what was done": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prévenir les iPhone associés de ce qui est fait"
           }
         }
       }
@@ -431,6 +621,16 @@
         }
       }
     },
+    "Open": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir"
+          }
+        }
+      }
+    },
     "Paused (camera not eligible)": {
       "localizations": {
         "fr": {
@@ -451,12 +651,42 @@
         }
       }
     },
+    "Preview": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu"
+          }
+        }
+      }
+    },
     "Preview only (nothing is sent to the house)": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Aperçu seulement (rien n’est envoyé à la maison)"
+          }
+        }
+      }
+    },
+    "Preview only: no iPhone request was sent.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperçu seulement : aucune demande envoyée à l’iPhone."
+          }
+        }
+      }
+    },
+    "Raise": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monter"
           }
         }
       }
@@ -477,6 +707,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Retirer"
+          }
+        }
+      }
+    },
+    "Room of": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pièce de"
           }
         }
       }
@@ -511,6 +751,16 @@
         }
       }
     },
+    "Same request twice.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Même demande deux fois."
+          }
+        }
+      }
+    },
     "Save": {
       "localizations": {
         "fr": {
@@ -531,12 +781,32 @@
         }
       }
     },
-    "Say “Lumen” then your request, for example “Lumen, allume la lumière du salon”.": {
+    "Say “Lumen” then your request, for example “Lumen, turn on the living room light”.": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Dites « Lumen » puis votre demande, par exemple « Lumen, allume la lumière du salon »."
+          }
+        }
+      }
+    },
+    "Sent to iPhone": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyé à l’iPhone"
+          }
+        }
+      }
+    },
+    "Set temperature": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Régler la température"
           }
         }
       }
@@ -551,12 +821,22 @@
         }
       }
     },
-    "Tell my iPhone what was done": {
+    "Sounded like the TV or music.": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prévenir mon iPhone de ce qui est fait"
+            "value": "Ressemblait à la télé ou à la musique."
+          }
+        }
+      }
+    },
+    "Stop": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrêter"
           }
         }
       }
@@ -601,6 +881,16 @@
         }
       }
     },
+    "Time left": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temps restant"
+          }
+        }
+      }
+    },
     "Token saved in the Keychain": {
       "localizations": {
         "fr": {
@@ -611,12 +901,42 @@
         }
       }
     },
+    "Too many requests in a row.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trop de demandes d’affilée."
+          }
+        }
+      }
+    },
     "Turn it on in Transcription first (indoor, with consent)": {
       "localizations": {
         "fr": {
           "stringUnit": {
             "state": "translated",
             "value": "Activez-la d’abord dans Transcription (intérieur, avec consentement)"
+          }
+        }
+      }
+    },
+    "Turn off": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Éteindre"
+          }
+        }
+      }
+    },
+    "Turn on": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allumer"
           }
         }
       }
@@ -637,6 +957,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Défaire la dernière action"
+          }
+        }
+      }
+    },
+    "Undone": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annulé"
+          }
+        }
+      }
+    },
+    "Unlock": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déverrouiller"
           }
         }
       }
@@ -727,6 +1067,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "llama-server ne tourne pas."
+          }
+        }
+      }
+    },
+    "“%@”": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "« %@ »"
           }
         }
       }

@@ -46,10 +46,10 @@ struct AssistantView: View {
             }
             Text(service.settings.mode == .natural
                  ? AL("Natural mode only does harmless things (lights, TV, shutters). It needs a known voice and a person seen in that room. “Lumen, …” still works for the rest.")
-                 : AL("Say “Lumen” then your request, for example “Lumen, allume la lumière du salon”."))
+                 : AL("Say “Lumen” then your request, for example “Lumen, turn on the living room light”."))
                 .font(.caption).foregroundStyle(.secondary)
             Toggle(AL("Preview only (nothing is sent to the house)"), isOn: binding(\.dryRun))
-            Toggle(AL("Tell my iPhone what was done"), isOn: binding(\.notifyPhone))
+            Toggle(AL("Notify the paired iPhones of what was done"), isOn: binding(\.notifyPhone))
             Toggle(AL("Answer out loud on this Mac"), isOn: binding(\.speakReplies))
             if service.proBlocked {
                 Text(AL("Lumen Pro is needed to turn this on.")).foregroundStyle(.orange)
@@ -81,7 +81,7 @@ struct AssistantView: View {
                         get: { service.settings.cameras.contains(camera) },
                         set: { on in service.update { if on { $0.cameras.insert(camera) } else { $0.cameras.remove(camera) } } })) {
                         VStack(alignment: .leading) {
-                            Text(camera.replacingOccurrences(of: "_", with: " ").capitalized)
+                            Text(pretty(camera))
                             Text(eligible ? (service.listening[camera] ?? AL("Off"))
                                           : AL("Turn it on in Transcription first (indoor, with consent)"))
                                 .font(.caption).foregroundStyle(.secondary)
@@ -151,22 +151,25 @@ struct AssistantView: View {
                 Text(AL("Press “Get devices” to list what Home Assistant has.")).foregroundStyle(.secondary)
             }
             ForEach(service.registry.devices) { device in
-                HStack(alignment: .firstTextBaseline) {
-                    Toggle(isOn: Binding(get: { device.exposed }, set: { service.setExposed(device.entityID, $0) })) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(device.name)
-                            Text(device.entityID).font(.caption.monospaced()).foregroundStyle(.secondary)
-                        }
+                HStack(alignment: .center, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(device.name)
+                        Text(device.entityID).font(.caption.monospaced()).foregroundStyle(.secondary)
                     }
-                    Spacer()
+                    Spacer(minLength: 8)
                     tierBadge(device.kind.tier)
-                    Picker("", selection: Binding(get: { device.room ?? "" },
-                                                  set: { service.setRoom(device.entityID, $0.isEmpty ? nil : $0) })) {
+                    Picker(AL("Room of") + " " + device.name,
+                           selection: Binding(get: { device.room ?? "" },
+                                              set: { service.setRoom(device.entityID, $0.isEmpty ? nil : $0) })) {
                         Text(AL("No room")).tag("")
                         ForEach(service.registry.rooms) { room in Text(room.name).tag(room.name) }
                     }
                     .labelsHidden()
-                    .frame(maxWidth: 140)
+                    .frame(width: 160)
+                    Toggle(device.name, isOn: Binding(get: { device.exposed }, set: { service.setExposed(device.entityID, $0) }))
+                        .labelsHidden()
+                        .toggleStyle(.switch)
+                        .accessibilityHint(AL("Lets the assistant use this device"))
                 }
             }
         } header: {
@@ -184,7 +187,7 @@ struct AssistantView: View {
                     HStack {
                         Text(AL("Heard by:")).font(.caption).foregroundStyle(.secondary)
                         ForEach(hearing.cameras, id: \.self) { camera in
-                            Toggle(camera, isOn: Binding(get: { room.cameras.contains(camera) },
+                            Toggle(pretty(camera), isOn: Binding(get: { room.cameras.contains(camera) },
                                                          set: { _ in service.toggleCamera(camera, room: room.name) }))
                                 .toggleStyle(.button).controlSize(.small)
                         }
@@ -231,7 +234,7 @@ struct AssistantView: View {
             safetyRow("T0", AL("Lights, TV, music, shutters, plugs: done right away, for anyone."))
             safetyRow("T1", AL("Heating, camera privacy: only for a recognised adult voice."))
             safetyRow("T2", AL("Locks, alarm, garage: never done from a camera. You get a request to confirm with Face ID on your iPhone."))
-            Text(AL("Children's voices: T0 only. A voice can only lower rights, never raise them. Say “non, annule” within 10 seconds to undo."))
+            Text(AL("Children's voices: T0 only. A voice can only lower rights, never raise them. Say “no, cancel” within 10 seconds to undo."))
                 .font(.caption).foregroundStyle(.secondary)
         }
     }
@@ -258,9 +261,11 @@ struct AssistantView: View {
         Section(AL("Waiting for iPhone confirmation")) {
             ForEach(service.proposals) { p in
                 HStack {
-                    Text(ReplyPhrases.done(p.plan, language: "fr"))
+                    Label(actionVerb(p.plan.action) + " · " + p.plan.targets.map(\.name).joined(separator: ", "),
+                          systemImage: "faceid")
                     Spacer()
-                    Text(p.expiresAt, style: .relative).font(.caption).foregroundStyle(.secondary)
+                    Text(p.expiresAt, style: .timer).font(.caption.monospacedDigit()).foregroundStyle(.secondary)
+                        .accessibilityLabel(AL("Time left"))
                     Button(AL("Dismiss")) { Task { await service.dismiss(p) } }
                 }
             }
@@ -278,14 +283,14 @@ struct AssistantView: View {
             ForEach(service.audit) { entry in
                 VStack(alignment: .leading, spacing: 2) {
                     HStack {
-                        Text(entry.outcome.rawValue).font(.caption.bold())
-                        Text(entry.date, style: .time).font(.caption).foregroundStyle(.secondary)
-                        Text(entry.camera).font(.caption).foregroundStyle(.secondary)
+                        Text(outcomeTitle(entry.outcome)).font(.caption.bold()).foregroundStyle(outcomeColor(entry.outcome))
+                        Text(entry.date.formatted(date: .abbreviated, time: .shortened)).font(.caption).foregroundStyle(.secondary)
+                        Text(pretty(entry.camera)).font(.caption).foregroundStyle(.secondary)
                         Spacer()
                         if let ms = entry.latencyMs { Text(verbatim: "\(ms) ms").font(.caption.monospaced()).foregroundStyle(.secondary) }
                     }
-                    Text(entry.command ?? (entry.action.rawValue + " " + entry.targets.joined(separator: ", ")))
-                    if let reason = entry.reason { Text(reason).font(.caption).foregroundStyle(.secondary) }
+                    Text(entry.command.map { String(format: AL("“%@”"), $0) } ?? entryTargets(entry))
+                    if let reason = reasonText(entry) { Text(reason).font(.caption).foregroundStyle(.secondary) }
                 }
             }
             HStack {
@@ -298,6 +303,79 @@ struct AssistantView: View {
         } footer: {
             Text(AL("Each line is chained to the one before it, so an edit made outside Lumen Hub shows up."))
         }
+    }
+
+    // MARK: Words
+
+
+    private func pretty(_ camera: String) -> String { camera.replacingOccurrences(of: "_", with: " ").capitalized }
+
+    private func actionVerb(_ a: DeviceAction) -> String {
+        switch a {
+        case .turnOn: AL("Turn on")
+        case .turnOff: AL("Turn off")
+        case .open: AL("Open")
+        case .close: AL("Close")
+        case .stop: AL("Stop")
+        case .raise: AL("Raise")
+        case .lower: AL("Lower")
+        case .setTemperature: AL("Set temperature")
+        case .lock: AL("Lock")
+        case .unlock: AL("Unlock")
+        case .arm: AL("Arm")
+        case .disarm: AL("Disarm")
+        case .query: AL("Check")
+        }
+    }
+
+    private func outcomeTitle(_ o: AuditEntry.Outcome) -> String {
+        switch o {
+        case .executed: AL("Done")
+        case .previewed: AL("Preview")
+        case .answered: AL("Answered")
+        case .proposed: AL("Sent to iPhone")
+        case .refused: AL("Refused")
+        case .failed: AL("Failed")
+        case .undone: AL("Undone")
+        case .confirmed: AL("Confirmed on iPhone")
+        }
+    }
+
+    private func outcomeColor(_ o: AuditEntry.Outcome) -> Color {
+        switch o {
+        case .refused, .failed: .orange
+        case .proposed: .red
+        default: .primary
+        }
+    }
+
+    /// Device names for a refusal (its words are never kept).
+    private func entryTargets(_ e: AuditEntry) -> String {
+        e.targets.map { id in service.registry.device(id: id)?.name ?? id }.joined(separator: ", ")
+    }
+
+    /// Plain words for a reason; ids and Home Assistant service names stay out of the list.
+    private func reasonText(_ e: AuditEntry) -> String? {
+        guard let raw = e.reason else { return nil }
+        if let r = RefusalReason(rawValue: raw) {
+            return switch r {
+            case .tierTooHigh: AL("Not allowed from a camera.")
+            case .childProfile: AL("Children's voices can only use lights, TV, music and shutters.")
+            case .unknownVoiceForT1: AL("Needs a recognised adult voice.")
+            case .t2NeedsKnownAdult: AL("Locks, alarm and garage need a recognised adult voice.")
+            case .naturalModeT0Only: AL("Natural mode only does harmless things.")
+            case .naturalModeNeedsKnownVoice: AL("Natural mode needs a known voice.")
+            case .naturalModeNeedsPerson: AL("Natural mode needs a person seen in the room.")
+            case .mediaPlaying: AL("Sounded like the TV or music.")
+            case .notAddressed: AL("Not said to the assistant.")
+            case .rateLimited: AL("Too many requests in a row.")
+            case .duplicate: AL("Same request twice.")
+            }
+        }
+        if raw == "would propose (T2)" { return AL("Preview only: no iPhone request was sent.") }
+        if e.outcome == .executed || e.outcome == .previewed || e.outcome == .proposed || e.outcome == .confirmed
+            || UUID(uuidString: raw) != nil { return nil }
+        return raw
     }
 
     private func binding<T>(_ key: WritableKeyPath<AssistantSettings, T>) -> Binding<T> {
