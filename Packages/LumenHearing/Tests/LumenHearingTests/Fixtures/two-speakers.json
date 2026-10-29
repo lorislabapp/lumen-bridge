@@ -1,0 +1,28 @@
+{
+ "voices": {
+  "fr": "Thomas (fr_FR)",
+  "en": "Samantha (en_US)"
+ },
+ "turns": [
+  {
+   "speaker": "fr",
+   "start": 0.0,
+   "end": 4.932
+  },
+  {
+   "speaker": "en",
+   "start": 5.532,
+   "end": 9.334
+  },
+  {
+   "speaker": "fr",
+   "start": 9.934,
+   "end": 13.542
+  },
+  {
+   "speaker": "en",
+   "start": 14.142,
+   "end": 17.904
+  }
+ ]
+}

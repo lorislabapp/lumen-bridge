@@ -19,10 +19,30 @@ public protocol TranscriptionEngine: Sendable {
     func transcribe(_ audio: PCMAudio, language: HearingLanguage) async throws -> EngineTranscript
 }
 
-/// Phase 2 seam (diarization / named voices). Phase 1 ships only the no-op:
-/// no voiceprint is computed or stored anywhere.
+/// Phase 2 seam (diarization / named voices). The no-op stage computes and
+/// stores nothing. `VoiceAttributor` (Voices/) is the real one.
 public protocol SpeakerAttributionStage: Sendable {
     func attribute(_ transcript: EngineTranscript, audio: PCMAudio) async throws -> EngineTranscript
+    /// Same, with the event and the map from `audio` time back to clip time.
+    func attribute(_ transcript: EngineTranscript, audio: PCMAudio, context: SpeakerContext) async throws -> EngineTranscript
+}
+
+extension SpeakerAttributionStage {
+    public func attribute(_ transcript: EngineTranscript, audio: PCMAudio, context: SpeakerContext) async throws -> EngineTranscript {
+        try await attribute(transcript, audio: audio)
+    }
+}
+
+/// What a speaker stage knows about the job it runs in.
+public struct SpeakerContext: Sendable {
+    public var event: SpeechEvent
+    /// Gated (speech-only) audio time → original clip time.
+    public var sourceTime: @Sendable (TimeInterval) -> TimeInterval
+
+    public init(event: SpeechEvent, sourceTime: @escaping @Sendable (TimeInterval) -> TimeInterval = { $0 }) {
+        self.event = event
+        self.sourceTime = sourceTime
+    }
 }
 
 public struct NoSpeakerAttribution: SpeakerAttributionStage {

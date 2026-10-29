@@ -245,7 +245,8 @@ public actor HearingPipeline {
         var transcript: EngineTranscript
         do {
             transcript = try await engine.transcribe(gated.audio, language: current.language)
-            transcript = try await speakers.attribute(transcript, audio: gated.audio)
+            transcript = try await speakers.attribute(transcript, audio: gated.audio,
+                                                      context: SpeakerContext(event: event, sourceTime: { gated.sourceTime($0) }))
         } catch HearingError.insufficientResources {
             return .retrying
         } catch {

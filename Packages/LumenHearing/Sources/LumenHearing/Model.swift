@@ -75,6 +75,9 @@ public struct EngineTranscript: Sendable, Equatable {
     public var engine: EngineKind
     public var audioSeconds: Double
     public var processingSeconds: Double
+    /// Timed words when the engine has them (Parakeet). Lets diarization split
+    /// a segment where the speaker changes. Not stored.
+    public var words: [TimedWord] = []
 
     public init(text: String, segments: [TranscriptSegment], language: String?, engine: EngineKind,
                 audioSeconds: Double, processingSeconds: Double) {

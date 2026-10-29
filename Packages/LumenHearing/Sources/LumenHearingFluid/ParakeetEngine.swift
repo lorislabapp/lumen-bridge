@@ -95,8 +95,10 @@ public actor ParakeetEngine: TranscriptionEngine {
         if segments.isEmpty, !text.isEmpty {
             segments = [TranscriptSegment(start: 0, end: audio.duration, text: text, confidence: result.confidence)]
         }
-        return EngineTranscript(text: text, segments: segments, language: hint?.rawValue, engine: .parakeetV3,
-                                audioSeconds: audio.duration, processingSeconds: seconds)
+        var transcript = EngineTranscript(text: text, segments: segments, language: hint?.rawValue, engine: .parakeetV3,
+                                          audioSeconds: audio.duration, processingSeconds: seconds)
+        transcript.words = words
+        return transcript
     }
 
     /// SentencePiece tokens → words (a token starting with "▁" or a space opens a new word).
