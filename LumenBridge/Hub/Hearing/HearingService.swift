@@ -296,7 +296,13 @@ actor HearingFrigateSource: SpeechEventFeed, SpeechAudioSource {
 
     func audio(for event: SpeechEvent) async throws -> PCMAudio {
         guard event.isWellFormed else { throw HearingError.invalidEvent }
-        let file = try await current().eventClip(id: event.id)
+        let file: URL
+        do {
+            file = try await current().eventClip(id: event.id)
+        } catch ClipDownloadFailure.http(let status) where status == 400 || status == 404 {
+            // Frigate answers 400 "No recordings found" until the segment is saved.
+            throw HearingError.clipNotReady
+        }
         defer { try? FileManager.default.removeItem(at: file) }
         return try await AudioDecoder.decode16kMono(url: file)
     }
