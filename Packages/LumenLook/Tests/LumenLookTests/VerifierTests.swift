@@ -29,7 +29,7 @@ struct VerifierTests {
         #expect(run.retries == 1)
         #expect(run.result.retried)
         #expect(run.notified.count == 1)
-        #expect(run.notified[0].message == "Lumière semble toujours éteinte — vu sur la caméra Salon, j'ai réessayé une fois")
+        #expect(run.notified[0].message == "Lumière semble toujours éteinte — vue sur la caméra Salon, j'ai réessayé une fois")
     }
 
     @Test func lampRetrySucceeds() async {

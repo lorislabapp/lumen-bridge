@@ -19,7 +19,7 @@ public enum LookPhrases {
                           : "\(enNoun(kind).capitalizedFirst): the device still reports \(observed.rawValue)"
                     + (retried ? ", I tried again once" : "")
             }
-            return fr ? "\(frNoun(kind).capitalizedFirst) \(frSeem(kind)) toujours \(frAdjective(observed, kind)) — vu sur la caméra \(cam)"
+            return fr ? "\(frNoun(kind).capitalizedFirst) \(frSeem(kind)) toujours \(frAdjective(observed, kind)) — \(frSeen(kind)) sur la caméra \(cam)"
                 + (retried ? ", j'ai réessayé une fois" : "")
                       : "\(enNoun(kind).capitalizedFirst) still \(enSeem(kind)) \(observed.rawValue) — seen on the \(cam) camera"
                 + (retried ? ", I tried again once" : "")
@@ -50,6 +50,8 @@ public enum LookPhrases {
     }
 
     static func frSeem(_ kind: LookDeviceKind) -> String { kind == .shutter ? "semblent" : "semble" }
+    /// "vue" (lumière, télé, porte), "vus" (volets).
+    static func frSeen(_ kind: LookDeviceKind) -> String { kind == .shutter ? "vus" : "vue" }
 
     static func frAdjective(_ state: LookState, _ kind: LookDeviceKind) -> String {
         let plural = kind == .shutter
