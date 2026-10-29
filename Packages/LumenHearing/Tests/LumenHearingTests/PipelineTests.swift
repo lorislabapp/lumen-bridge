@@ -221,6 +221,31 @@ struct Harness {
         #expect(try await h.store.count() == 1)
     }
 
+    /// UAT 0.18: clip.mp4 answers 400 "No recordings found" until the segment is saved.
+    @Test func clipNotReadyIsRetriedThenTranscribed() async throws {
+        struct LateClip: SpeechAudioSource {
+            let misses = Box(1)
+            func audio(for event: SpeechEvent) async throws -> PCMAudio {
+                var miss = false
+                misses.update { if $0 > 0 { $0 -= 1; miss = true } }
+                if miss { throw HearingError.clipNotReady }
+                return toneClip
+            }
+        }
+        let store = try TranscriptStore(url: nil)
+        var config = HearingPipeline.Configuration()
+        config.retryDelay = .milliseconds(10)
+        let settings = enabledSettings()
+        let pipeline = HearingPipeline(settings: { settings }, audioSource: LateClip(), gate: { EnergyVoiceGate() },
+                                       engines: EngineSelector(parakeet: nil, apple: StubEngine()), store: store,
+                                       alerts: RecordingSink(), now: { consentAt.addingTimeInterval(3600) },
+                                       configuration: config)
+        _ = await pipeline.enqueue(event(1))
+        await pipeline.waitUntilIdle()
+        #expect(try await store.count() == 1)
+        #expect(await pipeline.snapshot.failed == 0)
+    }
+
     @Test func insufficientResourcesGivesUpAfterMaxAttempts() async throws {
         let h = try Harness(engine: StubEngine(failuresBeforeSuccess: 10))
         _ = await h.pipeline.enqueue(event(1))
@@ -311,7 +336,7 @@ struct Harness {
         // Event ended 0 s ago: not settled yet.
         now.set(consentAt.addingTimeInterval(1016))
         #expect(await ingestor.pollOnce().isEmpty)
-        now.set(consentAt.addingTimeInterval(1040))
+        now.set(consentAt.addingTimeInterval(1061)) // 46 s after the end (settleDelay 45 s)
         #expect(await ingestor.pollOnce() == [.queued])
         await h.pipeline.waitUntilIdle()
         #expect(h.audio.fetched.get() == ["2.fresh-b"])

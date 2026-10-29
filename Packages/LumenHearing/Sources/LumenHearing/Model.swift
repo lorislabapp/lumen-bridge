@@ -116,6 +116,9 @@ public enum HearingError: Error, Equatable, Sendable {
     case engineUnavailable(String)
     /// SpeechAnalyzer refused a new analysis (system resource cap). Retry later.
     case insufficientResources
+    /// Frigate has the event but not its recording yet (HTTP 400 "No recordings
+    /// found" a few seconds after the end, seen on UAT 0.18). Retry later.
+    case clipNotReady
     case modelNotReady
     case invalidEvent
     case storage(String)

@@ -181,7 +181,7 @@ public actor HearingPipeline {
                     }
                 } else {
                     snapshot.failed += 1
-                    snapshot.lastError = "insufficientResources"
+                    snapshot.lastError = "retries exhausted"
                     try? await store.markProcessed(eventID: event.id, status: .failed, at: now())
                 }
             }
@@ -214,6 +214,9 @@ public actor HearingPipeline {
         } catch HearingError.noAudioTrack {
             try? await store.markProcessed(eventID: event.id, status: .skipped, at: now())
             return .noAudio
+        } catch HearingError.clipNotReady {
+            // Not final: the recording usually lands within a minute.
+            return .retrying
         } catch {
             try? await store.markProcessed(eventID: event.id, status: .failed, at: now())
             return .failed("audio: \(Self.describe(error))")

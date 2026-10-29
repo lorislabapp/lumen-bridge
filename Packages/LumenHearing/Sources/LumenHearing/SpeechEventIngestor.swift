@@ -12,8 +12,10 @@ public protocol SpeechEventFeed: Sendable {
 public actor SpeechEventIngestor {
     public struct Configuration: Sendable {
         public var interval: Duration = .seconds(90)
-        /// Frigate finalises the clip a little after the event ends.
-        public var settleDelay: TimeInterval = 20
+        /// Frigate finalises the clip a little after the event ends. On UAT
+        /// 0.18 the clip still answered 400 "No recordings found" 19 s after
+        /// the end and was ready by 75 s; the pipeline also retries.
+        public var settleDelay: TimeInterval = 45
         /// Re-reads this much history each poll; duplicates are ignored.
         public var overlap: TimeInterval = 30 * 60
         public var pageSize = 50
