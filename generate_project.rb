@@ -97,6 +97,12 @@ frigate_kit_pkg = add_local_package(project, FRIGATE_KIT_DIR)
 LUMEN_HEARING_DIR = 'Packages/LumenHearing'
 lumen_hearing_pkg = add_local_package(project, LUMEN_HEARING_DIR)
 
+# LumenAssistant — Lumen Hub hands-free assistant (camera mics → rules/LLM →
+# safety policy → Home Assistant). Hub only, like LumenHearing.
+# See Packages/LumenAssistant/README.md.
+LUMEN_ASSISTANT_DIR = 'Packages/LumenAssistant'
+lumen_assistant_pkg = add_local_package(project, LUMEN_ASSISTANT_DIR)
+
 # Groups mirror the on-disk layout.
 shared_group = project.new_group('Shared',         'Shared')
 mac_group    = project.new_group('LumenBridge',    'LumenBridge')
@@ -220,12 +226,15 @@ end
 
 mac_target = add_mac_app(project, 'LumenBridge', shared_swift + mac_swift, mac_group)
 hub_target = add_mac_app(project, 'LumenHub', shared_swift + mac_swift, mac_group)
+# Assistant strings: Hub-only table, kept out of Localizable.xcstrings.
+add_bundle_resource(mac_group, hub_target, 'Assistant.xcstrings')
 
 [mac_target, hub_target].each do |target|
   add_package_product(project, target, mqtt_nio_pkg, 'MQTTNIO')
   add_package_product(project, target, hap_pkg, 'HAP')
   add_package_product(project, target, frigate_kit_pkg, 'FrigateKit')
   add_package_product(project, target, lumen_hearing_pkg, 'LumenHearing') if target == hub_target
+  add_package_product(project, target, lumen_assistant_pkg, 'LumenAssistant') if target == hub_target
   add_package_product(project, target, foundation_pkg, 'LorisSecurity')
   add_package_product(project, target, loris_labs_kit_pkg, 'LorisReports') if loris_labs_kit_pkg
   add_package_product(project, target, loris_labs_kit_pkg, 'LorisLabsKit') if loris_labs_kit_pkg

@@ -77,6 +77,12 @@ final class VoiceService {
 
     private func readyAttributor() async -> VoiceAttributor? { await opening?.value }
 
+    /// For the assistant's per-utterance speaker check (read-only use of the gallery).
+    func assistantVoiceStore() async -> VoiceStore? {
+        _ = await opening?.value
+        return store
+    }
+
     private func open(hearing: @escaping @Sendable () async -> HearingSettings, frigate: HearingFrigateSource,
                       voices: LiveVoiceSettings) async -> VoiceAttributor? {
         var opened: VoiceStore?

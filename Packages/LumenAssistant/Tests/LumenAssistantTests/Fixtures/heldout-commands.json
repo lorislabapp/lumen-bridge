@@ -1,0 +1,762 @@
+[
+ {
+  "text": "allume la lumière du salon",
+  "camera": "cuisine",
+  "expect": "command",
+  "action": "turn_on",
+  "targets": [
+   "light.salon_plafond",
+   "light.salon_lampe"
+  ],
+  "value": null
+ },
+ {
+  "text": "éteins la lumière",
+  "camera": "chambre",
+  "expect": "command",
+  "action": "turn_off",
+  "targets": [
+   "light.chambre"
+  ],
+  "value": null
+ },
+ {
+  "text": "tu peux allumer la lumière de la cuisine s'il te plaît",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_on",
+  "targets": [
+   "light.cuisine"
+  ],
+  "value": null
+ },
+ {
+  "text": "éteins toutes les lumières",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_off",
+  "targets": [
+   "light.salon_plafond",
+   "light.salon_lampe",
+   "light.cuisine",
+   "light.chambre"
+  ],
+  "value": null
+ },
+ {
+  "text": "allume le plafonnier",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_on",
+  "targets": [
+   "light.salon_plafond"
+  ],
+  "value": null
+ },
+ {
+  "text": "allume la lampe de lecture",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_on",
+  "targets": [
+   "light.salon_lampe"
+  ],
+  "value": null
+ },
+ {
+  "text": "baisse un peu la lumière du séjour",
+  "camera": "salon",
+  "expect": "command",
+  "action": "lower",
+  "targets": [
+   "light.salon_plafond",
+   "light.salon_lampe"
+  ],
+  "value": null
+ },
+ {
+  "text": "monte la lumière",
+  "camera": "chambre",
+  "expect": "command",
+  "action": "raise",
+  "targets": [
+   "light.chambre"
+  ],
+  "value": null
+ },
+ {
+  "text": "allume la télé",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_on",
+  "targets": [
+   "media_player.tv_salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "éteins la télé du salon s'il te plait",
+  "camera": "cuisine",
+  "expect": "command",
+  "action": "turn_off",
+  "targets": [
+   "media_player.tv_salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "monte le son",
+  "camera": "salon",
+  "expect": "command",
+  "action": "raise",
+  "targets": [
+   "media_player.tv_salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "baisse le son",
+  "camera": "cuisine",
+  "expect": "command",
+  "action": "lower",
+  "targets": [
+   "media_player.sonos_cuisine"
+  ],
+  "value": null
+ },
+ {
+  "text": "ferme les volets",
+  "camera": "salon",
+  "expect": "command",
+  "action": "close",
+  "targets": [
+   "cover.volets_salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "ouvre les volets du salon",
+  "camera": "chambre",
+  "expect": "command",
+  "action": "open",
+  "targets": [
+   "cover.volets_salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "baisse le volet de la chambre",
+  "camera": "salon",
+  "expect": "command",
+  "action": "close",
+  "targets": [
+   "cover.volet_chambre"
+  ],
+  "value": null
+ },
+ {
+  "text": "monte les volets",
+  "camera": "chambre",
+  "expect": "command",
+  "action": "open",
+  "targets": [
+   "cover.volet_chambre"
+  ],
+  "value": null
+ },
+ {
+  "text": "stop les volets",
+  "camera": "salon",
+  "expect": "command",
+  "action": "stop",
+  "targets": [
+   "cover.volets_salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "baisse les stores",
+  "camera": "salon",
+  "expect": "command",
+  "action": "close",
+  "targets": [
+   "cover.volets_salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "mets le chauffage à 21",
+  "camera": "salon",
+  "expect": "command",
+  "action": "set_temperature",
+  "targets": [
+   "climate.salon"
+  ],
+  "value": 21
+ },
+ {
+  "text": "règle le thermostat sur 19 degrés",
+  "camera": "cuisine",
+  "expect": "command",
+  "action": "set_temperature",
+  "targets": [
+   "climate.salon"
+  ],
+  "value": 19
+ },
+ {
+  "text": "monte le chauffage",
+  "camera": "salon",
+  "expect": "command",
+  "action": "raise",
+  "targets": [
+   "climate.salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "tu peux baisser un peu le chauffage",
+  "camera": "salon",
+  "expect": "command",
+  "action": "lower",
+  "targets": [
+   "climate.salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "ferme la porte d'entrée",
+  "camera": "salon",
+  "expect": "command",
+  "action": "lock",
+  "targets": [
+   "lock.porte_entree"
+  ],
+  "value": null
+ },
+ {
+  "text": "verrouille la porte d'entrée s'il te plaît",
+  "camera": "chambre",
+  "expect": "command",
+  "action": "lock",
+  "targets": [
+   "lock.porte_entree"
+  ],
+  "value": null
+ },
+ {
+  "text": "ouvre la porte d'entrée",
+  "camera": "entree",
+  "expect": "command",
+  "action": "unlock",
+  "targets": [
+   "lock.porte_entree"
+  ],
+  "value": null
+ },
+ {
+  "text": "ouvre le garage",
+  "camera": "entree",
+  "expect": "command",
+  "action": "open",
+  "targets": [
+   "cover.garage"
+  ],
+  "value": null
+ },
+ {
+  "text": "ferme la porte du garage",
+  "camera": "salon",
+  "expect": "command",
+  "action": "close",
+  "targets": [
+   "cover.garage"
+  ],
+  "value": null
+ },
+ {
+  "text": "active l'alarme",
+  "camera": "entree",
+  "expect": "command",
+  "action": "arm",
+  "targets": [
+   "alarm_control_panel.maison"
+  ],
+  "value": null
+ },
+ {
+  "text": "éteins l'alarme",
+  "camera": "entree",
+  "expect": "command",
+  "action": "disarm",
+  "targets": [
+   "alarm_control_panel.maison"
+  ],
+  "value": null
+ },
+ {
+  "text": "allume le sapin",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_on",
+  "targets": [
+   "switch.sapin"
+  ],
+  "value": null
+ },
+ {
+  "text": "tu peux éteindre le sapin",
+  "camera": "cuisine",
+  "expect": "command",
+  "action": "turn_off",
+  "targets": [
+   "switch.sapin"
+  ],
+  "value": null
+ },
+ {
+  "text": "éteins le ventilo de la chambre",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_off",
+  "targets": [
+   "fan.chambre"
+  ],
+  "value": null
+ },
+ {
+  "text": "est-ce que la porte d'entrée est bien fermée",
+  "camera": "chambre",
+  "expect": "command",
+  "action": "query",
+  "targets": [
+   "lock.porte_entree"
+  ],
+  "value": null
+ },
+ {
+  "text": "la lumière de la cuisine est allumée",
+  "camera": "salon",
+  "expect": "command",
+  "action": "query",
+  "targets": [
+   "light.cuisine"
+  ],
+  "value": null
+ },
+ {
+  "text": "il fait combien dans le salon",
+  "camera": "chambre",
+  "expect": "command",
+  "action": "query",
+  "targets": [
+   "climate.salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "turn on the living room lights",
+  "camera": "cuisine",
+  "expect": "command",
+  "action": "turn_on",
+  "targets": [
+   "light.salon_plafond",
+   "light.salon_lampe"
+  ],
+  "value": null
+ },
+ {
+  "text": "turn off the light",
+  "camera": "chambre",
+  "expect": "command",
+  "action": "turn_off",
+  "targets": [
+   "light.chambre"
+  ],
+  "value": null
+ },
+ {
+  "text": "switch off all the lights",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_off",
+  "targets": [
+   "light.salon_plafond",
+   "light.salon_lampe",
+   "light.cuisine",
+   "light.chambre"
+  ],
+  "value": null
+ },
+ {
+  "text": "could you turn on the kitchen light please",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_on",
+  "targets": [
+   "light.cuisine"
+  ],
+  "value": null
+ },
+ {
+  "text": "dim the lights",
+  "camera": "salon",
+  "expect": "command",
+  "action": "lower",
+  "targets": [
+   "light.salon_plafond",
+   "light.salon_lampe"
+  ],
+  "value": null
+ },
+ {
+  "text": "make the bedroom light brighter",
+  "camera": "salon",
+  "expect": "command",
+  "action": "raise",
+  "targets": [
+   "light.chambre"
+  ],
+  "value": null
+ },
+ {
+  "text": "turn off the reading lamp",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_off",
+  "targets": [
+   "light.salon_lampe"
+  ],
+  "value": null
+ },
+ {
+  "text": "turn on the tv",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_on",
+  "targets": [
+   "media_player.tv_salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "turn the volume up",
+  "camera": "salon",
+  "expect": "command",
+  "action": "raise",
+  "targets": [
+   "media_player.tv_salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "turn the music down a bit",
+  "camera": "cuisine",
+  "expect": "command",
+  "action": "lower",
+  "targets": [
+   "media_player.sonos_cuisine"
+  ],
+  "value": null
+ },
+ {
+  "text": "close the shutters",
+  "camera": "salon",
+  "expect": "command",
+  "action": "close",
+  "targets": [
+   "cover.volets_salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "open the bedroom shutter",
+  "camera": "cuisine",
+  "expect": "command",
+  "action": "open",
+  "targets": [
+   "cover.volet_chambre"
+  ],
+  "value": null
+ },
+ {
+  "text": "stop the shutters",
+  "camera": "salon",
+  "expect": "command",
+  "action": "stop",
+  "targets": [
+   "cover.volets_salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "set the thermostat to 20",
+  "camera": "salon",
+  "expect": "command",
+  "action": "set_temperature",
+  "targets": [
+   "climate.salon"
+  ],
+  "value": 20
+ },
+ {
+  "text": "turn the heating up",
+  "camera": "chambre",
+  "expect": "command",
+  "action": "raise",
+  "targets": [
+   "climate.salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "lock the front door",
+  "camera": "salon",
+  "expect": "command",
+  "action": "lock",
+  "targets": [
+   "lock.porte_entree"
+  ],
+  "value": null
+ },
+ {
+  "text": "can you unlock the front door please",
+  "camera": "entree",
+  "expect": "command",
+  "action": "unlock",
+  "targets": [
+   "lock.porte_entree"
+  ],
+  "value": null
+ },
+ {
+  "text": "open the garage door",
+  "camera": "entree",
+  "expect": "command",
+  "action": "open",
+  "targets": [
+   "cover.garage"
+  ],
+  "value": null
+ },
+ {
+  "text": "close the garage",
+  "camera": "cuisine",
+  "expect": "command",
+  "action": "close",
+  "targets": [
+   "cover.garage"
+  ],
+  "value": null
+ },
+ {
+  "text": "arm the alarm",
+  "camera": "entree",
+  "expect": "command",
+  "action": "arm",
+  "targets": [
+   "alarm_control_panel.maison"
+  ],
+  "value": null
+ },
+ {
+  "text": "disarm the alarm",
+  "camera": "entree",
+  "expect": "command",
+  "action": "disarm",
+  "targets": [
+   "alarm_control_panel.maison"
+  ],
+  "value": null
+ },
+ {
+  "text": "turn on the christmas tree",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_on",
+  "targets": [
+   "switch.sapin"
+  ],
+  "value": null
+ },
+ {
+  "text": "turn off the fan in the bedroom",
+  "camera": "salon",
+  "expect": "command",
+  "action": "turn_off",
+  "targets": [
+   "fan.chambre"
+  ],
+  "value": null
+ },
+ {
+  "text": "is the front door locked",
+  "camera": "chambre",
+  "expect": "command",
+  "action": "query",
+  "targets": [
+   "lock.porte_entree"
+  ],
+  "value": null
+ },
+ {
+  "text": "what's the temperature in the lounge",
+  "camera": "cuisine",
+  "expect": "command",
+  "action": "query",
+  "targets": [
+   "climate.salon"
+  ],
+  "value": null
+ },
+ {
+  "text": "il faudrait qu'on ferme les volets plus tôt l'hiver",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "demain matin j'ouvrirai les volets plus tard",
+  "camera": "chambre",
+  "expect": "not_command"
+ },
+ {
+  "text": "j'ai éteint la lumière de la chambre tout à l'heure",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "n'éteins pas la télé je regarde encore",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "si il fait froid ce soir allume le chauffage",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "je ferme les volets et j'arrive",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "pourquoi la lumière de la cuisine s'est allumée toute seule",
+  "camera": "cuisine",
+  "expect": "not_command"
+ },
+ {
+  "text": "t'as pensé à fermer le garage en partant",
+  "camera": "entree",
+  "expect": "not_command"
+ },
+ {
+  "text": "on allumera le sapin ce week-end avec les enfants",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "capitaine éteignez les moteurs on s'arrête ici",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "we should turn the heating down at night",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "tomorrow I'll open the garage early",
+  "camera": "entree",
+  "expect": "not_command"
+ },
+ {
+  "text": "I already turned off the kitchen light",
+  "camera": "cuisine",
+  "expect": "not_command"
+ },
+ {
+  "text": "did you lock the front door",
+  "camera": "entree",
+  "expect": "not_command"
+ },
+ {
+  "text": "don't turn off the tv I'm still watching",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "if it rains later close the shutters",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "let's turn off the lights and watch a movie",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "I'm closing the shutters now",
+  "camera": "chambre",
+  "expect": "not_command"
+ },
+ {
+  "text": "why is the alarm going off",
+  "camera": "entree",
+  "expect": "not_command"
+ },
+ {
+  "text": "sergeant shut down the generator and lock the gate",
+  "camera": "salon",
+  "expect": "not_command"
+ },
+ {
+  "text": "allume la lumière du grenier",
+  "camera": "salon",
+  "expect": "unclear"
+ },
+ {
+  "text": "ouvre le portail",
+  "camera": "entree",
+  "expect": "unclear"
+ },
+ {
+  "text": "allume ça",
+  "camera": "cuisine",
+  "expect": "unclear"
+ },
+ {
+  "text": "baisse la clim de la salle de bain",
+  "camera": "chambre",
+  "expect": "unclear"
+ },
+ {
+  "text": "lance l'arrosage du jardin",
+  "camera": "salon",
+  "expect": "unclear"
+ },
+ {
+  "text": "turn on the bathroom light",
+  "camera": "chambre",
+  "expect": "unclear"
+ },
+ {
+  "text": "open the window",
+  "camera": "salon",
+  "expect": "unclear"
+ },
+ {
+  "text": "turn on the coffee machine",
+  "camera": "cuisine",
+  "expect": "unclear"
+ },
+ {
+  "text": "start the dishwasher",
+  "camera": "cuisine",
+  "expect": "unclear"
+ },
+ {
+  "text": "mets-le plus fort",
+  "camera": "salon",
+  "expect": "unclear"
+ }
+]
