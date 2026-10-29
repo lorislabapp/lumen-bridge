@@ -1,0 +1,366 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%@ camera · %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra %@ · %@"
+          }
+        }
+      }
+    },
+    "%@ ms · %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ms · %@"
+          }
+        }
+      }
+    },
+    "1 hour": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 heure"
+          }
+        }
+      }
+    },
+    "24 hours": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 heures"
+          }
+        }
+      }
+    },
+    "7 days": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 jours"
+          }
+        }
+      }
+    },
+    "Allow lights, TVs, shutters or doors above to check them on a camera.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorisez des lumières, télés, volets ou portes plus haut pour les vérifier sur une caméra."
+          }
+        }
+      }
+    },
+    "Area for %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone pour %@"
+          }
+        }
+      }
+    },
+    "Ask the vision model when unsure": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demander au modèle de vision en cas de doute"
+          }
+        }
+      }
+    },
+    "Camera": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caméra"
+          }
+        }
+      }
+    },
+    "Camera snapshot. Drag to draw the box.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image de la caméra. Faites glisser pour dessiner la zone."
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler"
+          }
+        }
+      }
+    },
+    "Check as": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifier comme"
+          }
+        }
+      }
+    },
+    "Check on camera": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifier sur la caméra"
+          }
+        }
+      }
+    },
+    "Check on camera after each action": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifier sur la caméra après chaque action"
+          }
+        }
+      }
+    },
+    "Drag a box around the device itself: the lamp shade, the TV screen, the window, the door.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dessinez la zone autour de l'appareil lui-même : l'abat-jour, l'écran de la télé, la fenêtre, la porte."
+          }
+        }
+      }
+    },
+    "Draw a box around the device on one camera. After a command, Lumen looks once the device has had time to move. It says “checked” only when it sees it.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dessinez une zone autour de l'appareil sur une caméra. Après une commande, Lumen regarde quand l'appareil a eu le temps de bouger. Il dit « vérifié » seulement s'il le voit."
+          }
+        }
+      }
+    },
+    "Draw area on camera": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dessiner la zone sur la caméra"
+          }
+        }
+      }
+    },
+    "Invalid address": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adresse invalide"
+          }
+        }
+      }
+    },
+    "Keep proof pictures": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garder les images de preuve"
+          }
+        }
+      }
+    },
+    "Look after %@ s": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regarder après %@ s"
+          }
+        }
+      }
+    },
+    "New snapshot": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouvelle image"
+          }
+        }
+      }
+    },
+    "No area yet": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de zone"
+          }
+        }
+      }
+    },
+    "No picture from this camera.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune image de cette caméra."
+          }
+        }
+      }
+    },
+    "No vision model answers at this address.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun modèle de vision ne répond à cette adresse."
+          }
+        }
+      }
+    },
+    "Proof picture": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image de preuve"
+          }
+        }
+      }
+    },
+    "Redraw": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redessiner"
+          }
+        }
+      }
+    },
+    "Remove area": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer la zone"
+          }
+        }
+      }
+    },
+    "Save": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer"
+          }
+        }
+      }
+    },
+    "TV": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "télé"
+          }
+        }
+      }
+    },
+    "Test": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tester"
+          }
+        }
+      }
+    },
+    "Vision model address": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adresse du modèle de vision"
+          }
+        }
+      }
+    },
+    "Vision model ready": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modèle de vision prêt"
+          }
+        }
+      }
+    },
+    "door": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "porte"
+          }
+        }
+      }
+    },
+    "light": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lumière"
+          }
+        }
+      }
+    },
+    "llama-server with Qwen3-VL. Only the cropped box is sent, on this Mac. Proof pictures stay on this Mac and are never in notifications.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "llama-server avec Qwen3-VL. Seule la zone recadrée est envoyée, sur ce Mac. Les images de preuve restent sur ce Mac et ne sont jamais dans les notifications."
+          }
+        }
+      }
+    },
+    "shutter": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "volets"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

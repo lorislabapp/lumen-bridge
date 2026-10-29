@@ -49,7 +49,7 @@ public final class SystemSpeechOutput: SpeechOutput {
     }
 }
 
-/// Next phase: after acting, a camera checks the device really changed.
+/// After acting, a camera checks the device really changed (LumenLook, "Look").
 public struct VerificationRequest: Sendable, Equatable {
     public var entityID: String
     public var kind: DeviceKind
@@ -57,10 +57,38 @@ public struct VerificationRequest: Sendable, Equatable {
     /// Expected HA-style state: "on", "off", "open", "closed".
     public var expectedState: String
     public var deadline: Date
+    /// HA state just before the command ("off"), when read.
+    public var priorState: String?
+    /// When the command was sent.
+    public var commandAt: Date
+    /// Reply language ("fr" / "en").
+    public var language: String
+
+    public init(entityID: String, kind: DeviceKind, camera: String?, expectedState: String, deadline: Date,
+                priorState: String? = nil, commandAt: Date = Date(), language: String = "fr") {
+        self.entityID = entityID
+        self.kind = kind
+        self.camera = camera
+        self.expectedState = expectedState
+        self.deadline = deadline
+        self.priorState = priorState
+        self.commandAt = commandAt
+        self.language = language
+    }
 }
 
 public protocol ActionVerifier: Sendable {
+    /// Can a camera check this device? (Then the reply says "checking", not "done".)
+    func covers(_ request: VerificationRequest) async -> Bool
+    /// Just before the command is sent: grab a "before" frame. Must return at once.
+    func prepare(_ request: VerificationRequest) async
+    /// After the command: check in the background. Must return at once.
     func verify(_ request: VerificationRequest) async
+}
+
+extension ActionVerifier {
+    public func covers(_ request: VerificationRequest) async -> Bool { false }
+    public func prepare(_ request: VerificationRequest) async {}
 }
 
 public struct NoOpVerifier: ActionVerifier {
@@ -70,7 +98,8 @@ public struct NoOpVerifier: ActionVerifier {
 
 public enum VerificationPlanner {
     /// Shutters travel 10–30 s; lights and TVs settle in a few seconds.
-    public static func requests(for plan: ActionPlan, registry: DeviceRegistry, now: Date) -> [VerificationRequest] {
+    public static func requests(for plan: ActionPlan, registry: DeviceRegistry, now: Date,
+                                before: [String: HAEntity] = [:], language: String = "fr") -> [VerificationRequest] {
         guard !plan.action.isReadOnly else { return [] }
         return plan.targets.compactMap { device in
             let expected: String
@@ -84,7 +113,8 @@ public enum VerificationPlanner {
             let camera = device.verificationCamera ?? registry.room(named: device.room)?.cameras.first
             let delay: TimeInterval = device.kind.isCover ? 45 : 8
             return VerificationRequest(entityID: device.entityID, kind: device.kind, camera: camera, expectedState: expected,
-                                       deadline: now.addingTimeInterval(delay))
+                                       deadline: now.addingTimeInterval(delay), priorState: before[device.entityID]?.state,
+                                       commandAt: now, language: language)
         }
     }
 }
@@ -235,6 +265,11 @@ public enum ReplyPhrases {
         return language == "en"
             ? ("Confirm on iPhone", "\(what)? Confirm with Face ID within 30 s.")
             : ("Confirmer sur l’iPhone", "\(what) ? Confirmez avec Face ID sous 30 s.")
+    }
+
+    /// Reply when a camera will check: never claim success before seeing it.
+    public static func checking(language: String) -> String {
+        language == "en" ? "Command sent, checking on the camera" : "Commande envoyée, je vérifie sur la caméra"
     }
 
     public static func undone(language: String) -> String { language == "en" ? "Cancelled" : "Annulé" }

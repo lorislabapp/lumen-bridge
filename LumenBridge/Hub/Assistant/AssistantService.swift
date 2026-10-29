@@ -117,8 +117,9 @@ final class AssistantService {
             presence: FrigatePresence(frigate: frigate),
             notifier: AssistantPushNotifier(),
             speech: SystemSpeechOutput(),
-            verifier: NoOpVerifier())
+            verifier: LookService.shared.assistantVerifier)
         let engine = AssistantEngine(dependencies: deps, audit: log!, proposals: book)
+        LookService.shared.attach(engine: engine)
         await engine.observe { outcome in
             Task { @MainActor in AssistantService.shared.note(outcome) }
         }

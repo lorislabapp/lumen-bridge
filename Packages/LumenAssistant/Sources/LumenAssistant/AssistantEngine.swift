@@ -278,6 +278,12 @@ public actor AssistantEngine {
             return AssistantOutcome(kind: .previewed, reply: reply, plan: plan, auditSeq: seq)
         }
         guard let backend = deps.backend else { return AssistantOutcome(kind: .failed("Home Assistant not connected"), plan: plan) }
+        // Look: a "before" frame leaves with the command; the check runs after the travel time.
+        let checks = VerificationPlanner.requests(for: plan, registry: registry, now: Date(), before: before, language: language)
+        var watched = !checks.isEmpty
+        for request in checks {
+            if await deps.verifier.covers(request) { await deps.verifier.prepare(request) } else { watched = false }
+        }
         do {
             for call in calls { try await backend.call(call) }
         } catch {
@@ -293,11 +299,12 @@ public actor AssistantEngine {
                              deadline: clock.now.advanced(by: .seconds(settings.undoSeconds)), mode: mode,
                              speaker: speaker.label)
         }
-        let reply = ReplyPhrases.done(plan, language: language)
-        if settings.notifyPhone {
+        // Every target watched by a camera: say "checking"; the verified result follows as its own notice.
+        let reply = watched ? ReplyPhrases.checking(language: language) : ReplyPhrases.done(plan, language: language)
+        if settings.notifyPhone && !watched {
             await deps.notifier?.notify(AssistantNotice(kind: .done, title: "Lumen", body: reply, camera: camera))
         }
-        for request in VerificationPlanner.requests(for: plan, registry: registry, now: Date()) {
+        for request in checks {
             await deps.verifier.verify(request)
         }
         return AssistantOutcome(kind: .executed, reply: reply, plan: plan, auditSeq: entry?.seq)
@@ -375,6 +382,34 @@ public actor AssistantEngine {
         }
         if settings.speakReplies { await deps.speech.speak(reply, language: language, camera: entry.camera) }
         return finish(AssistantOutcome(kind: .undone, reply: reply, plan: entry.plan, auditSeq: seq))
+    }
+
+    /// Look: the camera contradicted a T0 action; send it once more through the
+    /// same backend, limiter and audit log. False in preview mode, when rate
+    /// limited, or for anything above T0. Never called on "unknown".
+    public func reissue(_ request: VerificationRequest) async -> Bool {
+        let settings = await deps.settings()
+        guard settings.enabled, !settings.dryRun, let backend = deps.backend else { return false }
+        let registry = await deps.registry()
+        guard let device = registry.devices.first(where: { $0.entityID == request.entityID }), device.exposed,
+              device.kind.tier == .t0 else { return false }
+        let action: DeviceAction
+        switch request.expectedState {
+        case "on": action = .turnOn
+        case "off": action = .turnOff
+        case "open": action = .open
+        case "closed": action = .close
+        default: return false
+        }
+        let plan = ActionPlan(action: action, targets: [device], room: device.room)
+        let calls = ServiceMapper.calls(for: plan, states: [:])
+        guard !calls.isEmpty else { return false }
+        // The limiter would drop this as a duplicate (same action < 4 s): only the rate caps apply.
+        if let reason = limiter.admit(plan, at: Date()), reason != .duplicate { return false }
+        do { for call in calls { try await backend.call(call) } } catch { return false }
+        _ = try? await audit.append(outcome: .executed, camera: request.camera ?? "", mode: settings.mode, speaker: "look-retry",
+                                   plan: plan, source: .rules, command: nil, reason: "camera contradicted; retried once")
+        return true
     }
 
     // MARK: Helpers

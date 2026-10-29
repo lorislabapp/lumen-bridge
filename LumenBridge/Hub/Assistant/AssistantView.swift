@@ -19,6 +19,7 @@ struct AssistantView: View {
             camerasSection
             homeAssistantSection
             devicesSection
+            LookSection(look: LookService.shared, devices: service.registry.devices)
             roomsSection
             modelSection
             safetySection
