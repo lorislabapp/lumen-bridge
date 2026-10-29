@@ -130,7 +130,7 @@ public actor LookVerifier {
         guard let target = await deps.store.target(entityID) else { return nil }
         let reported = await deps.device.state(of: entityID)
         let request = LookRequest(entityID: entityID, expected: reported ?? target.kind.states.positive,
-                                  commandAt: Date().addingTimeInterval(-1), language: Locale.current.language.languageCode?.identifier ?? "fr")
+                                  commandAt: Date().addingTimeInterval(-30), language: Locale.current.language.languageCode?.identifier ?? "fr")
         var result = await check(request, target: target, attempt: 0, waitForTravel: false, allowRetry: false)
         result.message = LookPhrases.message(for: result.outcome, kind: target.kind, expected: request.expected,
                                              camera: target.camera, source: result.source, retried: false, language: request.language)
@@ -186,10 +186,10 @@ public actor LookVerifier {
         do {
             after = try await deps.frames.frame(camera: target.camera, height: height)
             let notBefore = request.commandAt.addingTimeInterval(min(travel * 0.5, 1))
-            if let t = after.frameTime, t < notBefore {
+            if let t = after.trustedFrameTime, t < notBefore {
                 await deps.sleep(1)
                 after = try await deps.frames.frame(camera: target.camera, height: height)
-                if let t2 = after.frameTime, t2 < notBefore {
+                if let t2 = after.trustedFrameTime, t2 < notBefore {
                     timing.fetchMs = Self.ms(fetchStart.duration(to: clock.now))
                     return await unknown(.staleFrame, "frame time \(t2.timeIntervalSince(request.commandAt))s after command")
                 }

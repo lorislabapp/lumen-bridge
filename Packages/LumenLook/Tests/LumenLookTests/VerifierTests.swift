@@ -201,6 +201,18 @@ struct VerifierTests {
         #expect(run.result.frameTime == nil)
     }
 
+    @Test func skewedFrigateClockFallsBackToFetchTime() async {
+        // Frigate's clock 30 s ahead: X-Frame-Time is ignored, the fetch time stands in.
+        let img = Fixture.scene(.tv, .on).image()
+        let t0 = Date()
+        let frames = ScriptedFrames(base: t0, [.frame(img, offset: 6)])
+        let frame = try? await frames.frame(camera: "salon", height: 720)
+        let skewed = CameraFrame(image: img, frameTime: t0.addingTimeInterval(40), fetchedAt: t0.addingTimeInterval(6))
+        #expect(frame?.trustedFrameTime != nil)
+        #expect(skewed.trustedFrameTime == nil)
+        #expect(skewed.takenAt == t0.addingTimeInterval(6))
+    }
+
     @Test func personInFront() async {
         let run = await Fixture.run(.shutter, from: .open, to: .closed, shows: [.closed],
                                     occlusion: [LookRect(x: 0.72, y: 0.05, width: 0.2, height: 0.9)])

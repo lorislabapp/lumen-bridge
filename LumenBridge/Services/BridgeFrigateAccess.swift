@@ -122,9 +122,16 @@ protocol BridgeFrigateTransport: Sendable {
     func eventClip(id: String) async throws -> URL
     /// `person` events on one camera that started in a window (Hub face ↔ voice suggestions).
     func personEvents(camera: String, after: Double, before: Double, limit: Int) async throws -> [FrigateEvent]
+    #if LUMEN_HUB
+    /// Hub · Look: latest frame plus Frigate's `X-Frame-Time` (proves it is newer than a command).
+    func timedSnapshot(camera: String, height: Int) async throws -> (Data, String?)
+    #endif
 }
 
 extension BridgeFrigateTransport {
+    #if LUMEN_HUB
+    func timedSnapshot(camera: String, height: Int) async throws -> (Data, String?) { (try await snapshot(camera: camera), nil) }
+    #endif
     func video(camera: String) async throws -> BridgeFrigateVideoStream { throw BridgeFrigateAccessError.videoUnavailable }
     func speechEvents(after: Double, limit: Int) async throws -> [FrigateEvent] { throw BridgeFrigateAccessError.invalidConfiguration }
     func eventClip(id: String) async throws -> URL { throw BridgeFrigateAccessError.videoUnavailable }
@@ -149,6 +156,33 @@ private struct NativeFrigateTransport: BridgeFrigateTransport {
     func personEvents(camera: String, after: Double, before: Double, limit: Int) async throws -> [FrigateEvent] {
         try await client.getEvents(camera: camera, label: "person", after: after, before: before, limit: limit)
     }
+    #if LUMEN_HUB
+    func timedSnapshot(camera: String, height: Int) async throws -> (Data, String?) {
+        // Frigate camera names: letters, digits, "_" and "-" only.
+        guard camera.range(of: "^[A-Za-z0-9_-]{1,64}$", options: .regularExpression) != nil,
+              var components = URLComponents(url: client.baseURL.appendingPathComponent("api/\(camera)/latest.jpg"),
+                                             resolvingAgainstBaseURL: false) else { throw BridgeFrigateAccessError.snapshotUnavailable }
+        // Query items, never string-appended (the %3F bug FrigateKit documents).
+        components.queryItems = [URLQueryItem(name: "h", value: String(height)), URLQueryItem(name: "quality", value: "85")]
+        guard let url = components.url else { throw BridgeFrigateAccessError.snapshotUnavailable }
+        var request = URLRequest(url: url, timeoutInterval: 6)
+        request.allHTTPHeaderFields = client.webRTCSignalingHeaders
+        request.setValue("image/jpeg", forHTTPHeaderField: "Accept")
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.httpCookieStorage = nil
+        configuration.urlCredentialStorage = nil
+        configuration.urlCache = nil
+        configuration.httpShouldSetCookies = false
+        let session = URLSession(configuration: configuration, delegate: BridgeOriginRedirectGuard(), delegateQueue: nil)
+        defer { session.finishTasksAndInvalidate() }
+        let (data, response) = try await session.data(for: request)
+        guard let http = response as? HTTPURLResponse else { throw BridgeFrigateAccessError.snapshotUnavailable }
+        if http.statusCode == 401 { throw FrigateClientError.unauthorized }
+        if http.statusCode == 403 { throw BridgeFrigateAccessError.accessDenied }
+        guard http.statusCode == 200, data.count < 8 * 1024 * 1024 else { throw BridgeFrigateAccessError.snapshotUnavailable }
+        return (data, http.value(forHTTPHeaderField: "X-Frame-Time"))
+    }
+    #endif
     func video(camera: String) async throws -> BridgeFrigateVideoStream {
         let cameras = try await client.getCameras()
         guard let selected = cameras[camera] else { throw BridgeFrigateAccessError.noCameras }
@@ -195,6 +229,11 @@ actor BridgeFrigateSession {
     func video(camera: String) async throws -> BridgeFrigateVideoStream {
         try await authenticated { try await self.transport.video(camera: camera) }
     }
+    #if LUMEN_HUB
+    func timedSnapshot(camera: String, height: Int) async throws -> (Data, String?) {
+        try await authenticated { try await self.transport.timedSnapshot(camera: camera, height: height) }
+    }
+    #endif
     func speechEvents(after: Double, limit: Int) async throws -> [FrigateEvent] {
         try await authenticated { try await self.transport.speechEvents(after: after, limit: limit) }
     }

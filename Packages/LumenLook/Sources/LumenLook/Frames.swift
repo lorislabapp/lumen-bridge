@@ -20,7 +20,14 @@ public struct CameraFrame: @unchecked Sendable {
 
     /// Best known capture time. Without `X-Frame-Time` the fetch time is an
     /// upper bound only, which is still enough to prove "after the command".
-    public var takenAt: Date { frameTime ?? fetchedAt }
+    public var takenAt: Date { trustedFrameTime ?? fetchedAt }
+
+    /// `X-Frame-Time` unless it is in the future of our own clock (Frigate and
+    /// the Mac disagree on time): then it proves nothing and is ignored.
+    public var trustedFrameTime: Date? {
+        guard let frameTime, frameTime <= fetchedAt.addingTimeInterval(2) else { return nil }
+        return frameTime
+    }
 }
 
 public enum LookFrameError: Error, Equatable, Sendable {
