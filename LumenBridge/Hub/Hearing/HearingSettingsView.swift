@@ -15,6 +15,12 @@ struct HearingSettingsView: View {
         var id: String { camera }
     }
 
+    /// `consentFor` opens the consent sheet at once (screens harness).
+    init(service: HearingService, consentFor camera: String? = nil) {
+        self.service = service
+        _consentCamera = State(initialValue: camera.map(ConsentRequest.init(camera:)))
+    }
+
     var body: some View {
         Form {
             HubProBanner(status: HubProStatus.shared)
@@ -42,6 +48,10 @@ struct HearingSettingsView: View {
                     }
                 }
                 .toggleStyle(.switch)
+                if service.settings.enabled && service.settings.staffPresent {
+                    Label("Listening is paused on every camera.", systemImage: "pause.circle.fill")
+                        .foregroundStyle(.orange)
+                }
             }
             .disabled(!service.settings.enabled)
 
@@ -106,13 +116,17 @@ struct HearingSettingsView: View {
             }
             .labelsHidden()
             .frame(width: 150)
-            if locked {
-                Label("Locked", systemImage: "lock.fill")
-                    .labelStyle(.iconOnly)
-                    .foregroundStyle(.secondary)
-                    .help(Text("Outdoor and street cameras can never be transcribed."))
-                    .accessibilityLabel(Text("Locked off: outdoor camera"))
+            // Same slot on every row, so pickers and switches line up.
+            Group {
+                if locked {
+                    Label("Locked", systemImage: "lock.fill")
+                        .labelStyle(.iconOnly)
+                        .foregroundStyle(.secondary)
+                        .help(Text("Outdoor and street cameras can never be transcribed."))
+                        .accessibilityLabel(Text("Locked off: outdoor or street camera"))
+                }
             }
+            .frame(width: 18)
             Toggle("Transcribe", isOn: Binding(
                 get: { on },
                 set: { wanted in
@@ -135,7 +149,7 @@ struct HearingSettingsView: View {
     private var keywordsSection: some View {
         Section {
             HStack {
-                TextField("Add a word or phrase", text: $newKeyword)
+                TextField("New keyword", text: $newKeyword, prompt: Text("Add a word or phrase"))
                     .onSubmit(addKeyword)
                 Button("Add", action: addKeyword)
                     .disabled(!HearingSettings.keywordLength.contains(newKeyword.trimmingCharacters(in: .whitespaces).count))
@@ -316,7 +330,9 @@ struct HearingConsentSheet: View {
     }
 
     private func point(_ icon: String, _ text: LocalizedStringKey) -> some View {
-        Label { Text(text).fixedSize(horizontal: false, vertical: true) } icon: { Image(systemName: icon) }
+        Label { Text(text).fixedSize(horizontal: false, vertical: true) } icon: {
+            Image(systemName: icon).frame(width: 22) // one icon column
+        }
     }
 }
 #endif

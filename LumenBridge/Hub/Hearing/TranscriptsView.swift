@@ -8,6 +8,11 @@ struct TranscriptsView: View {
     @State private var query = ""
     @State private var camera: String?
 
+    init(service: HearingService, query: String = "") {
+        self.service = service
+        _query = State(initialValue: query)
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -56,7 +61,7 @@ struct TranscriptsView: View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 6) {
                 Text(r.camera.replacingOccurrences(of: "_", with: " ").capitalized).font(.headline)
-                Text(r.start, format: .dateTime.day().month().hour().minute().second())
+                Text(r.start, format: .dateTime.day().month().hour().minute())
                     .font(.caption).foregroundStyle(.secondary)
                 Spacer()
                 if let language = r.language { Text(language.uppercased()).font(.caption2.monospaced()) }

@@ -48,6 +48,9 @@ final class HearingService {
     @ObservationIgnored private var ingestor: SpeechEventIngestor?
     @ObservationIgnored private var housekeeping: Task<Void, Never>?
     @ObservationIgnored private var started = false
+    /// Debug screens harness only (HubTests/HubScreensTests): fixture state,
+    /// throwaway store, no Frigate, nothing saved.
+    @ObservationIgnored private var isFixture = false
 
     nonisolated static let cursorKey = "lumenhub.hearing.cursor.v1"
 
@@ -160,6 +163,7 @@ final class HearingService {
         let retentionChanged = next.retentionDays != settings.retentionDays
         settings = next
         liveSettings.value = next
+        guard !isFixture else { return }
         settingsStore.save(next)
         applyRunningState()
         if retentionChanged { Task { await purgeExpired() } }
@@ -189,6 +193,7 @@ final class HearingService {
     // MARK: Cameras
 
     func refreshCameras() async {
+        guard !isFixture else { return }
         do {
             cameras = try await frigate.cameraNames()
             cameraError = nil
@@ -200,6 +205,7 @@ final class HearingService {
     // MARK: Engines
 
     func refreshEngineStates() async {
+        guard !isFixture else { return }
         switch await parakeet.readiness() {
         case .ready: parakeetState = .ready
         case .notDownloaded: if case .downloading = parakeetState {} else { parakeetState = .notDownloaded }
@@ -267,6 +273,25 @@ final class HearingService {
         transcripts = []
         transcriptCount = 0
     }
+
+    #if DEBUG
+    /// Screens harness only: shows fixture state from a throwaway store.
+    /// Never touches Frigate, the Keychain or the saved settings.
+    func installScreenFixture(settings: HearingSettings, cameras: [String], store: TranscriptStore,
+                              parakeet: ModelState, apple: ModelState, queue: HearingPipeline.Snapshot) async {
+        isFixture = true
+        started = true
+        self.settings = settings
+        liveSettings.value = settings
+        self.cameras = cameras
+        cameraError = nil
+        self.store = store
+        parakeetState = parakeet
+        appleState = apple
+        self.queue = queue
+        transcriptCount = (try? await store.count()) ?? 0
+    }
+    #endif
 
     private func purgeExpired() async {
         guard let store else { return }

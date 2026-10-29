@@ -20,6 +20,22 @@ struct VoicesView: View {
         var id = UUID()
     }
 
+    /// What opens at once (screens harness): a sheet or the "Forget" dialog.
+    enum Presenting {
+        case none, consent(NewPerson), teach(VoiceProfile), forget(VoiceProfile)
+    }
+
+    init(service: VoiceService, hearing: HearingService, presenting: Presenting = .none) {
+        self.service = service
+        self.hearing = hearing
+        switch presenting {
+        case .none: break
+        case .consent(let p): _consentFor = State(initialValue: p)
+        case .teach(let p): _teach = State(initialValue: p)
+        case .forget(let p): _forgetting = State(initialValue: p)
+        }
+    }
+
     var body: some View {
         Form {
             HubProBanner(status: HubProStatus.shared)
@@ -305,14 +321,28 @@ struct VoiceConsentSheet: View {
                 Text(verbatim: "English").tag("en")
             } label: { EmptyView() }
             .pickerStyle(.segmented)
-            .frame(width: 220)
+            .labelsHidden()
+            .fixedSize()
             Text(verbatim: ConsentText.title(language, who)).font(.title2.weight(.bold))
             ForEach(Array(ConsentText.points(language).enumerated()), id: \.offset) { _, point in
-                Label { Text(verbatim: point.1) } icon: { Image(systemName: point.0) }
+                Label { Text(verbatim: point.1) } icon: { Image(systemName: point.0).frame(width: 22) }
                     .fixedSize(horizontal: false, vertical: true)
             }
-            TextField(text: $name) { Text(verbatim: ConsentText.nameField(language)) }
-            TextField(text: $face) { Text(verbatim: ConsentText.faceField(language)) }
+            // Labels stay visible once the fields are filled in.
+            Grid(alignment: .leadingFirstTextBaseline, horizontalSpacing: 10, verticalSpacing: 8) {
+                GridRow {
+                    Text(verbatim: ConsentText.nameField(language)).gridColumnAlignment(.trailing)
+                    TextField(text: $name) { Text(verbatim: ConsentText.nameField(language)) }
+                        .labelsHidden()
+                }
+                GridRow {
+                    Text(verbatim: ConsentText.faceField(language))
+                    TextField(text: $face, prompt: Text(verbatim: ConsentText.optional(language))) {
+                        Text(verbatim: ConsentText.faceField(language))
+                    }
+                    .labelsHidden()
+                }
+            }
             Toggle(isOn: $child) { Text(verbatim: ConsentText.child(language)) }.toggleStyle(.checkbox)
             Toggle(isOn: $agreed) { Text(verbatim: ConsentText.agree(language, who, child)) }
                 .toggleStyle(.checkbox)
@@ -341,12 +371,12 @@ enum ConsentText {
     }
 
     static func points(_ l: String) -> [(String, String)] {
-        l == "fr" ? [
-            ("waveform", "Lumen Hub apprend votre voix à partir de 3 à 5 extraits des caméras intérieures, pour écrire votre prénom à la place de « S1 » dans les transcriptions."),
+        l == "fr" ? [
+            ("waveform", "Lumen Hub apprend votre voix à partir de 3 à 5 extraits des caméras intérieures, pour écrire votre prénom à la place de « S1 » dans les transcriptions."),
             ("lock.shield", "On enregistre une empreinte vocale (des nombres calculés depuis votre voix). C’est une donnée biométrique (RGPD, art. 9). Elle est chiffrée et reste sur ce Mac. Rien n’est envoyé à LorisLabs, Apple ou un cloud."),
             ("hand.raised", "Elle sert seulement à afficher votre prénom. Elle n’ouvre, ne déverrouille et n’autorise jamais rien."),
-            ("waveform.slash", "Aucune analyse d’émotion ou de ton. Jamais avec les caméras extérieures, ni en mode « Personnel présent »."),
-            ("trash", "Vous pouvez retirer votre accord à tout moment : « Oubliez-moi » efface votre empreinte et votre prénom de toutes les transcriptions."),
+            ("waveform.slash", "Aucune analyse d’émotion ou de ton. Jamais avec les caméras extérieures, ni en mode « Personnel présent »."),
+            ("trash", "Vous pouvez retirer votre accord à tout moment : « Oubliez-moi » efface votre empreinte et votre prénom de toutes les transcriptions."),
         ] : [
             ("waveform", "Lumen Hub learns your voice from 3 to 5 clips from the indoor cameras, so transcripts show your name instead of “S1”."),
             ("lock.shield", "A voice signature is stored (numbers computed from your voice). This is biometric data (GDPR, art. 9). It is encrypted and stays on this Mac. Nothing is sent to LorisLabs, Apple or a cloud."),
@@ -357,9 +387,8 @@ enum ConsentText {
     }
 
     static func nameField(_ l: String) -> String { l == "fr" ? "Prénom" : "Name" }
-    static func faceField(_ l: String) -> String {
-        l == "fr" ? "Nom du visage dans Frigate (facultatif)" : "Face name in Frigate (optional)"
-    }
+    static func faceField(_ l: String) -> String { l == "fr" ? "Visage Frigate" : "Frigate face" }
+    static func optional(_ l: String) -> String { l == "fr" ? "Facultatif" : "Optional" }
     static func child(_ l: String) -> String {
         l == "fr" ? "Enfant de moins de 15 ans : un parent donne l’accord" : "Child under 15: a parent gives consent"
     }

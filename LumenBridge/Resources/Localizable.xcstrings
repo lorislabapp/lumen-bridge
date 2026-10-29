@@ -226,7 +226,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Flux répondant : %1$lld · indisponibles : %2$lld · ouvrez Maison"
+            "value" : "Flux répondant : %1$lld · indisponibles : %2$lld · ouvrez Maison"
           }
         }
       }
@@ -1109,7 +1109,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erreur : %@"
+            "value" : "Erreur : %@"
           }
         }
       }
@@ -3778,7 +3778,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nounou, ménage ou aide à domicile ? Activez ceci : toute écoute s’arrête."
+            "value" : "Nounou, ménage ou aide à domicile ? Activez ceci : toute écoute s’arrête."
           }
         }
       }
@@ -3873,16 +3873,6 @@
         }
       }
     },
-    "Locked off: outdoor camera" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bloquée : caméra extérieure"
-          }
-        }
-      }
-    },
     "Transcribe" : {
       "localizations" : {
         "fr" : {
@@ -3938,7 +3928,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Votre iPhone reçoit « Mot-clé entendu » et le nom de la caméra. Les mots eux-mêmes ne quittent jamais ce Mac."
+            "value" : "Votre iPhone reçoit « Mot-clé entendu » et le nom de la caméra. Les mots eux-mêmes ne quittent jamais ce Mac."
           }
         }
       }
@@ -4058,7 +4048,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dernier extrait : %lld× plus rapide que le temps réel"
+            "value" : "Dernier extrait : %lld× plus rapide que le temps réel"
           }
         }
       }
@@ -4178,7 +4168,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Supprimer toutes les transcriptions de ce Mac ?"
+            "value" : "Supprimer toutes les transcriptions de ce Mac ?"
           }
         }
       }
@@ -4208,7 +4198,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Écouter « %@ » ?"
+            "value" : "Écouter « %@ » ?"
           }
         }
       }
@@ -4228,7 +4218,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En France, enregistrer les paroles privées de quelqu’un sans son consentement est un délit (Code pénal, art. 226-1 : jusqu’à 1 an et 45 000 € ; 2 ans et 60 000 € entre conjoints). Garder ou utiliser le texte l’est aussi (art. 226-2)."
+            "value" : "En France, enregistrer les paroles privées de quelqu’un sans son consentement est un délit (Code pénal, art. 226-1 : jusqu’à 1 an et 45 000 € ; 2 ans et 60 000 € entre conjoints). Garder ou utiliser le texte l’est aussi (art. 226-2)."
           }
         }
       }
@@ -4248,7 +4238,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nounou, ménage ou aide à domicile ? Activez « Personnel présent » : l’écoute s’arrête."
+            "value" : "Nounou, ménage ou aide à domicile ? Activez « Personnel présent » : l’écoute s’arrête."
           }
         }
       }
@@ -4518,7 +4508,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les lignes de transcription indiquent qui parle : S1, S2… Aucune voix n’est enregistrée pour cela."
+            "value" : "Les lignes de transcription indiquent qui parle : S1, S2… Aucune voix n’est enregistrée pour cela."
           }
         }
       }
@@ -4538,7 +4528,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seulement les personnes qui ont donné leur accord. Un prénom n’est qu’une étiquette : il ne déverrouille et n’autorise jamais rien."
+            "value" : "Seulement les personnes qui ont donné leur accord. Un prénom n’est qu’une étiquette : il ne déverrouille et n’autorise jamais rien."
           }
         }
       }
@@ -4578,7 +4568,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seulement les caméras intérieures avec la transcription activée. « Personnel présent » l’arrête aussi. Aucune analyse d’émotion ou de ton."
+            "value" : "Seulement les caméras intérieures avec la transcription activée. « Personnel présent » l’arrête aussi. Aucune analyse d’émotion ou de ton."
           }
         }
       }
@@ -4618,7 +4608,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Visage Frigate : %@"
+            "value" : "Visage Frigate : %@"
           }
         }
       }
@@ -4708,7 +4698,35 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Entendue %lld fois · dernière fois %@ · %@"
+            "value" : "Entendue %1$lld fois · dernière fois %2$@ · %3$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heard %#@count@ · last %2$@ · %3$@"
+          },
+          "substitutions" : {
+            "count" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg time"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg times"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -4808,7 +4826,35 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Entendue %lld fois avec le visage de %@. Est-ce %@ ?"
+            "value" : "Entendue %1$lld fois avec le visage de %2$@. Est-ce %3$@ ?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heard %#@count@ with %2$@’s face. Is it %3$@?"
+          },
+          "substitutions" : {
+            "count" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg time"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg times"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -4868,7 +4914,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dernier événement : %d interlocuteurs, %d nommés, %.2f s pour %.1f s de parole."
+            "value" : "Dernier événement : %d interlocuteurs, %d nommés, %.2f s pour %.1f s de parole."
           }
         }
       }
@@ -4898,7 +4944,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les étiquettes d’interlocuteurs suivent la durée de conservation des transcriptions. Les personnes restent jusqu’à « Oubliez-moi »."
+            "value" : "Les étiquettes d’interlocuteurs suivent la durée de conservation des transcriptions. Les personnes restent jusqu’à « Oubliez-moi »."
           }
         }
       }
@@ -4928,7 +4974,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Supprimer toutes les voix de ce Mac ?"
+            "value" : "Supprimer toutes les voix de ce Mac ?"
           }
         }
       }
@@ -4948,7 +4994,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oublier %@ ?"
+            "value" : "Oublier %@ ?"
           }
         }
       }
@@ -5038,7 +5084,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cette version de Lumen Hub ne peut pas encore lire votre statut Lumen Pro. Vous ne pouvez pas activer de nouvelles fonctions ; ce qui fonctionne déjà continue."
+            "value" : "Cette version de Lumen Hub ne peut pas encore lire votre statut Lumen Pro. Vous ne pouvez pas activer de nouvelles fonctions ; ce qui fonctionne déjà continue."
           }
         }
       }
@@ -5218,7 +5264,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ ?"
+            "value" : "%@ ?"
           }
         }
       }
@@ -5229,6 +5275,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Voix ignorée"
+          }
+        }
+      }
+    },
+    "Listening is paused on every camera." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’écoute est en pause sur toutes les caméras."
+          }
+        }
+      }
+    },
+    "Locked off: outdoor or street camera" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloquée : caméra extérieure ou côté rue"
+          }
+        }
+      }
+    },
+    "New keyword" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouveau mot-clé"
           }
         }
       }

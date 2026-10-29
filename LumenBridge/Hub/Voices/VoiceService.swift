@@ -41,6 +41,8 @@ final class VoiceService {
     @ObservationIgnored private var enroller: VoiceEnroller?
     @ObservationIgnored private var opening: Task<VoiceAttributor?, Never>?
     @ObservationIgnored private var housekeeping: Task<Void, Never>?
+    /// Debug screens harness only: fixture state, nothing saved.
+    @ObservationIgnored private var isFixture = false
 
     private init() {
         let loaded = settingsStore.load()
@@ -126,6 +128,7 @@ final class VoiceService {
         }
         settings = next
         live.value = next
+        guard !isFixture else { return }
         settingsStore.save(next)
     }
 
@@ -138,6 +141,7 @@ final class VoiceService {
     // MARK: Model
 
     func refreshModelState() async {
+        guard !isFixture else { return }
         switch await diarizer.readiness() {
         case .ready: modelState = .ready
         case .notDownloaded: if case .downloading = modelState {} else { modelState = .notDownloaded }
@@ -259,6 +263,21 @@ final class VoiceService {
         await refresh()
     }
 
+    #if DEBUG
+    /// Screens harness only: a throwaway store sealed with an in-memory key
+    /// (no Keychain), fixture settings, nothing saved.
+    func installScreenFixture(settings: VoiceSettings, store: VoiceStore, modelState: ModelState) async {
+        isFixture = true
+        self.settings = settings
+        live.value = settings
+        self.store = store
+        self.modelState = modelState
+        storeError = nil
+        message = nil
+        await refresh()
+    }
+    #endif
+
     // MARK: Reads
 
     func refresh() async {
@@ -292,6 +311,8 @@ final class VoiceService {
         for record in records {
             let turns = (try? await store.turns(eventID: record.eventID)) ?? []
             for speaker in Set(turns.map(\.speaker)).sorted() {
+                // Never teach a person from a voice the owner marked as TV or radio.
+                if labels[record.eventID]?[speaker]?.band == .ignored { continue }
                 let seconds = turns.filter { $0.speaker == speaker }.reduce(0) { $0 + $1.duration }
                 guard seconds >= settings.thresholds.minimumSpeechSeconds else { continue }
                 let text = record.segments.filter { $0.speaker == speaker }.map(\.text).joined(separator: " ")

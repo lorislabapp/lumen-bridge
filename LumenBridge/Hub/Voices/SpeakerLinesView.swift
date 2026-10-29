@@ -10,15 +10,18 @@ struct SpeakerLinesView: View {
     let voices: VoiceService
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
+        // A grid keeps every line's text in one column, whatever the label
+        // length ("Camille", "Unknown voice #3", "Voix inconnue n° 3").
+        Grid(alignment: .leadingFirstTextBaseline, horizontalSpacing: 8, verticalSpacing: 3) {
             ForEach(Array(record.segments.enumerated()), id: \.offset) { _, segment in
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                GridRow {
                     if let speaker = segment.speaker {
                         let label = voices.labels[record.eventID]?[speaker]
                         Text(voices.display(label, speaker: speaker))
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(color(label?.band))
-                            .frame(minWidth: 52, alignment: .leading)
+                    } else {
+                        Text(verbatim: "")
                     }
                     Text(segment.text)
                         .textSelection(.enabled)
