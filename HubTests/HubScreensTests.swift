@@ -3,6 +3,7 @@ import AppKit
 import CryptoKit
 import LumenAssistant
 import LumenHearing
+import LumenLook
 import SwiftUI
 import XCTest
 @testable import Lumen_Bridge
@@ -117,6 +118,35 @@ final class HubScreensTests: XCTestCase {
         }
     }
 
+    /// Look ("Check on camera"): areas on a drawn living-room snapshot, made-up
+    /// results with cropped proof pictures. No Frigate, no Home Assistant, no
+    /// vision server: the store is the test host's throwaway folder.
+    @MainActor
+    func testLookScreens() async throws {
+        let f = try await Fixture.make(in: dir.appendingPathComponent("look-\(lang)", isDirectory: true))
+        await f.install(hearing: f.onSettings, voices: f.voiceSettings)
+        await HubProStatus.shared.refresh()
+        let a = try await AssistantFixture.make(in: dir.appendingPathComponent("look-\(lang)", isDirectory: true))
+        let look = LookFixture(assistant: a)
+
+        for appearanceName in [NSAppearance.Name.darkAqua, .aqua] {
+            appearance = appearanceName
+            let tag = appearanceName == .darkAqua ? "dark" : "light"
+            await a.install()
+            await look.install()
+            try await show("look-\(tag)-1-section", section: .assistant, scroll: LookFixture.sectionScroll)
+            await a.install()
+            await look.install()
+            try await show("look-\(tag)-2-vision", section: .assistant, scroll: LookFixture.visionScroll)
+            await look.install()
+            try await show("look-\(tag)-3-editor", root: LookAreaEditor(look: .shared, device: a.shutters, close: {}),
+                           size: LookFixture.editorSize)
+            await look.install()
+            try await show("look-\(tag)-4-editor-new", root: LookAreaEditor(look: .shared, device: a.kitchen, close: {}),
+                           size: LookFixture.editorSize)
+        }
+    }
+
     // MARK: - Showing and capture handshake
 
     @MainActor
@@ -132,19 +162,20 @@ final class HubScreensTests: XCTestCase {
     }
 
     @MainActor
-    private func show<V: View>(_ name: String, root: V, scrollToEnd: Bool = false, scroll: CGFloat? = nil) async throws {
+    private func show<V: View>(_ name: String, root: V, scrollToEnd: Bool = false, scroll: CGFloat? = nil,
+                               size: NSSize = HubScreensTests.size) async throws {
         let fraction = scroll ?? (scrollToEnd ? 1 : nil)
         let scheme: ColorScheme = appearance == .darkAqua ? .dark : .light
         let hosting = NSHostingView(rootView: root.environment(\.colorScheme, scheme))
         hosting.appearance = NSAppearance(named: appearance)
-        let window = NSWindow(contentRect: NSRect(origin: .zero, size: Self.size),
+        let window = NSWindow(contentRect: NSRect(origin: .zero, size: size),
                               styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
                               backing: .buffered, defer: false)
         window.appearance = NSAppearance(named: appearance)
         window.title = MainWindow.appName
         window.isReleasedWhenClosed = false
         window.contentView = hosting
-        window.setContentSize(Self.size)
+        window.setContentSize(size)
         window.center()
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
@@ -190,7 +221,7 @@ final class HubScreensTests: XCTestCase {
                 try await settle(0.3)
             }
             try await settle(0.3) // let the capture finish writing
-            if target !== window || Self.looksActive(output) || attempt == 5 { break }
+            if target !== window || Self.looksActive(output, width: size.width) || attempt == 5 { break }
             NSApp.activate(ignoringOtherApps: true)
             window.makeKeyAndOrderFront(nil)
             try await settle(0.8)
@@ -199,9 +230,9 @@ final class HubScreensTests: XCTestCase {
     }
 
     /// Red close button = the window was key when captured.
-    private static func looksActive(_ png: URL) -> Bool {
+    private static func looksActive(_ png: URL, width: CGFloat = size.width) -> Bool {
         guard let data = try? Data(contentsOf: png), let rep = NSBitmapImageRep(data: data) else { return true }
-        let scale = CGFloat(rep.pixelsWide) / size.width
+        let scale = CGFloat(rep.pixelsWide) / width
         guard let c = rep.colorAt(x: Int(26 * scale), y: Int(26 * scale))?.usingColorSpace(.sRGB) else { return true }
         return c.redComponent - c.greenComponent > 0.2
     }
@@ -376,6 +407,9 @@ private struct AssistantFixture {
     let registry: DeviceRegistry
     let lock: Device
     let living: Device
+    let kitchen: Device
+    let tv: Device
+    let shutters: Device
     static var fr: Bool { Locale.preferredLanguages.first?.hasPrefix("fr") ?? false }
 
     static func make(in root: URL) async throws -> AssistantFixture {
@@ -423,7 +457,8 @@ private struct AssistantFixture {
                              plan: ActionPlan(action: .turnOn, targets: [living]), source: .llm,
                              command: fr ? "lumen il fait un peu sombre ici" : "lumen it is a bit dark in here",
                              reason: "light.turn_on", latencyMs: 640, at: now.addingTimeInterval(-12))
-        return AssistantFixture(log: log, registry: registry, lock: lock, living: living)
+        return AssistantFixture(log: log, registry: registry, lock: lock, living: living, kitchen: kitchen, tv: tv,
+                                shutters: shutters)
     }
 
     func install() async {
@@ -452,5 +487,132 @@ private struct AssistantFixture {
             lastResult: ReplyPhrases.preview(ActionPlan(action: .turnOn, targets: [living], room: living.room), language: lang),
             canUndo: false)
     }
+}
+#endif
+
+#if LUMEN_HUB && DEBUG
+/// Look areas for the made-up living room: shutters (closed, checked), TV
+/// (still off after one retry), ceiling light (night, unsure); the kitchen has
+/// no area yet. Snapshots are drawn here; proofs are crops of them.
+@MainActor
+private struct LookFixture {
+    let assistant: AssistantFixture
+    static let sectionScroll: CGFloat = 0.465
+    static let visionScroll: CGFloat = 0.6
+    static let editorSize = NSSize(width: 760, height: 640)
+
+    static let shutterArea = LookRect(x: 0.08, y: 0.16, width: 0.25, height: 0.42)
+    static let tvArea = LookRect(x: 0.42, y: 0.40, width: 0.26, height: 0.26)
+    static let lampArea = LookRect(x: 0.77, y: 0.22, width: 0.11, height: 0.16)
+
+    func install() async {
+        let living = LivingRoomScene.image(night: false), kitchen = LivingRoomScene.kitchen()
+        let a = assistant
+        let fr = AssistantFixture.fr
+        let lang = fr ? "fr" : "en"
+        let targets = [
+            LookTarget(entityID: a.shutters.entityID, name: a.shutters.name, kind: .shutter, camera: "living_room",
+                       area: Self.shutterArea, travelSeconds: 25),
+            LookTarget(entityID: a.tv.entityID, name: a.tv.name, kind: .tv, camera: "living_room", area: Self.tvArea),
+            LookTarget(entityID: a.living.entityID, name: a.living.name, kind: .light, camera: "living_room",
+                       area: Self.lampArea, travelSeconds: 2),
+        ]
+        func timing(_ ms: Double) -> LookTiming { var t = LookTiming(); t.totalMs = ms; return t }
+        let now = Date()
+        func result(_ t: LookTarget, _ outcome: LookOutcome, expected: LookState, source: LookSource, ms: Double,
+                    ago: TimeInterval, retried: Bool = false) -> LookResult {
+            LookResult(entityID: t.entityID, camera: t.camera, expected: expected, outcome: outcome, source: source,
+                       confidence: 0.9, evidence: "fixture", checkedAt: now.addingTimeInterval(-ago), retried: retried,
+                       timing: timing(ms),
+                       message: LookPhrases.message(for: outcome, kind: t.kind, expected: expected, camera: t.camera,
+                                                    source: source, retried: retried, language: lang))
+        }
+        let results = [
+            result(targets[0], .confirmed, expected: .closed, source: .pixels, ms: 184, ago: 600),
+            result(targets[1], .contradicted(observed: .off), expected: .on, source: .visionModel, ms: 2_350, ago: 95,
+                   retried: true),
+            result(targets[2], .unknown(.night), expected: .on, source: .pixels, ms: 210, ago: 30),
+        ]
+        let night = LivingRoomScene.image(night: true)
+        let proofs: [String: CGImage] = [
+            targets[0].entityID: LivingRoomScene.crop(living, Self.shutterArea.expanded(by: 0.15)),
+            targets[1].entityID: LivingRoomScene.crop(living, Self.tvArea.expanded(by: 0.15)),
+            targets[2].entityID: LivingRoomScene.crop(night, Self.lampArea.expanded(by: 0.3)),
+        ].compactMapValues { $0 }
+        var prefs = LookService.Prefs()
+        prefs.enabled = true
+        prefs.useModel = true
+        prefs.proofHours = 24
+        await LookService.shared.installScreenFixture(prefs: prefs, targets: targets, results: results, proofs: proofs,
+                                                      frames: ["living_room": living, "kitchen": kitchen],
+                                                      vision: .ok(0))
+    }
+}
+
+/// A drawn 1280×720 room: window with shutters (left), TV (centre), floor lamp (right).
+enum LivingRoomScene {
+    static let size = CGSize(width: 1280, height: 720)
+
+    static func image(night: Bool) -> CGImage {
+        draw { ctx in
+            let grey = night
+            // Wall and floor.
+            fill(ctx, CGRect(x: 0, y: 0, width: 1280, height: 520), grey ? gray(0.32) : rgb(0.86, 0.82, 0.74))
+            fill(ctx, CGRect(x: 0, y: 520, width: 1280, height: 200), grey ? gray(0.22) : rgb(0.55, 0.40, 0.28))
+            // Window frame and closed shutter slats.
+            fill(ctx, CGRect(x: 92, y: 106, width: 336, height: 316), grey ? gray(0.55) : rgb(0.95, 0.95, 0.93))
+            for i in 0..<14 {
+                fill(ctx, CGRect(x: 104, y: 118 + CGFloat(i) * 21.6, width: 312, height: 17),
+                     grey ? gray(0.42) : rgb(0.62, 0.66, 0.70))
+            }
+            // TV cabinet and screen (off).
+            fill(ctx, CGRect(x: 500, y: 478, width: 420, height: 60), grey ? gray(0.18) : rgb(0.30, 0.22, 0.16))
+            fill(ctx, CGRect(x: 545, y: 296, width: 320, height: 176), gray(0.06))
+            fill(ctx, CGRect(x: 553, y: 304, width: 304, height: 160), grey ? gray(0.10) : rgb(0.08, 0.09, 0.11))
+            // Sofa.
+            fill(ctx, CGRect(x: 180, y: 520, width: 300, height: 110), grey ? gray(0.28) : rgb(0.30, 0.42, 0.52))
+            // Floor lamp: pole and shade (lit by day, dark at night).
+            fill(ctx, CGRect(x: 1053, y: 270, width: 8, height: 290), grey ? gray(0.2) : rgb(0.2, 0.2, 0.2))
+            fill(ctx, CGRect(x: 1000, y: 170, width: 114, height: 100), grey ? gray(0.45) : rgb(1.0, 0.88, 0.55))
+            fill(ctx, CGRect(x: 1020, y: 552, width: 74, height: 12), grey ? gray(0.2) : rgb(0.2, 0.2, 0.2))
+            // Plant.
+            fill(ctx, CGRect(x: 930, y: 470, width: 46, height: 60), grey ? gray(0.25) : rgb(0.55, 0.35, 0.25))
+            fill(ctx, CGRect(x: 912, y: 390, width: 82, height: 84), grey ? gray(0.30) : rgb(0.25, 0.50, 0.30))
+        }
+    }
+
+    static func kitchen() -> CGImage {
+        draw { ctx in
+            fill(ctx, CGRect(x: 0, y: 0, width: 1280, height: 720), rgb(0.90, 0.90, 0.88))
+            fill(ctx, CGRect(x: 0, y: 430, width: 1280, height: 290), rgb(0.72, 0.70, 0.66))
+            fill(ctx, CGRect(x: 120, y: 330, width: 1040, height: 110), rgb(0.35, 0.45, 0.42))
+            fill(ctx, CGRect(x: 120, y: 120, width: 420, height: 150), rgb(0.40, 0.50, 0.47))
+            fill(ctx, CGRect(x: 760, y: 60, width: 160, height: 26), rgb(0.98, 0.94, 0.80))
+            fill(ctx, CGRect(x: 600, y: 140, width: 260, height: 170), rgb(0.70, 0.84, 0.95))
+        }
+    }
+
+    static func crop(_ image: CGImage, _ rect: LookRect) -> CGImage? {
+        image.cropping(to: rect.clamped.pixels(width: image.width, height: image.height))
+    }
+
+    private static func draw(_ body: (CGContext) -> Void) -> CGImage {
+        let ctx = CGContext(data: nil, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8, bytesPerRow: 0,
+                            space: CGColorSpace(name: CGColorSpace.sRGB)!,
+                            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+        // Top-left origin, like the camera picture.
+        ctx.translateBy(x: 0, y: size.height)
+        ctx.scaleBy(x: 1, y: -1)
+        body(ctx)
+        return ctx.makeImage()!
+    }
+
+    private static func fill(_ ctx: CGContext, _ r: CGRect, _ c: CGColor) {
+        ctx.setFillColor(c)
+        ctx.fill(r)
+    }
+
+    private static func rgb(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> CGColor { CGColor(srgbRed: r, green: g, blue: b, alpha: 1) }
+    private static func gray(_ v: CGFloat) -> CGColor { CGColor(srgbRed: v, green: v, blue: v, alpha: 1) }
 }
 #endif
